@@ -1,59 +1,294 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sahabat Aman
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sahabat Aman adalah aplikasi web berbasis Laravel untuk sistem curhat digital yang memungkinkan siswa mengirimkan keluhan atau cerita kepada teman sebaya atau konselor/BK dengan pendekatan aman, nyaman, dan anonim jika diinginkan.
 
-## About Laravel
+## 1. Ringkasan Proyek
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Nama aplikasi: Sahabat Aman
+- Platform: Web App
+- Stack utama: Laravel + MySQL + Vite
+- Bahasa: PHP, Blade, JavaScript
+- Target pengguna: Siswa, Teman Sebaya, Konselor/BK
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2. Stack Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP: 8.2
+- Laravel: 12
+- Database: MySQL
+- Server web: Laravel built-in server / Apache / Nginx
+- Frontend asset: Vite + Tailwind CSS
+- Session/Auth: Laravel Auth native
 
-## Learning Laravel
+### Konfigurasi default yang dipakai project
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- DB connection: MySQL
+- Port default MySQL: 3306
+- Session driver: database
+- Queue: database
+- Cache: database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 3. Login Pakai Apa?
 
-## Laravel Sponsors
+Sistem login pada aplikasi memakai autentikasi Laravel standard dengan:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Email
+- Password
 
-### Premium Partners
+Proses login ada di route `/login` dan menggunakan `AuthController` dengan validasi:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- `email` wajib diisi dan valid format email
+- `password` wajib diisi
 
-## Contributing
+### Role yang tersedia
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Saat register, user memilih role:
 
-## Code of Conduct
+- `siswa`
+- `teman`
+- `konselor`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Setelah login:
 
-## Security Vulnerabilities
+- `siswa` diarahkan ke halaman `/curhat`
+- `teman` dan `konselor` diarahkan ke `/dashboard`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Data yang dibutuhkan saat register
 
-## License
+- `name`
+- `email`
+- `identifier` (contoh: NIS atau ID unik)
+- `password`
+- `role`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 4. Fitur Utama
+
+- Login dan register akun
+- Siswa mengirim curhat
+- Pilihan tujuan curhat: teman atau konselor
+- Pilihan kategori: pribadi, sosial, belajar, karier
+- Opsi anonim
+- Riwayat curhat per siswa
+- Dashboard untuk teman/konselor
+- Balasan curhat dari penerima
+- Status curhat: terkirim, dilihat, dibalas, ditangani
+
+## 5. Persyaratan Sistem
+
+Sebelum install, pastikan perangkat sudah memiliki:
+
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- MySQL 8.0 (direkomendasikan) atau 5.7+
+- Git
+- Browser modern
+
+## 6. Cara Installasi Lokal
+
+### 6.1 Clone project
+
+```bash
+git clone <url-repository>
+cd sahabat-aman
+```
+
+### 6.2 Install dependency PHP
+
+```bash
+composer install
+```
+
+### 6.3 Install dependency frontend
+
+```bash
+npm install
+```
+
+### 6.4 Siapkan file environment
+
+Salin file `.env.example` menjadi `.env`:
+
+```bash
+copy .env.example .env
+```
+
+Jika Linux/macOS:
+
+```bash
+cp .env.example .env
+```
+
+### 6.5 Konfigurasi database MySQL
+
+Edit file `.env` dan atur konfigurasi database seperti berikut:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sahabat_aman
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Pastikan database sudah dibuat di MySQL:
+
+```sql
+CREATE DATABASE sahabat_aman;
+```
+
+### 6.6 Generate key aplikasi
+
+```bash
+php artisan key:generate
+```
+
+### 6.7 Jalankan migrasi database
+
+```bash
+php artisan migrate
+```
+
+Jika ingin langsung membuat struktur tabel dan data awal, bisa jalankan:
+
+```bash
+php artisan migrate --seed
+```
+
+## 7. Menjalankan Aplikasi
+
+### Mode development
+
+Jalankan server Laravel:
+
+```bash
+php artisan serve
+```
+
+Lalu jalankan Vite untuk frontend:
+
+```bash
+npm run dev
+```
+
+Akses aplikasi di:
+
+```text
+http://localhost:8000
+```
+
+### Mode production
+
+```bash
+npm run build
+php artisan optimize
+php artisan serve
+```
+
+## 8. Cara Pakai Aplikasi
+
+### Register akun
+
+1. Buka halaman `/register`
+2. Isi data sesuai form
+3. Pilih role: `siswa`, `teman`, atau `konselor`
+4. Klik daftar
+
+### Login
+
+1. Buka halaman `/login`
+2. Masukkan email dan password
+3. Sistem akan redirect sesuai role
+
+### Untuk siswa
+
+- Klik menu `Curhat`
+- Pilih tujuan curhat
+- Pilih kategori masalah
+- Tulis pesan
+- Aktifkan/ nonaktifkan mode anonim
+- Kirim curhat
+- Cek status di menu `Riwayat`
+
+### Untuk teman/konselor
+
+- Login dengan akun role yang sesuai
+- Akses halaman `/dashboard`
+- Lihat daftar curhat yang relevan
+- Buka detail curhat
+- Beri balasan
+- Khusus konselor, bisa menandai curhat sebagai ditangani
+
+## 9. Struktur Project
+
+```text
+sahabat-aman/
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+├── public/
+├── resources/
+├── routes/
+├── storage/
+├── tests/
+├── .env.example
+├── composer.json
+├── package.json
+├── phpunit.xml
+├── vite.config.js
+├── artisan
+└── README.md
+```
+
+## 10. Troubleshooting
+
+### Error database connection
+
+Pastikan:
+
+- MySQL aktif
+- DB sudah dibuat
+- `.env` sudah benar
+- user MySQL punya akses ke database tersebut
+
+### Error `Class "Illuminate\\..." not found`
+
+Jalankan:
+
+```bash
+composer dump-autoload
+```
+
+### Error saat menjalankan Vite
+
+```bash
+npm install
+npm run dev
+```
+
+### Error key application
+
+```bash
+php artisan key:generate
+```
+
+## 11. Catatan Penting
+
+- Aplikasi ini default menggunakan MySQL dan port `3306`.
+- Versi Laravel yang digunakan adalah `12.x`.
+- Login menggunakan email + password bawaan Laravel Auth.
+- Role dibuat saat registrasi, bukan dari seed otomatis.
+- Jika ingin deploy ke hosting, pastikan konfigurasi `.env` disesuaikan dengan database hosting.
+
+## 12. Lisensi
+
+Project ini menggunakan lisensi default Laravel/MIT sesuai pengaturan awal proyek.
+
+## 13. Sumber Referensi
+
+- Laravel Framework
+- Laravel Jetstream/Authentication basics
+- Vite + Tailwind CSS
+
+Jika Anda mau, saya juga bisa bantu membuat versi README yang lebih formal untuk portofolio atau versi yang lebih ringkas untuk GitHub landing page.
