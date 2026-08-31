@@ -39,6 +39,18 @@ Proses login ada di route `/login` dan menggunakan `AuthController` dengan valid
 - `email` wajib diisi dan valid format email
 - `password` wajib diisi
 
+- `Siswa:`
+email: siswa@sahabataman.test
+password: password
+
+- `Teman Sebaya:`
+email: teman@sahabataman.test
+password: password
+
+- `Konselor/Guru BK;`
+email: konselor@sahabataman.test
+password: password
+
 ### Role yang tersedia
 
 Saat register, user memilih role:
