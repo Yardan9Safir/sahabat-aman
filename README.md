@@ -39,6 +39,7 @@ Proses login ada di route `/login` dan menggunakan `AuthController` dengan valid
 - `email` wajib diisi dan valid format email
 - `password` wajib diisi
 
+Untuk testing, tester dalam menggunakan data dummy untuk melakukan input maupun output data menggunakan data berikut:
 - `Siswa:`
 email: siswa@sahabataman.test
 password: password
