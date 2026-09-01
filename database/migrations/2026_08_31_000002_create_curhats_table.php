@@ -3,16 +3,17 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('curhats', function (Blueprint $table) {
-            $table->id();
+        Schema::create('curhat', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->foreignId('siswa_id')->constrained('users')->cascadeOnDelete();
             $table->enum('tujuan', ['teman', 'konselor']);
-            $table->enum('kategori', ['pribadi', 'sosial', 'belajar', 'karier']);
+            $table->foreignId('kategori_id')->constrained('kategori')->restrictOnDelete();
             $table->text('pesan');
             $table->boolean('anonim')->default(true);
             $table->enum('status', ['terkirim', 'dilihat', 'dibalas', 'ditangani'])->default('terkirim');
@@ -22,9 +23,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('balasans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('curhat_id')->constrained('curhats')->cascadeOnDelete();
+        Schema::create('balasan', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('curhat_id');
+            $table->foreign('curhat_id')->references('id')->on('curhat')->cascadeOnDelete();
             $table->foreignId('pengirim_id')->constrained('users')->cascadeOnDelete();
             $table->enum('pengirim_role', ['teman', 'konselor']);
             $table->text('isi');
@@ -34,7 +36,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('balasans');
-        Schema::dropIfExists('curhats');
+        Schema::dropIfExists('balasan');
+        Schema::dropIfExists('curhat');
     }
 };

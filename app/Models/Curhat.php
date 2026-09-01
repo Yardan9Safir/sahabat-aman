@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Curhat extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
-    protected $table = 'curhats';
+    protected $table = 'curhat';
 
     protected $fillable = [
         'siswa_id',
         'tujuan',
         'nama_penerima',
-        'kategori',
+        'kategori_id',
         'pesan',
         'anonim',
         'status',
@@ -33,6 +34,11 @@ class Curhat extends Model
     public function siswa()
     {
         return $this->belongsTo(User::class, 'siswa_id');
+    }
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
     }
 
     public function balasans()

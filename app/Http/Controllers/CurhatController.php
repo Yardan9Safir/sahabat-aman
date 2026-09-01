@@ -3,27 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curhat;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CurhatController extends Controller
 {
+    /**
+     * Halaman landing
+     */
     public function landing()
     {
         return view('home');
     }
 
+    /**
+     * Form untuk membuat curhat baru
+     */
     public function createForm()
     {
-        return view('curhat.create');
+        $kategoris = Kategori::all();
+        return view('curhat.create', compact('kategoris'));
     }
 
+    /**
+     * Simpan curhat baru
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tujuan' => ['required', 'in:teman,konselor'],
+            'tujuan' => ['required', 'in:guru'],
             'nama_penerima' => ['nullable', 'string', 'max:255'],
-            'kategori' => ['required', 'in:pribadi,sosial,belajar,karier'],
+            'kategori_id' => ['required', 'exists:kategori,id'],
             'pesan' => ['required', 'string', 'min:10'],
             'anonim' => ['nullable', 'boolean'],
         ]);
@@ -31,7 +42,7 @@ class CurhatController extends Controller
         $request->user()->curhats()->create([
             'tujuan' => $validated['tujuan'],
             'nama_penerima' => $validated['nama_penerima'] ?? null,
-            'kategori' => $validated['kategori'],
+            'kategori_id' => $validated['kategori_id'],
             'pesan' => $validated['pesan'],
             'anonim' => $request->boolean('anonim'),
             'status' => 'terkirim',
@@ -40,6 +51,9 @@ class CurhatController extends Controller
         return redirect()->route('riwayat')->with('success', 'Curhatmu terkirim.');
     }
 
+    /**
+     * Daftar riwayat curhat siswa
+     */
     public function history()
     {
         $curhats = Auth::user()->curhats()->latest()->get();
@@ -47,6 +61,9 @@ class CurhatController extends Controller
         return view('riwayat.index', compact('curhats'));
     }
 
+    /**
+     * Detail curhat siswa
+     */
     public function detail(Curhat $curhat)
     {
         abort_unless(Auth::id() === $curhat->siswa_id, 403);
@@ -54,88 +71,5 @@ class CurhatController extends Controller
         $curhat->setViewed();
 
         return view('riwayat.show', compact('curhat'));
-    }
-
-    public function dashboard()
-    {
-        $user = Auth::user();
-
-        if ($user->role === 'siswa') {
-            return redirect('/curhat');
-        }
-
-        $query = Curhat::query()->where('tujuan', $user->role === 'teman' ? 'teman' : 'konselor');
-
-        if (request('kategori')) {
-            $query->where('kategori', request('kategori'));
-        }
-
-        if (request('status')) {
-            $query->where('status', request('status'));
-        }
-
-        $curhats = $query->latest()->get();
-
-        return view('dashboard.index', compact('curhats'));
-    }
-
-    public function recipientDetail(Curhat $curhat)
-    {
-        $user = Auth::user();
-
-        if ($user->role === 'teman' && $curhat->tujuan !== 'teman') {
-            abort(403);
-        }
-
-        if ($user->role === 'konselor' && $curhat->tujuan !== 'konselor') {
-            abort(403);
-        }
-
-        $curhat->setViewed();
-
-        return view('dashboard.show', compact('curhat'));
-    }
-
-    public function reply(Curhat $curhat, Request $request)
-    {
-        $user = Auth::user();
-
-        if ($user->role === 'siswa') {
-            abort(403);
-        }
-
-        if ($user->role === 'teman' && $curhat->tujuan !== 'teman') {
-            abort(403);
-        }
-
-        if ($user->role === 'konselor' && $curhat->tujuan !== 'konselor') {
-            abort(403);
-        }
-
-        $validated = $request->validate([
-            'isi' => ['required', 'string', 'min:3'],
-        ]);
-
-        $curhat->balasans()->create([
-            'pengirim_id' => $user->id,
-            'pengirim_role' => $user->role,
-            'isi' => $validated['isi'],
-        ]);
-
-        $curhat->setReplied();
-
-        return redirect()->route('dashboard')->with('success', 'Balasan berhasil dikirim.');
-    }
-
-    public function handle(Curhat $curhat)
-    {
-        $user = Auth::user();
-
-        abort_unless($user->role === 'konselor', 403);
-        abort_if($curhat->tujuan !== 'konselor', 403);
-
-        $curhat->setHandled($user);
-
-        return redirect()->route('dashboard')->with('success', 'Curhat telah ditandai selesai.');
     }
 }

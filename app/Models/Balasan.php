@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Balasan extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
-    protected $table = 'balasans';
+    protected $table = 'balasan';
 
     protected $fillable = [
         'curhat_id',

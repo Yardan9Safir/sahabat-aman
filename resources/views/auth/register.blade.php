@@ -5,7 +5,7 @@
 @section('content')
 <div class="mx-auto max-w-xl rounded-[28px] bg-white p-7 shadow-[0_18px_45px_rgba(69,102,89,0.08)] ring-1 ring-[#E5DECF]">
     <h1 class="text-3xl font-black text-[#214D41]">Buat akun</h1>
-    <p class="mt-2 text-sm text-[#587067]">Daftar sebagai siswa, teman sebaya, atau konselor.</p>
+    <p class="mt-2 text-sm text-[#587067]">Daftar sebagai siswa atau guru BK.</p>
 
     <form method="POST" action="{{ route('register') }}" class="mt-6 space-y-5">
         @csrf
@@ -44,8 +44,7 @@
             <label for="role" class="mb-2 block text-sm font-semibold text-[#355C4F]">Peran</label>
             <select id="role" name="role" class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none">
                 <option value="siswa">Siswa</option>
-                <option value="teman">Teman Sebaya</option>
-                <option value="konselor">Konselor / BK</option>
+                <option value="guru">Guru BK</option>
             </select>
         </div>
 
