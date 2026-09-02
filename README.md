@@ -107,8 +107,19 @@ Sebelum install, pastikan perangkat sudah memiliki:
 - Git
 - Browser modern
 
-## 6. Cara Installasi Lokal
+## 6. Cara Instalasi Lokal
 
+### Kalau Sudah Pernah Instalasi Lokal Ikutin Cara Ini : 
+untuk mengambil sc yang sudah dipush dari branch yg diingnikan 
+```bash
+git pull
+```
+untuk refresh migration dan mengisi data dengan data baru
+```bash
+php artisan migrate:fresh --seed
+```
+
+### Kalau Belum Pernah Instalasi Lokal Ikutin Cara Ini : 
 ### 6.1 Clone project
 
 ```bash
@@ -332,9 +343,3 @@ php artisan key:generate
 ## 12. Lisensi
 
 Project ini menggunakan lisensi default Laravel/MIT sesuai pengaturan awal proyek.
-
-## 13. Sumber Referensi
-
-- Laravel Framework
-- Laravel Authentication basics
-- Vite + Tailwind CSS
