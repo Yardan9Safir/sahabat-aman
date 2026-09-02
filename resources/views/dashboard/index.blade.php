@@ -42,14 +42,14 @@
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5B7F71]">{{ ucfirst($curhat->kategori) }}</p>
-                            <h2 class="mt-2 text-xl font-bold text-[#214D41]">{{ $curhat->anonim ? 'Siswa anonim' : $curhat->siswa->name }}</h2>
+                            <h2 class="mt-2 text-xl font-bold text-[#214D41]">{{ $curhat->siswa->name }}</h2>
                         </div>
                         <span class="inline-flex rounded-full px-3 py-1 text-xs font-bold {{ $curhat->status === 'terkirim' ? 'bg-[#EFE7FF] text-[#5B4A8E]' : ($curhat->status === 'dilihat' ? 'bg-[#E2F0FF] text-[#315B9C]' : ($curhat->status === 'dibalas' ? 'bg-[#FCE7D3] text-[#9A5A1B]' : 'bg-[#DFF5E7] text-[#2E6B48]')) }}">{{ ucfirst($curhat->status) }}</span>
                     </div>
                     <p class="mt-4 text-sm leading-6 text-[#4F635F]">{{ Str::limit($curhat->pesan, 180) }}</p>
                     <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <a href="{{ route('dashboard.show', $curhat) }}" class="inline-flex items-center justify-center rounded-full border border-[#B8C7BD] px-4 py-2 text-sm font-semibold text-[#355C4F]">Lihat detail</a>
-                        @if(Auth::user()->role === 'konselor' && $curhat->status !== 'ditangani')
+                        @if(Auth::user()->role === 'guru' && $curhat->penerima_id === Auth::id() && $curhat->status !== 'ditangani')
                             <form method="POST" action="{{ route('dashboard.handle', $curhat) }}">
                                 @csrf
                                 <button type="submit" class="rounded-full bg-[#3A7A57] px-4 py-2 text-sm font-bold text-white">Tandai ditangani</button>

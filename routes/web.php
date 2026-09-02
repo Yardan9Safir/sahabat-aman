@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CurhatController;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{curhat}', [CurhatController::class, 'recipientDetail'])->name('dashboard.show');
     Route::post('/dashboard/curhat/{curhat}/balas', [CurhatController::class, 'reply'])->name('dashboard.reply');
     Route::post('/dashboard/curhat/{curhat}/tangani', [CurhatController::class, 'handle'])->name('dashboard.handle');
+
+    Route::prefix('admin')->name('admin.')->middleware('guru')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('/curhat/{curhat}', [AdminController::class, 'show'])->name('show');
+        Route::get('/siswa', [AdminController::class, 'siswa'])->name('siswa');
+    });
 });

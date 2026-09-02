@@ -18,27 +18,39 @@
         <div>
             <p class="mb-3 text-sm font-semibold text-[#355C4F]">Tujuan curhat</p>
             <div class="grid gap-3 sm:grid-cols-2">
-                <label class="cursor-pointer rounded-2xl border border-[#D8D0C2] p-4 transition hover:border-[#5B7F71] hover:bg-[#F2F8F4] {{ old('tujuan') === 'teman' ? 'border-[#5B7F71] bg-[#F2F8F4]' : '' }}" onclick="updateTujuan('teman')">
-                    <input type="radio" name="tujuan" value="teman" class="sr-only" {{ old('tujuan') === 'teman' || !old('tujuan') ? 'checked' : '' }}>
-                    <div class="text-lg font-bold text-[#214D41]">👥 Teman Sebaya</div>
-                    <div class="mt-1 text-sm text-[#587067]">Bercerita ke peer counselor</div>
+                <label class="cursor-pointer rounded-2xl border border-[#D8D0C2] p-4 transition hover:border-[#5B7F71] hover:bg-[#F2F8F4] {{ old('tujuan') !== 'siswa' ? 'border-[#5B7F71] bg-[#F2F8F4]' : '' }}" onclick="toggleTujuan('guru')">
+                    <input type="radio" name="tujuan_tipe" value="guru" id="tujuan-guru" class="sr-only" {{ old('tujuan') !== 'siswa' ? 'checked' : '' }}>
+                    <div class="text-lg font-bold text-[#214D41]">👨‍🏫 Guru</div>
+                    <div class="mt-1 text-sm text-[#587067]">Bercerita ke guru</div>
                 </label>
-                <label class="cursor-pointer rounded-2xl border border-[#D8D0C2] p-4 transition hover:border-[#5B7F71] hover:bg-[#F2F8F4] {{ old('tujuan') === 'konselor' ? 'border-[#5B7F71] bg-[#F2F8F4]' : '' }}" onclick="updateTujuan('konselor')">
-                    <input type="radio" name="tujuan" value="konselor" class="sr-only" {{ old('tujuan') === 'konselor' ? 'checked' : '' }}>
-                    <div class="text-lg font-bold text-[#214D41]">👨‍🏫 Guru BK/Konselor</div>
-                    <div class="mt-1 text-sm text-[#587067]">Butuh bantuan formal.</div>
+                <label class="cursor-pointer rounded-2xl border border-[#D8D0C2] p-4 transition hover:border-[#5B7F71] hover:bg-[#F2F8F4] {{ old('tujuan') === 'siswa' ? 'border-[#5B7F71] bg-[#F2F8F4]' : '' }}" onclick="toggleTujuan('siswa')">
+                    <input type="radio" name="tujuan_tipe" value="siswa" id="tujuan-siswa" class="sr-only" {{ old('tujuan') === 'siswa' ? 'checked' : '' }}>
+                    <div class="text-lg font-bold text-[#214D41]">👥 Siswa Lain</div>
+                    <div class="mt-1 text-sm text-[#587067]">Curhat ke teman sekelas</div>
                 </label>
             </div>
-            @error('tujuan')
+            @error('penerima_id')
                 <p class="mt-2 text-xs text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        <!-- Nama penerima - Teman Sebaya -->
-        <div id="nama-teman-section" class="hidden">
-            <label for="nama_penerima" class="mb-2 block text-sm font-semibold text-[#355C4F]">Nama teman sebaya (opsional)</label>
-            <input type="text" id="nama_penerima" name="nama_penerima" class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none" placeholder="Ketik nama teman yang ingin menerima curhat..." value="{{ old('nama_penerima') }}">
-            <p class="mt-1 text-xs text-[#587067]">Jika kosong, akan dievaluasi oleh admin untuk disampaikan ke teman sebaya yang tepat.</p>
+        <!-- Pilih penerima -->
+        <div>
+            <label for="penerima_id" class="mb-2 block text-sm font-semibold text-[#355C4F]">Pilih penerima</label>
+            <select id="penerima_id" name="penerima_id" required class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none">
+                <option value="">-- Pilih penerima --</option>
+                <optgroup label="Guru" id="optgroup-guru">
+                    @foreach($gurus as $guru)
+                        <option value="{{ $guru->id }}" data-tujuan="guru" {{ old('tujuan') === 'guru' && old('penerima_id') == $guru->id ? 'selected' : '' }}>{{ $guru->name }} ({{ $guru->identifier }})</option>
+                    @endforeach
+                </optgroup>
+                <optgroup label="Siswa" id="optgroup-siswa">
+                    @foreach($siswas as $siswa)
+                        <option value="{{ $siswa->id }}" data-tujuan="siswa" {{ old('tujuan') === 'siswa' && old('penerima_id') == $siswa->id ? 'selected' : '' }}>{{ $siswa->name }} ({{ $siswa->identifier }})</option>
+                    @endforeach
+                </optgroup>
+            </select>
+            <p class="mt-1 text-xs text-[#587067]">Pilih guru atau siswa yang akan menerima curhatmu.</p>
         </div>
 
         <div>
@@ -69,72 +81,29 @@
             @enderror
         </div>
 
-        <div id="anonim-container" class="flex items-center justify-between rounded-2xl bg-[#F5F2EA] p-4 transition">
-            <div>
-                <p class="text-sm font-semibold text-[#355C4F]">Kirim sebagai anonim</p>
-                <p class="text-xs text-[#587067]" id="anonim-description">Identitasmu tidak ditampilkan ke penerima.</p>
-            </div>
-            <label class="relative inline-flex cursor-pointer items-center">
-                <input type="checkbox" id="anonim-toggle" name="anonim" value="1" class="peer sr-only" checked>
-                <div class="h-7 w-12 rounded-full bg-[#CFE0D8] transition peer-checked:bg-[#5B7F71] peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
-                <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></div>
-            </label>
-        </div>
-
         <button type="submit" class="w-full rounded-full bg-[#5B7F71] px-5 py-3 text-sm font-bold text-white shadow-md hover:bg-[#486A5E]">Kirim curhat</button>
     </form>
 </div>
 
 <script>
-    function updateTujuan(value) {
-        const namaPenerimaSectionTeman = document.getElementById('nama-teman-section');
-        if (value === 'teman') {
-            namaPenerimaSectionTeman.classList.remove('hidden');
-        } else {
-            namaPenerimaSectionTeman.classList.add('hidden');
+    function toggleTujuan(tipe) {
+        const select = document.getElementById('penerima_id');
+
+        Array.from(select.options).forEach(option => {
+            option.disabled = option.dataset.tujuan !== tipe;
+        });
+
+        if (select.value && select.selectedOptions.length && select.selectedOptions[0].dataset.tujuan !== tipe) {
+            select.value = '';
         }
     }
 
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
-        const currentTujuan = document.querySelector('input[name="tujuan"]:checked')?.value;
-        if (currentTujuan === 'teman') {
-            document.getElementById('nama-teman-section').classList.remove('hidden');
-        }
+        const selectedTujuan = document.querySelector('input[name="tujuan_tipe"]:checked')?.value || 'guru';
+        toggleTujuan(selectedTujuan);
 
-        // Handle nama_penerima input - disable anonim if name is filled
-        const namaPenerimaInput = document.getElementById('nama_penerima');
-        const anonimToggle = document.getElementById('anonim-toggle');
-        const anonimContainer = document.getElementById('anonim-container');
-        const anonimDescription = document.getElementById('anonim-description');
-
-        function updateAnonimState() {
-            if (!namaPenerimaInput || !anonimToggle) return;
-
-            const hasName = namaPenerimaInput.value.trim() !== '';
-            anonimToggle.disabled = hasName;
-
-            if (hasName) {
-                anonimToggle.checked = false;
-                anonimContainer.classList.add('opacity-60');
-                anonimDescription.textContent = 'Dinonaktifkan karena Anda memilih penerima tertentu.';
-            } else {
-                anonimContainer.classList.remove('opacity-60');
-                anonimDescription.textContent = 'Identitasmu tidak ditampilkan ke penerima.';
-                anonimToggle.checked = true;
-            }
-        }
-
-        if (namaPenerimaInput) {
-            namaPenerimaInput.addEventListener('input', updateAnonimState);
-            // Check initial state on page load
-            updateAnonimState();
-        }
-
-        // Add change event listener to category radio buttons for styling
         document.querySelectorAll('input[name="kategori"]').forEach(input => {
             input.addEventListener('change', function() {
-                // Update all radio button label styles
                 document.querySelectorAll('label[id^="kategori-label-"]').forEach(label => {
                     const radioInput = label.querySelector('input[name="kategori"]');
                     const radioDot = label.querySelector('div[class*="rounded-full"]');
@@ -144,7 +113,6 @@
                         label.classList.remove('border-[#D8D0C2]');
                         radioDot.classList.add('border-[#5B7F71]', 'bg-[#5B7F71]');
                         radioDot.classList.remove('border-[#D8D0C2]');
-                        // Add inner circle
                         if (!radioDot.querySelector('div')) {
                             const innerCircle = document.createElement('div');
                             innerCircle.className = 'w-2 h-2 bg-white rounded-full';
@@ -155,7 +123,6 @@
                         label.classList.add('border-[#D8D0C2]');
                         radioDot.classList.remove('border-[#5B7F71]', 'bg-[#5B7F71]');
                         radioDot.classList.add('border-[#D8D0C2]');
-                        // Remove inner circle
                         const innerCircle = radioDot.querySelector('div');
                         if (innerCircle) {
                             innerCircle.remove();

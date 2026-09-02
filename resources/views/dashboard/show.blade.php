@@ -8,7 +8,7 @@
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5B7F71]">Curhat masuk</p>
-                <h1 class="mt-2 text-3xl font-black text-[#214D41]">{{ $curhat->anonim ? 'Siswa anonim' : $curhat->siswa->name }}</h1>
+                <h1 class="mt-2 text-3xl font-black text-[#214D41]">{{ $curhat->siswa->name }}</h1>
             </div>
             <span class="inline-flex rounded-full px-3 py-1 text-xs font-bold {{ $curhat->status === 'terkirim' ? 'bg-[#EFE7FF] text-[#5B4A8E]' : ($curhat->status === 'dilihat' ? 'bg-[#E2F0FF] text-[#315B9C]' : ($curhat->status === 'dibalas' ? 'bg-[#FCE7D3] text-[#9A5A1B]' : 'bg-[#DFF5E7] text-[#2E6B48]')) }}">{{ ucfirst($curhat->status) }}</span>
         </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="rounded-2xl bg-[#F5F2EA] p-4">
                 <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Tujuan</p>
-                <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->tujuan === 'teman' ? 'Teman' : 'Konselor/BK' }}</p>
+                <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->tujuan === 'siswa' ? 'Siswa Lain' : 'Guru' }}</p>
             </div>
             <div class="rounded-2xl bg-[#F5F2EA] p-4">
                 <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Waktu</p>
@@ -48,7 +48,7 @@
         <div class="mt-5 space-y-4">
             @forelse($curhat->balasans as $balasan)
                 <div class="rounded-2xl bg-[#F7F4F0] p-4">
-                    <p class="font-bold text-[#214D41]">{{ $balasan->pengirim_role === 'teman' ? 'Teman Sebaya' : 'Konselor/BK' }}</p>
+                    <p class="font-bold text-[#214D41]">{{ $balasan->pengirim->name ?? ($balasan->pengirim_role === 'siswa' ? 'Siswa' : 'Guru') }}</p>
                     <p class="mt-2 text-sm leading-7 text-[#3C504B]">{{ $balasan->isi }}</p>
                 </div>
             @empty

@@ -1,6 +1,6 @@
 # Sahabat Aman
 
-Sahabat Aman adalah aplikasi web berbasis Laravel untuk sistem curhat digital yang memungkinkan siswa mengirimkan keluhan atau cerita kepada teman sebaya atau konselor/BK dengan pendekatan aman, nyaman, dan anonim jika diinginkan.
+Sahabat Aman adalah aplikasi web berbasis Laravel untuk sistem curhat digital yang memungkinkan siswa mengirimkan cerita/keluhan kepada **guru** atau **siswa lain** dengan pendekatan yang aman, nyaman, dan terarah. Siswa berperan sebagai pengguna, sedangkan guru berperan sebagai admin yang mengelola data siswa dan data curhat.
 
 ## 1. Ringkasan Proyek
 
@@ -8,7 +8,7 @@ Sahabat Aman adalah aplikasi web berbasis Laravel untuk sistem curhat digital ya
 - Platform: Web App
 - Stack utama: Laravel + MySQL + Vite
 - Bahasa: PHP, Blade, JavaScript
-- Target pengguna: Siswa, Teman Sebaya, Konselor/BK
+- Target pengguna: Siswa dan Guru
 
 ## 2. Stack Teknologi
 
@@ -39,31 +39,34 @@ Proses login ada di route `/login` dan menggunakan `AuthController` dengan valid
 - `email` wajib diisi dan valid format email
 - `password` wajib diisi
 
-Untuk testing, tester dalam menggunakan data dummy untuk melakukan input maupun output data menggunakan data berikut:
+Untuk testing, tester dapat menggunakan data dummy berikut (disiapkan via seeder):
+
 - `Siswa:`
-email: siswa@sahabataman.test
-password: password
+  Adit
+  email: `adit@gmail.com`
+  password: `password`
 
-- `Teman Sebaya:`
-email: teman@sahabataman.test
-password: password
+  Udin
+  email: `udin@gmail.com`
+  password: `password`
 
-- `Konselor/Guru BK;`
-email: konselor@sahabataman.test
-password: password
+- `Guru:`
+  email: `guru@sahabataman.test`
+  password: `password`
+
+> Catatan: akun-akun ini dibuat melalui `DatabaseSeeder` (lihat bagian seeder di bawah).
 
 ### Role yang tersedia
 
 Saat register, user memilih role:
 
 - `siswa`
-- `teman`
-- `konselor`
+- `guru`
 
 Setelah login:
 
-- `siswa` diarahkan ke halaman `/curhat`
-- `teman` dan `konselor` diarahkan ke `/dashboard`
+- `siswa` diarahkan ke halaman `/curhat` (menu: Curhat, Riwayat, Inbox)
+- `guru` diarahkan ke `/dashboard` dan otomatis dibawa ke Panel Admin (`/admin`)
 
 ### Data yang dibutuhkan saat register
 
@@ -75,15 +78,23 @@ Setelah login:
 
 ## 4. Fitur Utama
 
+### Siswa (user)
+
 - Login dan register akun
-- Siswa mengirim curhat
-- Pilihan tujuan curhat: teman atau konselor
+- Mengirim curhat
+- Pilihan tujuan curhat: **guru** atau **siswa lain** (penerima dipilih dari daftar user terdaftar)
 - Pilihan kategori: pribadi, sosial, belajar, karier
-- Opsi anonim
-- Riwayat curhat per siswa
-- Dashboard untuk teman/konselor
-- Balasan curhat dari penerima
-- Status curhat: terkirim, dilihat, dibalas, ditangani
+- Riwayat curhat per siswa (dengan nama penerima yang dipilih)
+- **Inbox**: menerima curhat yang ditujukan ke dirinya dari siswa lain, serta membalas curhat yang masuk
+
+### Guru (admin) — Panel Admin dengan sidebar
+
+- **Data Curhat** (`/admin`): melihat seluruh curhat di semua siswa. Kolom yang ditampilkan: **pengirim, penerima, kategori, status, waktu**. Isi pesan **tidak** ditampilkan demi kerahasiaan.
+- **Detail Curhat** (`/admin/curhat/{id}`): hanya menampilkan pengirim, penerima, kategori, status, dan waktu. **Isi pesan dan balasan tidak ditampilkan.**
+- **Data Siswa** (`/admin/siswa`): daftar seluruh siswa terdaftar (nama, identitas, email).
+- Filter curhat berdasarkan kategori dan status.
+
+Status curhat: `terkirim`, `dilihat`, `dibalas`, `ditangani`.
 
 ## 5. Persyaratan Sistem
 
@@ -139,7 +150,7 @@ Edit file `.env` dan atur konfigurasi database seperti berikut:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=sahabat_aman
+DB_DATABASE=db_sahabat_aman
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -147,7 +158,7 @@ DB_PASSWORD=
 Pastikan database sudah dibuat di MySQL:
 
 ```sql
-CREATE DATABASE sahabat_aman;
+CREATE DATABASE db_sahabat_aman;
 ```
 
 ### 6.6 Generate key aplikasi
@@ -167,6 +178,12 @@ Jika ingin langsung membuat struktur tabel dan data awal, bisa jalankan:
 ```bash
 php artisan migrate --seed
 ```
+
+Seeder (`DatabaseSeeder`) membuat:
+
+- `Udin` (siswa) — `udin@gmail.com` / `password`
+- `Adit` (siswa) — `adit@gmail.com` / `password`
+- `Guru Demo` (guru) — `guru@sahabataman.test` / `password`
 
 ## 7. Menjalankan Aplikasi
 
@@ -204,7 +221,7 @@ php artisan serve
 
 1. Buka halaman `/register`
 2. Isi data sesuai form
-3. Pilih role: `siswa`, `teman`, atau `konselor`
+3. Pilih role: `siswa` atau `guru`
 4. Klik daftar
 
 ### Login
@@ -216,33 +233,49 @@ php artisan serve
 ### Untuk siswa
 
 - Klik menu `Curhat`
-- Pilih tujuan curhat
+- Pilih tujuan curhat (guru atau siswa lain), lalu pilih penerima dari daftar
 - Pilih kategori masalah
 - Tulis pesan
-- Aktifkan/ nonaktifkan mode anonim
 - Kirim curhat
 - Cek status di menu `Riwayat`
+- Cek curhat yang masuk ke dirinya di menu `Inbox` dan balas bila perlu
 
-### Untuk teman/konselor
+### Untuk guru
 
-- Login dengan akun role yang sesuai
-- Akses halaman `/dashboard`
-- Lihat daftar curhat yang relevan
-- Buka detail curhat
-- Beri balasan
-- Khusus konselor, bisa menandai curhat sebagai ditangani
+- Login dengan akun role guru
+- Akan diarahkan ke Panel Admin (sidebar)
+- Menu **Data Curhat**: lihat seluruh curhat (pengirim, penerima, kategori, status, waktu) tanpa isi pesan, dan filter berdasarkan kategori/status
+- Menu **Data Siswa**: lihat daftar seluruh siswa
 
 ## 9. Struktur Project
 
 ```text
 sahabat-aman/
 ├── app/
+│   ├── Http/Controllers/
+│   │   ├── AdminController.php
+│   │   ├── AuthController.php
+│   │   └── CurhatController.php
+│   ├── Http/Middleware/EnsureUserIsGuru.php
+│   └── Models/
+│       ├── Balasan.php
+│       ├── Curhat.php
+│       └── User.php
 ├── bootstrap/
 ├── config/
 ├── database/
+│   ├── migrations/
+│   └── seeders/DatabaseSeeder.php
 ├── public/
-├── resources/
-├── routes/
+├── resources/views/
+│   ├── layouts/
+│   │   ├── admin.blade.php
+│   │   └── app.blade.php
+│   ├── admin/
+│   ├── curhat/
+│   ├── dashboard/
+│   └── riwayat/
+├── routes/web.php
 ├── storage/
 ├── tests/
 ├── .env.example
@@ -265,7 +298,7 @@ Pastikan:
 - `.env` sudah benar
 - user MySQL punya akses ke database tersebut
 
-### Error `Class "Illuminate\\..." not found`
+### Error `Class "Illuminate\..." not found`
 
 Jalankan:
 
@@ -291,7 +324,9 @@ php artisan key:generate
 - Aplikasi ini default menggunakan MySQL dan port `3306`.
 - Versi Laravel yang digunakan adalah `12.x`.
 - Login menggunakan email + password bawaan Laravel Auth.
-- Role dibuat saat registrasi, bukan dari seed otomatis.
+- Role dibuat saat registrasi, dan akun demo disiapkan melalui seeder.
+- Guru bersifat **admin murni**: isi pesan curhat **tidak** ditampilkan di Panel Admin demi kerahasiaan.
+- Penerima curhat dipilih berdasarkan user terdaftar (`penerima_id`), bukan nama bebas.
 - Jika ingin deploy ke hosting, pastikan konfigurasi `.env` disesuaikan dengan database hosting.
 
 ## 12. Lisensi
@@ -301,7 +336,5 @@ Project ini menggunakan lisensi default Laravel/MIT sesuai pengaturan awal proye
 ## 13. Sumber Referensi
 
 - Laravel Framework
-- Laravel Jetstream/Authentication basics
+- Laravel Authentication basics
 - Vite + Tailwind CSS
-
-Jika Anda mau, saya juga bisa bantu membuat versi README yang lebih formal untuk portofolio atau versi yang lebih ringkas untuk GitHub landing page.
