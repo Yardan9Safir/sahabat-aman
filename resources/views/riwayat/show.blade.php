@@ -15,16 +15,17 @@
 
         <div class="mt-6 grid gap-5 md:grid-cols-3">
             <div class="rounded-2xl bg-[#F5F2EA] p-4">
-                <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Tujuan</p>
-                <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->tujuan === 'teman' ? 'Teman Sebaya' : 'Konselor/BK' }}</p>
+                <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Penerima</p>
+                <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->penerima->name ?? '-' }}</p>
+                <p class="mt-1 text-xs text-[#6D7E79]">{{ $curhat->penerima ? ucfirst($curhat->penerima->role) : '' }}</p>
             </div>
             <div class="rounded-2xl bg-[#F5F2EA] p-4">
                 <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Waktu</p>
                 <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->created_at->translatedFormat('d M Y, H:i') }}</p>
             </div>
             <div class="rounded-2xl bg-[#F5F2EA] p-4">
-                <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Anonim</p>
-                <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->anonim ? 'Ya' : 'Tidak' }}</p>
+                <p class="text-[11px] uppercase tracking-[0.2em] text-[#6D7E79]">Penerima</p>
+                <p class="mt-2 font-bold text-[#214D41]">{{ $curhat->nama_penerima ?: '-' }}</p>
             </div>
         </div>
 
@@ -57,7 +58,7 @@
             @forelse($curhat->balasans as $balasan)
                 <div class="rounded-2xl {{ $balasan->pengirim_id === auth()->id() ? 'bg-[#E7F2EC]' : 'bg-[#F7F4F0]' }} p-4">
                     <div class="flex items-center justify-between">
-                        <p class="font-bold text-[#214D41]">{{ $balasan->pengirim->name ?? ($balasan->pengirim_role === 'teman' ? 'Teman Sebaya' : 'Konselor/BK') }}</p>
+                        <p class="font-bold text-[#214D41]">{{ $balasan->pengirim->name ?? ($balasan->pengirim_role === 'siswa' ? 'Siswa' : 'Guru') }}</p>
                         <span class="text-xs uppercase tracking-[0.2em] text-[#6D7E79]">{{ $balasan->pengirim_role }}</span>
                     </div>
                     <p class="mt-3 whitespace-pre-line text-sm leading-7 text-[#3C504B]">{{ $balasan->isi }}</p>

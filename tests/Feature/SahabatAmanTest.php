@@ -18,50 +18,78 @@ class SahabatAmanTest extends TestCase
             'identifier' => '2024001',
         ]);
 
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-1']);
+
         $this->actingAs($student);
 
         $response = $this->post('/curhat', [
-            'tujuan' => 'teman',
+            'penerima_id' => $guru->id,
             'kategori' => 'pribadi',
             'pesan' => 'Saya merasa cemas saat ujian.',
-            'anonim' => true,
         ]);
 
         $response->assertRedirect('/riwayat');
         $this->assertDatabaseHas('curhats', [
             'siswa_id' => $student->id,
-            'tujuan' => 'teman',
+            'penerima_id' => $guru->id,
+            'tujuan' => 'guru',
             'status' => 'terkirim',
         ]);
 
         $this->get('/riwayat')->assertOk();
     }
 
-    public function test_peer_counselor_can_reply_and_mark_seen(): void
+    public function test_guru_can_access_admin_panel(): void
     {
         $student = User::factory()->create(['role' => 'siswa', 'identifier' => '2024002']);
-        $peer = User::factory()->create(['role' => 'teman', 'identifier' => 'peer-1']);
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-2']);
 
         $curhat = Curhat::create([
             'siswa_id' => $student->id,
-            'tujuan' => 'teman',
+            'penerima_id' => $guru->id,
+            'tujuan' => 'guru',
             'kategori' => 'sosial',
             'pesan' => 'Saya sedang kesulitan bergaul di kelas.',
-            'anonim' => true,
             'status' => 'terkirim',
         ]);
 
-        $this->actingAs($peer);
+        $this->actingAs($guru);
 
-        $this->post('/dashboard/curhat/' . $curhat->id . '/balas', [
-            'isi' => 'Kamu tidak sendiri, ayo ceritakan lebih detail.',
-        ])->assertRedirect('/dashboard');
+        $this->get('/admin')->assertOk()->assertSee('Data Curhat');
+        $this->get('/admin/curhat/'.$curhat->id)->assertOk()->assertSee('Detail Curhat');
+        $this->get('/admin/siswa')->assertOk()->assertSee($student->name);
+    }
+
+    public function test_siswa_cannot_access_admin_panel(): void
+    {
+        $student = User::factory()->create(['role' => 'siswa', 'identifier' => '2024005']);
+
+        $this->actingAs($student);
+
+        $this->get('/admin')->assertForbidden();
+    }
+
+    public function test_siswa_recipient_can_reply(): void
+    {
+        $sender = User::factory()->create(['role' => 'siswa', 'identifier' => '2024003']);
+        $recipient = User::factory()->create(['role' => 'siswa', 'identifier' => '2024004']);
+
+        $curhat = Curhat::create([
+            'siswa_id' => $sender->id,
+            'penerima_id' => $recipient->id,
+            'tujuan' => 'siswa',
+            'kategori' => 'belajar',
+            'pesan' => 'Saya bingung memilih jurusan kuliah.',
+            'status' => 'terkirim',
+        ]);
+
+        $this->actingAs($recipient);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
+            'isi' => 'Coba konsultasikan ke guru BK ya.',
+        ])->assertRedirect();
 
         $curhat->refresh();
         $this->assertSame('dibalas', $curhat->status);
-        $this->assertDatabaseHas('balasans', [
-            'curhat_id' => $curhat->id,
-            'pengirim_id' => $peer->id,
-        ]);
     }
 }

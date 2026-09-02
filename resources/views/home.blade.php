@@ -9,7 +9,7 @@
             <div>
                 <p class="mb-4 inline-flex rounded-full bg-[#DDECE3] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#456B5A]">Sahabat Aman</p>
                 <h1 class="max-w-xl text-4xl font-black leading-tight text-[#214D41] sm:text-5xl">Curhatmu aman, dan tetap didengar.</h1>
-                <p class="mt-5 max-w-xl text-base leading-7 text-[#496D62]">Platform yang membantu siswa menyampaikan keluhan dengan nyaman, baik ke teman sebaya maupun Guru BK dan konselor, tanpa rasa takut dihakimi.</p>
+                <p class="mt-5 max-w-xl text-base leading-7 text-[#496D62]">Platform yang membantu siswa menyampaikan keluhan dengan nyaman, entah kepada guru maupun siswa lain, tanpa rasa takut dihakimi.</p>
                 <div class="mt-8 flex flex-wrap gap-3">
                     <a href="{{ route('curhat.create') }}" class="rounded-full bg-[#5B7F71] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#496A5E]">Mulai Curhat</a>
                     <a href="{{ route('login') }}" class="rounded-full border border-[#7C9885] bg-white/60 px-6 py-3 text-sm font-semibold text-[#355C4F]">Masuk</a>
@@ -31,7 +31,7 @@
                     <div class="flex gap-3">
                         <div class="flex-1 rounded-2xl bg-[#F7E7D5] p-3">
                             <p class="text-[11px] uppercase tracking-[0.2em] text-[#8D6C4C]">Tujuan</p>
-                            <p class="mt-2 font-bold text-[#4F3B2C]">Teman Sebaya</p>
+                            <p class="mt-2 font-bold text-[#4F3B2C]">Guru</p>
                         </div>
                         <div class="flex-1 rounded-2xl bg-[#DDEAF4] p-3">
                             <p class="text-[11px] uppercase tracking-[0.2em] text-[#4E677D]">Kategori</p>
@@ -47,12 +47,12 @@
         <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#E9E0D6]">
             <div class="mb-4 text-3xl">💬</div>
             <h2 class="text-xl font-bold text-[#214D41]">Curhat mudah</h2>
-            <p class="mt-3 text-sm leading-6 text-[#587067]">Pilih tujuan, kategori, dan kirim cerita dengan mode anonim yang nyaman.</p>
+            <p class="mt-3 text-sm leading-6 text-[#587067]">Pilih tujuan, kategori, dan kirim cerita ke guru atau siswa lain dengan nyaman.</p>
         </div>
         <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#E9E0D6]">
-            <div class="mb-4 text-3xl">🛡️</div>
-            <h2 class="text-xl font-bold text-[#214D41]">Privasi dijaga</h2>
-            <p class="mt-3 text-sm leading-6 text-[#587067]">Identitas siswa tetap terhubung ke akun, tetapi disembunyikan dari penerima saat anonim aktif.</p>
+            <div class="mb-4 text-3xl">🎯</div>
+            <h2 class="text-xl font-bold text-[#214D41]">Tujuan jelas</h2>
+            <p class="mt-3 text-sm leading-6 text-[#587067]">Tentukan yang membaca curhatmu, baik guru maupun siswa lain.</p>
         </div>
         <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#E9E0D6]">
             <div class="mb-4 text-3xl">📈</div>

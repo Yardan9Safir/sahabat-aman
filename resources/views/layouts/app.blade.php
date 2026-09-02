@@ -18,8 +18,9 @@
                         @if(Auth::user()->role === 'siswa')
                             <a href="{{ route('curhat.create') }}" class="hover:text-[#2D4F46]">Curhat</a>
                             <a href="{{ route('riwayat') }}" class="hover:text-[#2D4F46]">Riwayat</a>
+                            <a href="{{ route('dashboard') }}" class="hover:text-[#2D4F46]">Inbox</a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="hover:text-[#2D4F46]">Dashboard</a>
+                            <a href="{{ route('admin.index') }}" class="hover:text-[#2D4F46]">Panel Admin</a>
                         @endif
                     @else
                         <a href="{{ route('login') }}" class="hover:text-[#2D4F46]">Masuk</a>
@@ -28,7 +29,7 @@
                 </nav>
                 <div class="flex items-center gap-3">
                     @auth
-                        <span class="hidden rounded-full bg-[#E7F2EC] px-3 py-1 text-xs font-semibold text-[#3C685E] sm:inline-block">{{ ucfirst(Auth::user()->role) }}</span>
+                        <span class="hidden rounded-full bg-[#E7F2EC] px-3 py-1 text-xs font-semibold text-[#3C685E] sm:inline-block">{{ ucfirst(Auth::user()->name) }}</span>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="rounded-full bg-[#5B7F71] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#486A5E]">Keluar</button>

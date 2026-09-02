@@ -13,11 +13,11 @@ class Curhat extends Model
 
     protected $fillable = [
         'siswa_id',
+        'penerima_id',
         'tujuan',
         'nama_penerima',
         'kategori',
         'pesan',
-        'anonim',
         'status',
         'dilihat_at',
         'ditangani_by',
@@ -25,7 +25,6 @@ class Curhat extends Model
     ];
 
     protected $casts = [
-        'anonim' => 'boolean',
         'dilihat_at' => 'datetime',
         'ditangani_at' => 'datetime',
     ];
@@ -33,6 +32,11 @@ class Curhat extends Model
     public function siswa()
     {
         return $this->belongsTo(User::class, 'siswa_id');
+    }
+
+    public function penerima()
+    {
+        return $this->belongsTo(User::class, 'penerima_id');
     }
 
     public function balasans()

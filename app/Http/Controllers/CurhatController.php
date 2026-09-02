@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curhat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,25 +16,28 @@ class CurhatController extends Controller
 
     public function createForm()
     {
-        return view('curhat.create');
+        $gurus = User::where('role', 'guru')->orderBy('name')->get();
+        $siswas = User::where('role', 'siswa')->where('id', '!=', Auth::id())->orderBy('name')->get();
+
+        return view('curhat.create', compact('gurus', 'siswas'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tujuan' => ['required', 'in:teman,konselor'],
-            'nama_penerima' => ['nullable', 'string', 'max:255'],
+            'penerima_id' => ['required', 'exists:users,id'],
             'kategori' => ['required', 'in:pribadi,sosial,belajar,karier'],
             'pesan' => ['required', 'string', 'min:10'],
-            'anonim' => ['nullable', 'boolean'],
         ]);
 
+        $penerima = User::findOrFail($validated['penerima_id']);
+
         $request->user()->curhats()->create([
-            'tujuan' => $validated['tujuan'],
-            'nama_penerima' => $validated['nama_penerima'] ?? null,
+            'penerima_id' => $penerima->id,
+            'tujuan' => $penerima->role,
+            'nama_penerima' => $penerima->name,
             'kategori' => $validated['kategori'],
             'pesan' => $validated['pesan'],
-            'anonim' => $request->boolean('anonim'),
             'status' => 'terkirim',
         ]);
 
@@ -51,8 +55,6 @@ class CurhatController extends Controller
     {
         abort_unless(Auth::id() === $curhat->siswa_id, 403);
 
-        $curhat->setViewed();
-
         return view('riwayat.show', compact('curhat'));
     }
 
@@ -60,11 +62,11 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'siswa') {
-            return redirect('/curhat');
+        if ($user->role === 'guru') {
+            return redirect()->route('admin.index');
         }
 
-        $query = Curhat::query()->where('tujuan', $user->role === 'teman' ? 'teman' : 'konselor');
+        $query = Curhat::query()->where('penerima_id', $user->id);
 
         if (request('kategori')) {
             $query->where('kategori', request('kategori'));
@@ -83,13 +85,11 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'teman' && $curhat->tujuan !== 'teman') {
-            abort(403);
+        if ($user->role === 'guru') {
+            return redirect()->route('admin.show', $curhat);
         }
 
-        if ($user->role === 'konselor' && $curhat->tujuan !== 'konselor') {
-            abort(403);
-        }
+        abort_unless($curhat->penerima_id === $user->id, 403);
 
         $curhat->setViewed();
 
@@ -100,17 +100,10 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'siswa') {
-            abort(403);
-        }
-
-        if ($user->role === 'teman' && $curhat->tujuan !== 'teman') {
-            abort(403);
-        }
-
-        if ($user->role === 'konselor' && $curhat->tujuan !== 'konselor') {
-            abort(403);
-        }
+        abort_unless(
+            $curhat->penerima_id === $user->id || $curhat->siswa_id === $user->id,
+            403
+        );
 
         $validated = $request->validate([
             'isi' => ['required', 'string', 'min:3'],
@@ -124,15 +117,15 @@ class CurhatController extends Controller
 
         $curhat->setReplied();
 
-        return redirect()->route('dashboard')->with('success', 'Balasan berhasil dikirim.');
+        return redirect()->back()->with('success', 'Balasan berhasil dikirim.');
     }
 
     public function handle(Curhat $curhat)
     {
         $user = Auth::user();
 
-        abort_unless($user->role === 'konselor', 403);
-        abort_if($curhat->tujuan !== 'konselor', 403);
+        abort_unless($user->role === 'guru', 403);
+        abort_unless($curhat->penerima_id === $user->id, 403);
 
         $curhat->setHandled($user);
 
