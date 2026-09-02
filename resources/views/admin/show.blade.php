@@ -21,7 +21,7 @@
             <span class="inline-flex rounded-full px-3 py-1 text-xs font-bold {{ $curhat->status === 'terkirim' ? 'bg-[#EFE7FF] text-[#5B4A8E]' : ($curhat->status === 'dilihat' ? 'bg-[#E2F0FF] text-[#315B9C]' : ($curhat->status === 'dibalas' ? 'bg-[#FCE7D3] text-[#9A5A1B]' : 'bg-[#DFF5E7] text-[#2E6B48]')) }}">{{ ucfirst($curhat->status) }}</span>
         </div>
 
-        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div class="mt-6 grid gap-4 sm:grid-cols-3">
             <div class="rounded-2xl bg-[#F5F2EA] p-4">
                 <p class="text-[11px] uppercase tracking-[0.2em] text-[#8A7B63]">Pengirim</p>
                 <p class="mt-1 font-bold text-[#214D41]">{{ $curhat->siswa->name ?? 'Tanpa pengirim' }}</p>
