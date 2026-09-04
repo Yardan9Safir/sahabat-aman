@@ -12,7 +12,7 @@
 
 {{-- HERO SECTION --}}
 <section class="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden">
-    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-primary-fixed-dim/20 blur-3xl rounded-full pointer-events-none -z-10"></div>
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-175 h-87.5 bg-primary-fixed-dim/20 blur-3xl rounded-full pointer-events-none -z-10"></div>
     <div class="max-w-3xl mx-auto text-center">
         {{-- Trust Badge --}}
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/30 text-on-surface-variant mb-6">
@@ -284,7 +284,7 @@
             <div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 custom-pill-shadow flex flex-col">
                 <div class="w-12 h-12 rounded-2xl bg-primary-fixed text-primary text-headline-sm font-bold flex items-center justify-center mb-6">1</div>
                 <h3 class="text-title-md text-on-surface mb-2">Pilih Teman Bicara</h3>
-                <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 flex-grow">
+                <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 grow">
                     Tentukan apakah kamu ingin berbagi cerita ke Teman Sebaya atau bimbingan terarah dengan Guru BK sekolah. Kamu juga bisa memilih opsi mode anonim.
                 </p>
                 <div class="p-3 rounded-xl bg-surface-container-low text-on-surface-variant text-label-sm flex items-center gap-2">
@@ -295,7 +295,7 @@
             <div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 custom-pill-shadow flex flex-col">
                 <div class="w-12 h-12 rounded-2xl bg-primary-fixed text-primary text-headline-sm font-bold flex items-center justify-center mb-6">2</div>
                 <h3 class="text-title-md text-on-surface mb-2">Tulis Apa yang Membebani</h3>
-                <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 flex-grow">
+                <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 grow">
                     Ketikkan apapun yang kamu rasakan: tekanan tugas sekolah, pertemanan rumit, kecemasan masa depan, atau sekadar ingin didengarkan tanpa diceramahi.
                 </p>
                 <div class="p-3 rounded-xl bg-surface-container-low text-on-surface-variant text-label-sm flex items-center gap-2">
@@ -306,7 +306,7 @@
             <div class="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/30 custom-pill-shadow flex flex-col">
                 <div class="w-12 h-12 rounded-2xl bg-primary-fixed text-primary text-headline-sm font-bold flex items-center justify-center mb-6">3</div>
                 <h3 class="text-title-md text-on-surface mb-2">Dapatkan Respon Hangat</h3>
-                <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 flex-grow">
+                <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 grow">
                     Konselor akan membalas dengan penuh penerimaan dan empati. Kamu bisa terus bertukar pesan hingga merasa lebih tenang, atau menentukan langkah pendampingan berikutnya.
                 </p>
                 <div class="p-3 rounded-xl bg-surface-container-low text-on-surface-variant text-label-sm flex items-center gap-2">

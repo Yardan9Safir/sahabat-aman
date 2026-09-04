@@ -114,7 +114,7 @@
             </div>
         </header>
 
-        <main class="mt-[61px] p-6 lg:p-8 min-h-screen bg-background pb-12">
+        <main class="mt-15.25 p-6 lg:p-8 min-h-screen bg-background pb-12">
             @if(session('success'))
             <div class="mb-6 bg-primary-fixed/40 border border-primary/20 rounded-2xl px-5 py-3 text-sm font-semibold text-primary flex items-center gap-2">
                 <span class="material-symbols-outlined text-base">check_circle</span>
