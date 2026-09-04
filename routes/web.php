@@ -34,5 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/siswa/{siswa}/edit', [AdminController::class, 'siswaEdit'])->name('siswa.edit');
         Route::put('/siswa/{siswa}', [AdminController::class, 'siswaUpdate'])->name('siswa.update');
         Route::delete('/siswa/{siswa}', [AdminController::class, 'siswaDestroy'])->name('siswa.destroy');
+        Route::get('/akun', [AdminController::class, 'account'])->name('account');
+        Route::put('/akun', [AdminController::class, 'accountUpdate'])->name('account.update');
     });
 });

@@ -86,6 +86,7 @@ class CurhatController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'guru') {
+            abort_unless($curhat->tujuan === 'guru', 403);
             return redirect()->route('admin.show', $curhat);
         }
 

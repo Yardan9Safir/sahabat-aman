@@ -1,47 +1,69 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Siswa - Sahabat Aman')
+@section('title', 'Edit Siswa - RuangTeduh BK')
 
 @section('content')
-<div class="mx-auto max-w-xl">
-    <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#8A7B63]">Panel Admin</p>
-        <h1 class="mt-1 text-3xl font-black text-[#214D41]">Edit Siswa</h1>
-        <p class="mt-1 text-sm text-[#587067]">Perbarui data siswa berikut.</p>
-    </div>
+<div class="max-w-2xl mx-auto space-y-6">
+    <a href="{{ route('admin.siswa') }}" class="inline-flex items-center gap-1.5 text-label-md text-primary hover:underline font-semibold">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Kembali ke Daftar Siswa
+    </a>
 
-    <div class="mt-6 rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-[#E5DECF]">
-        <form method="POST" action="{{ route('admin.siswa.update', $siswa) }}" class="space-y-5">
+    <div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-lg">
+                {{ strtoupper(substr($siswa->name, 0, 2)) }}
+            </div>
+            <div>
+                <h1 class="text-headline-sm font-bold text-on-surface">Edit Data Siswa</h1>
+                <p class="text-body-sm text-on-surface-variant">{{ $siswa->name }}</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('admin.siswa.update', $siswa) }}" class="flex flex-col gap-5">
             @csrf
             @method('PUT')
 
             <div>
-                <label for="name" class="mb-2 block text-sm font-semibold text-[#355C4F]">Nama</label>
-                <input id="name" name="name" type="text" value="{{ old('name', $siswa->name) }}" required class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none">
-                @error('name') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                <label for="name" class="text-label-lg font-bold text-on-surface mb-2 block">Nama Lengkap</label>
+                <input type="text" name="name" id="name" value="{{ old('name', $siswa->name) }}" required
+                    class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                @error('name')
+                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
-                <label for="identifier" class="mb-2 block text-sm font-semibold text-[#355C4F]">NIS / Identifier</label>
-                <input id="identifier" name="identifier" type="text" value="{{ old('identifier', $siswa->identifier) }}" class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none">
-                @error('identifier') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                <label for="identifier" class="text-label-lg font-bold text-on-surface mb-2 block">NISN / ID Siswa</label>
+                <input type="text" name="identifier" id="identifier" value="{{ old('identifier', $siswa->identifier) }}"
+                    class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                @error('identifier')
+                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
-                <label for="email" class="mb-2 block text-sm font-semibold text-[#355C4F]">Email</label>
-                <input id="email" name="email" type="email" value="{{ old('email', $siswa->email) }}" required class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none">
-                @error('email') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                <label for="email" class="text-label-lg font-bold text-on-surface mb-2 block">Email</label>
+                <input type="email" name="email" id="email" value="{{ old('email', $siswa->email) }}" required
+                    class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                @error('email')
+                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
-                <label for="password" class="mb-2 block text-sm font-semibold text-[#355C4F]">Password Baru <span class="font-normal text-[#8A7B63]">(opsional)</span></label>
-                <input id="password" name="password" type="password" placeholder="Kosongkan jika tidak diubah" class="w-full rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm focus:border-[#5B7F71] focus:outline-none">
-                @error('password') <p class="mt-2 text-xs text-red-600">{{ $message }}</p> @enderror
+                <label for="password" class="text-label-lg font-bold text-on-surface mb-2 block">Password Baru <span class="text-outline font-normal">(Kosongkan jika tidak diubah)</span></label>
+                <input type="password" name="password" id="password"
+                    class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                @error('password')
+                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                @enderror
             </div>
 
-            <div class="flex items-center gap-3">
-                <button type="submit" class="rounded-full bg-[#5B7F71] px-5 py-3 text-sm font-bold text-white hover:bg-[#486A5E]">Simpan</button>
-                <a href="{{ route('admin.siswa') }}" class="rounded-full border border-[#7C9885] px-5 py-3 text-sm font-semibold text-[#385C4F]">Batal</a>
+            <div class="flex items-center gap-3 pt-2">
+                <a href="{{ route('admin.siswa') }}" class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">Batal</a>
+                <button type="submit" class="px-7 py-3.5 rounded-2xl bg-primary-container text-white text-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">save</span> Simpan Perubahan
+                </button>
             </div>
         </form>
     </div>

@@ -1,64 +1,96 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard - Sahabat Aman')
+@section('title', 'Kotak Masuk - Sahabat Aman')
 
 @section('content')
-<div class="space-y-6">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5B7F71]">Dashboard</p>
-            <h1 class="mt-2 text-3xl font-black text-[#214D41]">Daftar curhat masuk</h1>
-        </div>
+<section class="bg-gradient-to-r from-surface-container-low via-surface-container-lowest to-surface-container-low p-6 sm:p-8 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="max-w-xl">
+        <h2 class="text-headline-lg font-bold text-on-surface tracking-tight leading-snug">Kotak Masuk & Dialog</h2>
+        <p class="text-body-md text-on-surface-variant mt-2">Lihat balasan dari pendengar pilihanmu. Setiap percakapan dijaga kerahasiaannya.</p>
     </div>
+    <a href="{{ route('curhat.create') }}" class="px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-lg">add_notes</span> Curhat Baru
+    </a>
+</section>
 
-    <div class="rounded-[28px] bg-white p-4 shadow-sm ring-1 ring-[#E5DECF]">
-        <form method="GET" class="grid gap-4 md:grid-cols-3">
-            <select name="kategori" class="rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm">
-                <option value="">Semua kategori</option>
-                <option value="pribadi" {{ request('kategori') === 'pribadi' ? 'selected' : '' }}>Pribadi</option>
-                <option value="sosial" {{ request('kategori') === 'sosial' ? 'selected' : '' }}>Sosial</option>
-                <option value="belajar" {{ request('kategori') === 'belajar' ? 'selected' : '' }}>Belajar</option>
-                <option value="karier" {{ request('kategori') === 'karier' ? 'selected' : '' }}>Karier</option>
-            </select>
-            <select name="status" class="rounded-2xl border border-[#D8D0C2] bg-[#FBF9F5] px-4 py-3 text-sm">
-                <option value="">Semua status</option>
-                <option value="terkirim" {{ request('status') === 'terkirim' ? 'selected' : '' }}>Terkirim</option>
-                <option value="dilihat" {{ request('status') === 'dilihat' ? 'selected' : '' }}>Dilihat</option>
-                <option value="dibalas" {{ request('status') === 'dibalas' ? 'selected' : '' }}>Dibalas</option>
-                <option value="ditangani" {{ request('status') === 'ditangani' ? 'selected' : '' }}>Ditangani</option>
-            </select>
-            <button type="submit" class="rounded-2xl bg-[#5B7F71] px-5 py-3 text-sm font-bold text-white">Filter</button>
-        </form>
+@if($curhats->isEmpty())
+<div class="bg-surface-container-lowest p-10 rounded-3xl soft-shadow border border-surface-variant/40 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary mx-auto mb-4">
+        <span class="material-symbols-outlined text-3xl">chat_bubble</span>
     </div>
-
-    @if($curhats->isEmpty())
-        <div class="rounded-[28px] border border-dashed border-[#C8D5CD] bg-[#F9F7F3] p-10 text-center">
-            <p class="text-lg font-bold text-[#214D41]">Tidak ada curhat yang cocok.</p>
-        </div>
-    @else
-        <div class="space-y-4">
-            @foreach($curhats as $curhat)
-                <div class="rounded-[28px] bg-white p-5 shadow-sm ring-1 ring-[#E5DECF]">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5B7F71]">{{ ucfirst($curhat->kategori) }}</p>
-                            <h2 class="mt-2 text-xl font-bold text-[#214D41]">{{ $curhat->siswa->name }}</h2>
-                        </div>
-                        <span class="inline-flex rounded-full px-3 py-1 text-xs font-bold {{ $curhat->status === 'terkirim' ? 'bg-[#EFE7FF] text-[#5B4A8E]' : ($curhat->status === 'dilihat' ? 'bg-[#E2F0FF] text-[#315B9C]' : ($curhat->status === 'dibalas' ? 'bg-[#FCE7D3] text-[#9A5A1B]' : 'bg-[#DFF5E7] text-[#2E6B48]')) }}">{{ ucfirst($curhat->status) }}</span>
-                    </div>
-                    <p class="mt-4 text-sm leading-6 text-[#4F635F]">{{ Str::limit($curhat->pesan, 180) }}</p>
-                    <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <a href="{{ route('dashboard.show', $curhat) }}" class="inline-flex items-center justify-center rounded-full border border-[#B8C7BD] px-4 py-2 text-sm font-semibold text-[#355C4F]">Lihat detail</a>
-                        @if(Auth::user()->role === 'guru' && $curhat->penerima_id === Auth::id() && $curhat->status !== 'ditangani')
-                            <form method="POST" action="{{ route('dashboard.handle', $curhat) }}">
-                                @csrf
-                                <button type="submit" class="rounded-full bg-[#3A7A57] px-4 py-2 text-sm font-bold text-white">Tandai ditangani</button>
-                            </form>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
+    <h2 class="text-headline-sm font-bold text-on-surface">Belum ada percakapan</h2>
+    <p class="text-body-md text-on-surface-variant mt-2">Ketika kamu atau orang lain membalas curhatmu, percakapan akan muncul di sini.</p>
+    <a href="{{ route('curhat.create') }}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary transition-all">
+        <span class="material-symbols-outlined text-lg">edit_note</span> Mulai Curhat
+    </a>
 </div>
+@else
+<div class="bg-surface-container-lowest p-4 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+        <h3 class="text-title-md font-bold text-on-surface">Dialog Siswa</h3>
+        <p class="text-body-sm text-on-surface-variant">{{ $curhats->count() }} Percakapan</p>
+    </div>
+    <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
+        <a href="{{ route('dashboard') }}" class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+            Semua ({{ $curhats->count() }})
+        </a>
+        <a href="{{ route('dashboard', ['status' => 'terkirim']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+            Baru
+        </a>
+        <a href="{{ route('dashboard', ['status' => 'dibalas']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+            Dibalas
+        </a>
+        <a href="{{ route('dashboard', ['status' => 'ditangani']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+            Selesai
+        </a>
+    </div>
+</div>
+
+<div class="space-y-3">
+    @foreach($curhats as $curhat)
+    <a href="{{ route('dashboard.show', $curhat) }}" class="block p-4 rounded-2xl {{ $curhat->status === 'terkirim' ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
+        <div class="flex items-start justify-between gap-2 mb-1.5">
+            <div class="flex items-center gap-1.5">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm">
+                    <span class="material-symbols-outlined text-xs">{{ $curhat->tujuan === 'guru' ? 'school' : 'diversity_1' }}</span>
+                    {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Teman Sebaya' }}
+                </span>
+                @if($curhat->status === 'dibalas')
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E4F5EB] text-[#1B5E3B] text-label-sm font-semibold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                    Dibalas
+                </span>
+                @elseif($curhat->status === 'terkirim')
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FEF3E2] text-[#964F06] text-label-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                    Menunggu Balasan
+                </span>
+                @elseif($curhat->status === 'ditangani')
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-label-sm">
+                    <span class="material-symbols-outlined text-xs text-primary">check_circle</span>
+                    Selesai
+                </span>
+                @else
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-outline text-label-sm">
+                    {{ ucfirst($curhat->status) }}
+                </span>
+                @endif
+            </div>
+            <span class="text-label-sm text-outline">{{ $curhat->created_at->diffForHumans() }}</span>
+        </div>
+        <div class="pl-0">
+            <h3 class="text-title-md text-on-surface text-[15px] leading-snug line-clamp-1 mb-0.5 font-bold">
+                {{ ucfirst($curhat->kategori) }}
+            </h3>
+            <p class="text-label-sm text-primary font-semibold mb-1">
+                {{ $curhat->nama_penerima ?? $curhat->penerima->name ?? 'Tidak diketahui' }}
+            </p>
+            <p class="text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+                {{ Str::limit($curhat->pesan, 160) }}
+            </p>
+        </div>
+    </a>
+    @endforeach
+</div>
+@endif
 @endsection
