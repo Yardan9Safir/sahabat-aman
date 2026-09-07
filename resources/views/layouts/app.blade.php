@@ -62,10 +62,6 @@
             </div>
 
             <nav class="flex flex-col gap-1.5">
-                <a class="flex items-center gap-3 {{ request()->routeIs('home') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('home') }}">
-                    <span class="material-symbols-outlined {{ request()->routeIs('home') ? 'text-primary' : 'text-outline' }}">spa</span>
-                    <span class="text-label-lg">Beranda Ruang Aman</span>
-                </a>
                 <a class="flex items-center gap-3 {{ request()->routeIs('curhat.create') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('curhat.create') }}">
                     <span class="material-symbols-outlined {{ request()->routeIs('curhat.create') ? 'text-primary' : 'text-outline' }}">add_notes</span>
                     <span class="text-label-lg">Buat Curhat Baru</span>
@@ -97,9 +93,6 @@
                     <span class="text-label-md">Keluar</span>
                 </button>
             </form>
-            <div class="text-center">
-                <span class="text-label-sm text-outline">Enkripsi End-to-End Siswa</span>
-            </div>
         </div>
     </aside>
     @endauth
@@ -135,10 +128,6 @@
     {{-- Mobile Bottom Navigation --}}
     @auth
     <nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest shadow-lg border-t border-surface-variant/30">
-        <a class="flex flex-col items-center justify-center {{ request()->routeIs('home') ? 'bg-primary-container text-on-primary-container rounded-xl' : 'text-on-surface-variant' }} px-3 py-1.5 transition-transform duration-150" href="{{ route('home') }}">
-            <span class="material-symbols-outlined text-xl {{ request()->routeIs('home') ? 'text-on-primary-container' : '' }}">spa</span>
-            <span class="text-label-sm mt-0.5 {{ request()->routeIs('home') ? 'font-semibold' : 'font-normal' }}">Beranda</span>
-        </a>
         <a class="flex flex-col items-center justify-center {{ request()->routeIs('curhat.create') ? 'bg-primary-container text-on-primary-container rounded-xl' : 'text-on-surface-variant' }} px-3 py-1.5 transition-transform duration-150" href="{{ route('curhat.create') }}">
             <span class="material-symbols-outlined text-xl">add_notes</span>
             <span class="text-label-sm mt-0.5">Curhat</span>

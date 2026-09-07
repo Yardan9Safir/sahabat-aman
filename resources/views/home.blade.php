@@ -3,12 +3,6 @@
 @section('title', 'Sahabat Aman - BK')
 
 @section('content')
-{{-- TOP EMERGENCY BANNER --}}
-<div class="bg-surface-container-low text-on-surface-variant border-b border-surface-container px-4 py-2 text-center flex items-center justify-center gap-2 rounded-2xl">
-    <span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
-    <span class="text-label-sm font-medium">Butuh bantuan segera saat krisis? Hotline Psikologi Sekolah siaga 24/7 di 0800-1 atau datangi Ruang BK Gedung A.</span>
-    <a class="text-label-sm font-semibold text-primary underline ml-1 hover:text-primary-container" href="#krisis">Bantuan Cepat</a>
-</div>
 
 {{-- HERO SECTION --}}
 <section class="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden">
@@ -493,10 +487,6 @@
                         <span class="material-symbols-outlined text-primary text-base">mail</span>
                         <span>konseling@sekolah.sch.id</span>
                     </p>
-                    <p class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-error text-base">phone_in_talk</span>
-                        <span class="font-semibold text-on-surface">Hotline Siaga: 0800-1</span>
-                    </p>
                 </div>
             </div>
         </div>
@@ -505,7 +495,6 @@
             <div class="flex items-center gap-6">
                 <a class="hover:text-primary transition-colors" href="#">Kebijakan Privasi Siswa</a>
                 <a class="hover:text-primary transition-colors" href="#">Syarat Penggunaan</a>
-                <a class="hover:text-primary transition-colors" href="#">Integritas Data</a>
             </div>
         </div>
     </div>
