@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Siswa - RuangTeduh BK')
+@section('title', 'Edit Siswa - BK')
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">

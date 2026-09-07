@@ -151,7 +151,6 @@
     </div>
     <ul class="space-y-2 text-body-md text-on-surface-variant">
         <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-sm mt-1">check</span> Tulis dengan jujur, tidak ada jawaban yang salah di sini.</li>
-        <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-sm mt-1">check</span> Kamu bisa memilih apakah ingin anonim atau terbuka.</li>
         <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-sm mt-1">check</span> Cerita yang dikirim tidak akan dibagikan ke pihak lain tanpa izinmu.</li>
     </ul>
 </section>

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Sahabat Aman - RuangTeduh BK')
+@section('title', 'Sahabat Aman - BK')
 
 @section('content')
 {{-- TOP EMERGENCY BANNER --}}
 <div class="bg-surface-container-low text-on-surface-variant border-b border-surface-container px-4 py-2 text-center flex items-center justify-center gap-2 rounded-2xl">
     <span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
-    <span class="text-label-sm font-medium">Butuh bantuan segera saat krisis? Hotline Psikologi Sekolah siaga 24/7 di 0800-1-TEDUH atau datangi Ruang BK Gedung A.</span>
+    <span class="text-label-sm font-medium">Butuh bantuan segera saat krisis? Hotline Psikologi Sekolah siaga 24/7 di 0800-1 atau datangi Ruang BK Gedung A.</span>
     <a class="text-label-sm font-semibold text-primary underline ml-1 hover:text-primary-container" href="#krisis">Bantuan Cepat</a>
 </div>
 
@@ -17,7 +17,7 @@
         {{-- Trust Badge --}}
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high border border-outline-variant/30 text-on-surface-variant mb-6">
             <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings: 'FILL' 1;">lock</span>
-            <span class="text-label-md">100% Bebas Stigma &bull; Anonimitas & Etika Kerahasiaan Terjamin</span>
+            <span class="text-label-md">100% Bebas Stigma &bull; Etika Kerahasiaan Terjamin</span>
         </div>
         {{-- Hero Headline --}}
         <h1 class="text-headline-xl font-bold tracking-tight text-on-surface text-balance mb-6 leading-tight">
@@ -106,7 +106,7 @@
                 <span>&#x1F331;</span> <span>Bersyukur</span>
             </button>
         </div>
-        <p class="text-body-sm text-outline mt-3">Tidak ada emosi yang salah. Apapun rasanya, RuangTeduh hadir untuk mendengarkan tanpa menghakimi.</p>
+        <p class="text-body-sm text-outline mt-3">Tidak ada emosi yang salah. Apapun rasanya, Sahabat Aman hadir untuk mendengarkan tanpa menghakimi.</p>
     </div>
 </section>
 
@@ -238,7 +238,7 @@
                     <span class="text-label-md text-primary font-bold">REVOLUSI BUDAYA SEKOLAH</span>
                     <h3 class="text-headline-md text-on-surface mt-1 mb-3">Menghapus Stigma "Ruang BK Tempat Anak Bermasalah"</h3>
                     <p class="text-body-md text-on-surface-variant leading-relaxed">
-                        Selama puluhan tahun, dipanggil ke ruang BK identik dengan hukuman atau kenakalan. RuangTeduh mengubah ruang BK menjadi oasis penyembuhan emosional, eksplorasi minat karir, dan wadah bercerita tanpa takut dicap negatif oleh teman sekelas.
+                        Selama puluhan tahun, dipanggil ke ruang BK identik dengan hukuman atau kenakalan. Sahabat Aman mengubah ruang BK menjadi oasis penyembuhan emosional, eksplorasi minat karir, dan wadah bercerita tanpa takut dicap negatif oleh teman sekelas.
                     </p>
                 </div>
                 <div class="mt-8 pt-6 border-t border-surface-container flex flex-wrap gap-4 text-on-surface-variant text-label-md">
@@ -285,7 +285,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-primary-fixed text-primary text-headline-sm font-bold flex items-center justify-center mb-6">1</div>
                 <h3 class="text-title-md text-on-surface mb-2">Pilih Teman Bicara</h3>
                 <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 flex-grow">
-                    Tentukan apakah kamu ingin berbagi cerita ke Teman Sebaya atau bimbingan terarah dengan Guru BK sekolah. Kamu juga bisa memilih opsi mode anonim.
+                    Tentukan apakah kamu ingin berbagi cerita ke Teman Sebaya atau bimbingan terarah dengan Guru BK sekolah.
                 </p>
                 <div class="p-3 rounded-xl bg-surface-container-low text-on-surface-variant text-label-sm flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary text-base">visibility_off</span>
@@ -339,7 +339,7 @@
                         <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
                     </div>
                     <blockquote class="text-body-lg text-on-surface italic leading-relaxed mb-6">
-                        "Dulu aku selalu mengunci diri kalau panik menjelang ujian akhir dan ekspektasi orang tua. Takut mau ke ruang BK karena takut dikira kena masalah. Lewat RuangTeduh, aku bisa curhat duluan secara anonim ke Peer Counselor. Tanggapannya bikin adem banget, dan akhirnya aku berani konseling tatap muka dengan tenang."
+                        "Dulu aku selalu mengunci diri kalau panik menjelang ujian akhir dan ekspektasi orang tua. Takut mau ke ruang BK karena takut dikira kena masalah. Lewat Sahabat Aman, aku bisa curhat duluan ke Temanku. Tanggapannya bikin adem banget, dan akhirnya aku berani konseling tatap muka dengan tenang."
                     </blockquote>
                 </div>
                 <div class="flex items-center gap-3 pt-4 border-t border-surface-container">
@@ -407,15 +407,6 @@
             </details>
             <details class="group bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 custom-pill-shadow open:border-primary/40 transition-all">
                 <summary class="flex justify-between items-center cursor-pointer text-title-md text-on-surface list-none">
-                    <span>Apakah saya bisa benar-benar menggunakan nama samaran?</span>
-                    <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
-                </summary>
-                <p class="text-body-md text-on-surface-variant mt-4 leading-relaxed border-t border-surface-container pt-3">
-                    Ya. Di portal siswa tersedia tombol "Mode Anonim". Ketika opsi ini aktif, konselor hanya akan melihat nama avatar unik sehingga kamu bisa merasa lebih bebas menuangkan keluh kesahmu tanpa beban reputasi.
-                </p>
-            </details>
-            <details class="group bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 custom-pill-shadow open:border-primary/40 transition-all">
-                <summary class="flex justify-between items-center cursor-pointer text-title-md text-on-surface list-none">
                     <span>Bagaimana jika saya butuh konsultasi di luar jam sekolah?</span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
                 </summary>
@@ -467,7 +458,7 @@
                     <div class="w-8 h-8 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
                         <span class="material-symbols-outlined text-lg">spa</span>
                     </div>
-                    <span class="text-headline-sm font-bold text-primary">RuangTeduh BK</span>
+                    <span class="text-headline-sm font-bold text-primary">Sahabat Aman BK</span>
                 </div>
                 <p class="text-body-sm text-on-surface-variant mb-6 leading-relaxed">
                     Inisiatif Digitalisasi Bimbingan & Konseling Sekolah Inklusif. Menjamin kerahasiaan, kesehatan mental siswa, dan hubungan positif di lingkungan pendidikan.
@@ -504,7 +495,7 @@
                     </p>
                     <p class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-error text-base">phone_in_talk</span>
-                        <span class="font-semibold text-on-surface">Hotline Siaga: 0800-1-TEDUH</span>
+                        <span class="font-semibold text-on-surface">Hotline Siaga: 0800-1</span>
                     </p>
                 </div>
             </div>

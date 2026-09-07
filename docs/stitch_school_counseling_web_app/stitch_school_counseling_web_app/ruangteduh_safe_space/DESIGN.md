@@ -1,5 +1,5 @@
 ---
-name: RuangTeduh Safe Space
+name: Sahabat Aman Safe Space
 colors:
   surface: '#f0fdf3'
   surface-dim: '#d0ddd4'
