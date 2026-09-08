@@ -31,5 +31,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::get('/curhat/{curhat}', [AdminController::class, 'show'])->name('show');
         Route::get('/siswa', [AdminController::class, 'siswa'])->name('siswa');
+        Route::get('/siswa/{siswa}/edit', [AdminController::class, 'siswaEdit'])->name('siswa.edit');
+        Route::put('/siswa/{siswa}', [AdminController::class, 'siswaUpdate'])->name('siswa.update');
+        Route::delete('/siswa/{siswa}', [AdminController::class, 'siswaDestroy'])->name('siswa.destroy');
+        Route::get('/akun', [AdminController::class, 'account'])->name('account');
+        Route::put('/akun', [AdminController::class, 'accountUpdate'])->name('account.update');
     });
 });

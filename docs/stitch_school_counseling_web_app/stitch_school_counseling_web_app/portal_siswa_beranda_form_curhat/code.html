@@ -1,0 +1,502 @@
+<!DOCTYPE html><html lang="id" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Ruang Aman BK - Portal Siswa &amp; Curhat Terjaga</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#d9e6dd",
+            "on-surface": "#131e18",
+            "surface-dim": "#d0ddd4",
+            "on-primary-fixed-variant": "#0e5138",
+            "error": "#ba1a1a",
+            "on-tertiary": "#ffffff",
+            "outline": "#707973",
+            "surface-tint": "#2c694e",
+            "tertiary-container": "#924d00",
+            "error-container": "#ffdad6",
+            "secondary": "#615a7c",
+            "on-error-container": "#93000a",
+            "on-primary-fixed": "#002114",
+            "primary-container": "#2d6a4f",
+            "on-tertiary-fixed-variant": "#6f3900",
+            "inverse-on-surface": "#e7f4eb",
+            "on-tertiary-container": "#ffd0af",
+            "surface": "#f0fdf3",
+            "on-secondary": "#ffffff",
+            "surface-bright": "#f0fdf3",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb77f",
+            "inverse-primary": "#95d4b3",
+            "surface-container-highest": "#d9e6dd",
+            "secondary-fixed": "#e6deff",
+            "on-background": "#131e18",
+            "on-secondary-fixed-variant": "#494263",
+            "background": "#f0fdf3",
+            "primary-fixed-dim": "#95d4b3",
+            "on-primary-container": "#a8e7c5",
+            "secondary-container": "#ded5fd",
+            "secondary-fixed-dim": "#cac1e9",
+            "on-surface-variant": "#404943",
+            "tertiary": "#6f3900",
+            "outline-variant": "#bfc9c1",
+            "tertiary-fixed": "#ffdcc3",
+            "surface-container": "#e4f1e8",
+            "surface-container-lowest": "#ffffff",
+            "primary": "#0f5238",
+            "surface-container-high": "#deebe2",
+            "on-tertiary-fixed": "#2f1500",
+            "inverse-surface": "#28332d",
+            "on-secondary-container": "#615a7d",
+            "primary-fixed": "#b1f0ce",
+            "surface-container-low": "#eaf7ee",
+            "on-secondary-fixed": "#1d1735"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1.25rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "title-md": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-xl": ["40px", { "lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-xl-mobile": ["30px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["15px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "title-md": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+            "headline-lg": ["32px", { "lineHeight": "42px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "body-lg": ["17px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .soft-shadow {
+      box-shadow: 0 4px 20px -2px rgba(45, 106, 79, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+    }
+    .hover-lift {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hover-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -4px rgba(45, 106, 79, 0.08), 0 4px 8px -2px rgba(45, 106, 79, 0.03);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Desktop SideNavBar Component based on Shared Component JSON -->
+<aside class="fixed top-0 left-0 h-full w-72 bg-surface-container-lowest z-40 hidden lg:flex flex-col justify-between p-6 shadow-md border-r border-surface-variant/40">
+<div class="flex flex-col gap-6">
+<!-- Brand & Header Identity -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined" data-icon="spa">spa</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight">Sahabat Aman</h1>
+<p class="font-label-sm text-label-sm text-outline">Sistem Konseling Terjaga &amp; Aman</p>
+</div>
+</div>
+<!-- Student Profile Card Minimal -->
+<div class="p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-base">
+          RS
+        </div>
+<div class="flex-1 min-w-0">
+<p class="font-label-lg text-label-lg font-bold truncate text-on-surface">Rian Safutra</p>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span> Kelas XI IPA 2
+          </span>
+</div>
+<button class="text-outline hover:text-primary transition-colors p-1" title="Pengaturan">
+<span class="material-symbols-outlined text-lg" data-icon="shield">shield</span>
+</button>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1.5">
+<!-- Beranda Ruang Aman (Active based on current view) -->
+<a class="flex items-center gap-3 bg-surface-container text-primary font-bold rounded-xl px-4 py-3 active:scale-[0.99] transition-transform duration-100" href="#beranda">
+<span class="material-symbols-outlined" data-icon="spa" data-weight="fill" style="font-variation-settings: &quot;FILL&quot; 1;">spa</span>
+<span class="font-label-lg text-label-lg">Beranda Ruang Aman</span>
+</a>
+<!-- Buat Curhat Baru -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-3 font-normal transition-colors duration-150" href="#buat-curhat">
+<span class="material-symbols-outlined" data-icon="add_notes">add_notes</span>
+<span class="font-label-lg text-label-lg">Buat Curhat Baru</span>
+</a>
+<!-- Kotak Masuk & Dialog -->
+<a class="flex items-center justify-between text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-3 font-normal transition-colors duration-150" href="#kotak-masuk">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-lg text-label-lg">Kotak Masuk &amp; Dialog</span>
+</div>
+<span class="bg-primary-container text-on-primary px-2 py-0.5 rounded-full text-xs font-bold">1</span>
+</a>
+<!-- Riwayat Curhat -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-3 font-normal transition-colors duration-150" href="#riwayat">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-lg text-label-lg">Riwayat Curhat</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Footer Area & Crisis Link -->
+<div class="flex flex-col gap-3 pt-4 border-t border-surface-variant/40">
+<!-- Panduan Privasi -->
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-2.5 font-normal transition-colors duration-150" href="#privasi">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+<span class="font-label-md text-label-md">Panduan Privasi</span>
+</a>
+<!-- Pusat Krisis BK / Bantuan Cepat Pill -->
+
+<div class="text-center">
+<span class="font-label-sm text-label-sm text-outline">Enkripsi End-to-End Siswa</span>
+</div>
+</div>
+</aside>
+<!-- Mobile Top Bar with Shared Brand Identity -->
+<header class="lg:hidden fixed top-0 left-0 w-full bg-surface-container-lowest z-30 px-4 py-3 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm" data-icon="spa">spa</span>
+</div>
+<span class="font-title-md text-title-md font-bold text-primary">Ruang Aman BK</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-error bg-error-container/40 rounded-full" title="Bantuan Cepat">
+<span class="material-symbols-outlined text-xl" data-icon="health_and_safety">health_and_safety</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">
+        RS
+      </div>
+</div>
+</header>
+<!-- Main Canvas Content Area -->
+<main class="flex-1 lg:ml-72 min-h-screen pt-16 lg:pt-8 pb-24 lg:pb-12 px-4 sm:px-8 max-w-7xl mx-auto flex flex-col gap-8">
+<!-- Section 1: Welcoming Header & Mood Check-In -->
+<section class="bg-gradient-to-r from-surface-container-low via-surface-container-lowest to-surface-container-low p-6 sm:p-8 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<div class="max-w-xl">
+
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight leading-snug">
+          Halo, Rian. Apa yang sedang membebani pikiranmu hari ini?
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">
+          Ambil jeda sebentar. Tarik napas perlahan. Apapun perasaanmu hari ini, kamu tidak harus memikulnya sendirian.
+        </p>
+</div>
+<!-- Interactive Mood Check-in Pill Bar -->
+
+</section>
+<!-- Main Grid: Interactive Hero Form (Left 8 cols) + Status & Affirmation (Right 4 cols) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Formulir Curhat Baru (8 cols) -->
+<section class="lg:col-span-8 bg-surface-container-lowest p-6 sm:p-8 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col gap-6 relative overflow-hidden">
+<!-- Subtle leaf decorative background element -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Card Header -->
+<div class="flex flex-wrap items-center justify-between gap-4 border-b border-surface-variant/40 pb-5">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl" data-icon="edit_heart">chevron_left</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Mulai Curhat Baru</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sampaikan apa yang terjadi. Setiap kata berada di bawah kode etik kerahasiaan.</p>
+</div>
+</div>
+<!-- Privacy Security Pill Badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-low text-primary rounded-full font-label-sm text-label-sm font-semibold border border-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+<span class="">Aman &amp; Terjaga</span>
+</div>
+</div>
+<form class="flex flex-col gap-6" id="venting-form">
+<!-- 1. Pemilihan Target Pendengar: Segmented Tabs -->
+<div class="flex flex-col gap-2.5">
+<label class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="group">group</span>
+              Pilih Siapa yang Ingin Mendengarmu:
+            </label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="target-listener-group">
+<!-- Option A: Guru BK Sekolah -->
+<label class="relative flex flex-col p-4 rounded-2xl border-2 border-primary bg-surface-container-low/40 cursor-pointer transition-all hover-lift"><input checked="" class="peer sr-only" name="listener_target" type="radio" value="guru_bk"><div class="flex items-center justify-between mb-2"><span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="school">school</span> Guru BK Sekolah</span><div class="w-5 h-5 rounded-full border-2 border-primary bg-primary flex items-center justify-center text-white"><span class="material-symbols-outlined text-xs font-bold" data-icon="check">check</span></div></div><div class="flex items-center gap-2 mb-1"><p class="font-body-sm text-body-sm font-semibold text-on-surface">Konselor Profesional Berlisensi</p><span class="px-2 py-0.5 rounded-md bg-surface-container text-primary font-label-sm text-label-sm font-bold">Histori Tercatat Guru</span></div><p class="font-body-sm text-body-sm text-outline mt-0.5 leading-snug">Cocok untuk bimbingan konseling formal &amp; pemantauan berkala. Catatan tersimpan untuk penanganan tindak lanjut beretika.</p></label>
+<!-- Option B: Peer Counselor -->
+<label class="relative flex flex-col p-4 rounded-2xl border border-outline-variant/60 bg-surface-container-lowest cursor-pointer transition-all hover-lift"><input class="peer sr-only" name="listener_target" type="radio" value="peer_counselor"><div class="flex items-center justify-between mb-2"><span class="px-2.5 py-1 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-bold flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="diversity_1">diversity_1</span> Teman Sebaya / Peer Counselor</span><div class="w-5 h-5 rounded-full border border-outline flex items-center justify-center text-transparent"><span class="material-symbols-outlined text-xs font-bold" data-icon="check">check</span></div></div><div class="flex items-center gap-2 mb-1"><p class="font-body-sm text-body-sm font-semibold text-on-surface">Kakak Kelas / Teman Terlatih</p><span class="px-2 py-0.5 rounded-md bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-bold">Privat &amp; Rahasia dari Guru</span></div><p class="font-body-sm text-body-sm text-outline mt-0.5 leading-snug">Ruang aman santai antar-siswa tanpa penghakiman. Riwayat chat terlindungi penuh dan tidak dapat diakses pihak guru.</p></label>
+</div>
+</div>
+<!-- 2. Kategori Masalah: Tag Pilihan -->
+<div class="flex flex-col gap-2.5">
+<label class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="category">category</span>
+              Topik Pembahasan:
+            </label>
+<div class="flex flex-wrap gap-2" id="category-tags">
+<button class="category-tag px-3.5 py-2 rounded-xl text-label-md font-label-md border-2 border-primary bg-surface-container text-primary font-bold flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-base" data-icon="menu_book">menu_book</span>
+                Akademik &amp; Ujian
+              </button>
+<button class="category-tag px-3.5 py-2 rounded-xl text-label-md font-label-md border border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-base" data-icon="group">group</span>
+                Pertemanan / Relasi
+              </button>
+<button class="category-tag px-3.5 py-2 rounded-xl text-label-md font-label-md border border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-base" data-icon="cottage">cottage</span>
+                Keluarga
+              </button>
+<button class="category-tag px-3.5 py-2 rounded-xl text-label-md font-label-md border border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-base" data-icon="psychology">psychology</span>
+                Overthinking
+              </button>
+<button class="category-tag px-3.5 py-2 rounded-xl text-label-md font-label-md border border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-base" data-icon="self_improvement">self_improvement</span>
+                Pengembangan Diri
+              </button>
+</div>
+</div>
+<!-- 3. Textarea Input Curhat Luas -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-2" for="curhat-text">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="draw">draw</span>
+                Ruang Luapan Pikiranmu:
+              </label>
+<span class="font-label-sm text-label-sm text-outline" id="char-counter">0 / 2000 karakter</span>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 sm:p-5 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all resize-y outline-none font-body-md" id="curhat-text" placeholder="Tuliskan apa saja yang kamu rasakan, tidak ada penilaian di sini... Ceritakan beban ujian, rasa lelah, kesal, atau hal yang mengganjal hatimu." rows="6"></textarea>
+</div>
+</div>
+<!-- 4. Opsi Privasi: Switch Toggle Anonim -->
+
+<!-- 5. Form Actions -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+<p class="font-body-sm text-body-sm text-outline flex items-center gap-1.5 text-center sm:text-left"><span class="material-symbols-outlined text-base text-primary flex-shrink-0" data-icon="verified_user">verified_user</span><span class="">Histori chat dengan Guru BK tercatat untuk bimbingan konseling. Obrolan dengan Teman Sebaya (Peer) bersifat privat antar-siswa dan tidak dapat diakses oleh guru.</span></p>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary font-label-lg text-label-lg font-bold hover:bg-surface-variant transition-colors" type="button">
+                Simpan Draft
+              </button>
+<button class="flex-1 sm:flex-none px-7 py-3.5 rounded-2xl bg-primary-container text-white font-label-lg text-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit"><span class="material-symbols-outlined text-lg" data-icon="send">send</span> Kirim Curhat</button>
+</div>
+</div>
+</form>
+</section>
+<!-- Right Column: Curhat Aktif + Kutipan Afirmasi (4 cols) -->
+<aside class="lg:col-span-4 flex flex-col gap-6">
+<!-- Ringkasan Curhat Aktif Kamu -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col gap-4">
+<div class="flex items-center justify-between pb-2 border-b border-surface-variant/40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="mark_chat_unread">mark_chat_unread</span>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">Curhat Aktif Kamu</h4>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm font-bold text-primary">2 Aktif</span>
+</div>
+<!-- Card 1: Curhat #BK-104 -->
+<div class="p-4 rounded-2xl bg-surface-container-low/40 border border-primary/20 flex flex-col gap-2.5 hover-lift cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-primary px-2 py-0.5 bg-primary-fixed/60 rounded-md">#BK-104</span>
+<!-- Status Badge: Ada Balasan Baru -->
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+                Ada Balasan Baru
+              </span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg font-bold text-on-surface">Tekanan Belajar Menjelang Tryout SNBT</p>
+<p class="font-body-sm text-body-sm text-outline mt-0.5">Tujuan: Ibu Rahma, S.Psi (Guru BK)</p>
+</div>
+<div class="p-2.5 rounded-xl bg-surface-container-lowest text-on-surface-variant font-body-sm text-body-sm border border-outline-variant/30 flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5" data-icon="forum">forum</span>
+<p class="italic text-xs leading-relaxed line-clamp-2">"Rian, tidak apa-apa merasa kewalahan. Ibu sudah siapkan jadwal latihan santai untukmu..."</p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-outline">10 menit yang lalu</span>
+<span class="text-primary font-label-sm text-label-sm font-bold flex items-center gap-0.5">
+                Buka Dialog
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Card 2: Curhat #PR-082 -->
+<div class="p-4 rounded-2xl bg-surface-container-lowest border border-surface-variant/60 flex flex-col gap-2.5 hover-lift cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-outline px-2 py-0.5 bg-surface-container rounded-md">#PR-082</span>
+<!-- Status Badge: Sedang Dibaca -->
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-outline font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="done_all">done_all</span>
+                Sedang Dibaca
+              </span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg font-bold text-on-surface">Bingung Membuka Obrolan di Kelompok Baru</p>
+<p class="font-body-sm text-body-sm text-outline mt-0.5">Tujuan: Dinda (Peer Counselor)</p>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-outline">Kemarin, 16:40</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm font-medium flex items-center gap-0.5">
+                Menunggu Respon
+              </span>
+</div>
+</div>
+<a class="text-center font-label-md text-label-md font-bold text-primary hover:underline pt-1" href="#riwayat">
+            Lihat Seluruh Riwayat Konseling (5)
+          </a>
+</div>
+<!-- Tips Kesehatan Mental & Afirmasi Harian -->
+<div class="p-6 rounded-3xl bg-gradient-to-br from-secondary-fixed/50 to-surface-container-low border border-secondary-fixed/40 soft-shadow flex flex-col gap-4">
+<div class="flex items-center gap-2 text-secondary">
+<span class="material-symbols-outlined text-2xl" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-md text-label-md font-bold uppercase tracking-wider">Afirmasi Hari Ini</span>
+</div>
+<blockquote class="font-headline-sm text-headline-sm text-on-secondary-fixed font-semibold leading-relaxed">
+            “Kamu tidak harus menyelesaikan semua hal hari ini. Bertahan dan hadir sampai detik ini sudah sebuah pencapaian besar.”
+          </blockquote>
+<!-- 3-Menit Latihan Napas Interaktif -->
+
+</div>
+<!-- Info Jadwal Guru BK yang Bertugas -->
+
+</aside>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Bar (Shared Component JSON Compliance) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest shadow-lg border-t border-surface-variant/30">
+<!-- Tab 1: Beranda (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1.5 active:scale-95 transition-transform duration-150" href="#beranda">
+<span class="material-symbols-outlined text-xl" data-icon="spa" data-weight="fill" style="font-variation-settings: &quot;FILL&quot; 1;">spa</span>
+<span class="font-label-sm text-label-sm font-semibold mt-0.5">Beranda</span>
+</a>
+<!-- Tab 2: Curhat -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 active:scale-95 transition-transform duration-150" href="#buat-curhat">
+<span class="material-symbols-outlined text-xl" data-icon="edit_heart">chevron_left</span>
+<span class="font-label-sm text-label-sm font-normal mt-0.5">Curhat</span>
+</a>
+<!-- Tab 3: Pesan -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 active:scale-95 transition-transform duration-150 relative" href="#kotak-masuk">
+<span class="material-symbols-outlined text-xl" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-sm text-label-sm font-normal mt-0.5">Pesan</span>
+<span class="absolute top-1 right-2 w-2 h-2 rounded-full bg-primary"></span>
+</a>
+<!-- Tab 4: Riwayat -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 active:scale-95 transition-transform duration-150" href="#riwayat">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_heart">bookmark_heart</span>
+<span class="font-label-sm text-label-sm font-normal mt-0.5">Riwayat</span>
+</a>
+</nav>
+<!-- Interactive script for category tags, character counter, and mood selection -->
+<script>
+    // Character counter
+    const textarea = document.getElementById('curhat-text');
+    const counter = document.getElementById('char-counter');
+    if (textarea && counter) {
+      textarea.addEventListener('input', (e) => {
+        const count = e.target.value.length;
+        counter.textContent = `${count} / 2000 karakter`;
+      });
+    }
+
+    // Mood pills single select
+    const moodPills = document.querySelectorAll('.mood-pill');
+    moodPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        moodPills.forEach(p => {
+          p.classList.remove('border-2', 'border-primary-container', 'bg-surface-container-low', 'text-primary', 'font-bold');
+          p.classList.add('border', 'border-outline-variant/50', 'text-on-surface-variant');
+        });
+        pill.classList.add('border-2', 'border-primary-container', 'bg-surface-container-low', 'text-primary', 'font-bold');
+        pill.classList.remove('border', 'border-outline-variant/50', 'text-on-surface-variant');
+      });
+    });
+
+    // Category tags selection
+    const categoryTags = document.querySelectorAll('.category-tag');
+    categoryTags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        categoryTags.forEach(t => {
+          t.classList.remove('border-2', 'border-primary', 'bg-surface-container', 'text-primary', 'font-bold');
+          t.classList.add('border', 'border-outline-variant/60', 'bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        tag.classList.add('border-2', 'border-primary', 'bg-surface-container', 'text-primary', 'font-bold');
+        tag.classList.remove('border', 'border-outline-variant/60', 'bg-surface-container-lowest', 'text-on-surface-variant');
+      });
+    });
+
+    // Listener toggle radio visual feedback
+    const listenerCards = document.querySelectorAll('#target-listener-group label');
+    listenerCards.forEach(card => {
+      card.addEventListener('click', () => {
+        listenerCards.forEach(c => {
+          c.classList.remove('border-2', 'border-primary', 'bg-surface-container-low/40');
+          c.classList.add('border', 'border-outline-variant/60', 'bg-surface-container-lowest');
+          const indicator = c.querySelector('.w-5.h-5');
+          if (indicator) {
+            indicator.className = "w-5 h-5 rounded-full border border-outline flex items-center justify-center text-transparent";
+          }
+        });
+        card.classList.add('border-2', 'border-primary', 'bg-surface-container-low/40');
+        card.classList.remove('border', 'border-outline-variant/60', 'bg-surface-container-lowest');
+        const indicator = card.querySelector('.w-5.h-5');
+        if (indicator) {
+          indicator.className = "w-5 h-5 rounded-full border-2 border-primary bg-primary flex items-center justify-center text-white";
+        }
+      });
+    });
+
+    // Gentle submission alert feedback
+    const ventForm = document.getElementById('venting-form');
+    if (ventForm) {
+      ventForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const content = textarea.value.trim();
+        if (!content) {
+          textarea.focus();
+          return;
+        }
+        alert('Curhatmu telah terkirim secara aman & terenkripsi ke pendengar pilihanmu. Tetap tenang ya!');
+        textarea.value = '';
+        counter.textContent = '0 / 2000 karakter';
+      });
+    }
+  </script>
+
+
+</body></html>

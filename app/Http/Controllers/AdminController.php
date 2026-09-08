@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Curhat;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Curhat::query()->with(['siswa', 'penerima']);
+        $query = Curhat::query()->with(['siswa', 'penerima'])->where('tujuan', 'guru');
 
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
@@ -27,13 +29,91 @@ class AdminController extends Controller
 
     public function show(Curhat $curhat)
     {
+        abort_unless($curhat->tujuan === 'guru', 403);
+
+        $curhat->load(['siswa', 'penerima', 'balasans.pengirim']);
+
         return view('admin.show', compact('curhat'));
     }
 
     public function siswa()
     {
-        $siswas = User::where('role', 'siswa')->orderBy('name')->get();
+        $siswas = User::where('role', 'siswa')
+            ->with(['curhats' => function ($q) {
+                $q->select('id', 'siswa_id', 'status', 'created_at')->orderBy('created_at', 'desc');
+            }])
+            ->orderBy('name')
+            ->get();
 
         return view('admin.siswa', compact('siswas'));
+    }
+
+    public function siswaEdit(User $siswa)
+    {
+        abort_unless($siswa->role === 'siswa', 404);
+
+        return view('admin.siswa-edit', compact('siswa'));
+    }
+
+    public function siswaUpdate(Request $request, User $siswa)
+    {
+        abort_unless($siswa->role === 'siswa', 404);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'identifier' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $siswa->id],
+            'password' => ['nullable', 'string', 'min:8'],
+        ]);
+
+        $siswa->name = $validated['name'];
+        $siswa->identifier = $validated['identifier'] ?? null;
+        $siswa->email = $validated['email'];
+
+        if (!empty($validated['password'])) {
+            $siswa->password = Hash::make($validated['password']);
+        }
+
+        $siswa->save();
+
+        return redirect()->route('admin.siswa')->with('success', 'Data siswa berhasil diperbarui.');
+    }
+
+    public function siswaDestroy(User $siswa)
+    {
+        abort_unless($siswa->role === 'siswa', 404);
+
+        $siswa->delete();
+
+        return redirect()->route('admin.siswa')->with('success', 'Siswa berhasil dihapus.');
+    }
+
+    public function account()
+    {
+        $user = Auth::user();
+
+        return view('admin.account', compact('user'));
+    }
+
+    public function accountUpdate(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.account')->with('success', 'Akun berhasil diperbarui.');
     }
 }

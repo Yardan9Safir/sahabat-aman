@@ -86,6 +86,7 @@ class CurhatController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'guru') {
+            abort_unless($curhat->tujuan === 'guru', 403);
             return redirect()->route('admin.show', $curhat);
         }
 
@@ -109,7 +110,7 @@ class CurhatController extends Controller
             'isi' => ['required', 'string', 'min:3'],
         ]);
 
-        $curhat->balasans()->create([
+        $balasan = $curhat->balasans()->create([
             'pengirim_id' => $user->id,
             'pengirim_role' => $user->role,
             'isi' => $validated['isi'],
@@ -117,17 +118,34 @@ class CurhatController extends Controller
 
         $curhat->setReplied();
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'balasan' => [
+                    'id' => $balasan->id,
+                    'isi' => $balasan->isi,
+                    'pengirim_name' => $user->name,
+                    'pengirim_role' => $user->role,
+                    'created_at' => $balasan->created_at->translatedFormat('d M Y, H:i'),
+                    'is_me' => true,
+                ],
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Balasan berhasil dikirim.');
     }
 
-    public function handle(Curhat $curhat)
+    public function handle(Curhat $curhat, Request $request)
     {
         $user = Auth::user();
 
-        abort_unless($user->role === 'guru', 403);
         abort_unless($curhat->penerima_id === $user->id, 403);
 
         $curhat->setHandled($user);
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
 
         return redirect()->route('dashboard')->with('success', 'Curhat telah ditandai selesai.');
     }

@@ -1,42 +1,52 @@
 @extends('layouts.app')
 
-@section('title', 'Riwayat Curhat')
+@section('title', 'Riwayat Curhat - Sahabat Aman')
 
 @section('content')
-<div class="space-y-6">
-    <div class="flex items-center justify-between">
-        <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5B7F71]">Riwayat</p>
-            <h1 class="mt-2 text-3xl font-black text-[#214D41]">Curhatmu</h1>
-        </div>
-        <a href="{{ route('curhat.create') }}" class="rounded-full bg-[#5B7F71] px-5 py-3 text-sm font-bold text-white">Buat curhat baru</a>
+<section class="bg-gradient-to-r from-surface-container-low via-surface-container-lowest to-surface-container-low p-6 sm:p-8 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="max-w-xl">
+        <h2 class="text-headline-lg font-bold text-on-surface tracking-tight leading-snug">Riwayat Curhatmu</h2>
+        <p class="text-body-md text-on-surface-variant mt-2">Semua cerita yang sudah kamu kirim akan muncul di sini.</p>
     </div>
+    <a href="{{ route('curhat.create') }}" class="px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-lg">add_notes</span> Curhat Baru
+    </a>
+</section>
 
-    @if($curhats->isEmpty())
-        <div class="rounded-[28px] border border-dashed border-[#C8D5CD] bg-[#F9F7F3] p-10 text-center">
-            <div class="text-5xl mb-4">💌</div>
-            <h2 class="text-xl font-bold text-[#214D41]">Belum ada curhat</h2>
-            <p class="mt-2 text-sm text-[#587067]">Semua cerita yang kamu kirim akan muncul di sini.</p>
-        </div>
-    @else
-        <div class="space-y-4">
-            @foreach($curhats as $curhat)
-                <a href="{{ route('riwayat.show', $curhat) }}" class="block rounded-[28px] bg-white p-5 shadow-sm ring-1 ring-[#E5DECF] transition hover:-translate-y-0.5 hover:shadow-md">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#5B7F71]">{{ ucfirst($curhat->kategori) }}</p>
-                            <h2 class="mt-2 text-xl font-bold text-[#214D41]">Untuk {{ $curhat->penerima->name ?? 'Tidak diketahui' }}</h2>
-                        </div>
-                        <span class="inline-flex rounded-full px-3 py-1 text-xs font-bold {{ $curhat->status === 'terkirim' ? 'bg-[#EFE7FF] text-[#5B4A8E]' : ($curhat->status === 'dilihat' ? 'bg-[#E2F0FF] text-[#315B9C]' : ($curhat->status === 'dibalas' ? 'bg-[#FCE7D3] text-[#9A5A1B]' : 'bg-[#DFF5E7] text-[#2E6B48]')) }}">{{ ucfirst($curhat->status) }}</span>
-                    </div>
-                    <p class="mt-4 line-clamp-2 text-sm leading-6 text-[#4F635F]">{{ Str::limit($curhat->pesan, 160) }}</p>
-                    <div class="mt-4 flex items-center justify-between text-xs text-[#6D7E79]">
-                        <span>{{ $curhat->created_at->translatedFormat('d M Y, H:i') }}</span>
-                        <span>{{ $curhat->penerima->name ?? 'Menunggu penerima' }}</span>
-                    </div>
-                </a>
-            @endforeach
-        </div>
-    @endif
+@if($curhats->isEmpty())
+<div class="bg-surface-container-lowest p-10 rounded-3xl soft-shadow border border-surface-variant/40 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center text-primary mx-auto mb-4">
+        <span class="material-symbols-outlined text-3xl">bookmark_heart</span>
+    </div>
+    <h2 class="text-headline-sm font-bold text-on-surface">Belum ada riwayat curhat</h2>
+    <p class="text-body-md text-on-surface-variant mt-2">Semua cerita yang kamu kirim akan muncul di sini.</p>
+    <a href="{{ route('curhat.create') }}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary transition-all">
+        <span class="material-symbols-outlined text-lg">edit_note</span> Mulai Curhat
+    </a>
 </div>
+@else
+<div class="space-y-3">
+    @foreach($curhats as $curhat)
+    <a href="{{ route('riwayat.show', $curhat) }}" class="block p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 hover-lift cursor-pointer transition-all hover:shadow-md">
+        <div class="flex items-start justify-between gap-2 mb-1.5">
+            <div class="flex items-center gap-1.5">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm">
+                    <span class="material-symbols-outlined text-xs">{{ $curhat->tujuan === 'guru' ? 'school' : 'diversity_1' }}</span>
+                    {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Teman Sebaya' }}
+                </span>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-[#FEF3E2] text-[#964F06]' : ($curhat->status === 'dibalas' ? 'bg-[#E4F5EB] text-[#1B5E3B]' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold">
+                    {{ ucfirst($curhat->status) }}
+                </span>
+            </div>
+            <span class="text-label-sm text-outline">{{ $curhat->created_at->diffForHumans() }}</span>
+        </div>
+        <div>
+            <h3 class="text-title-md text-on-surface text-[15px] leading-snug mb-0.5 font-bold">{{ ucfirst($curhat->kategori) }}</h3>
+            <p class="text-label-sm text-primary font-semibold mb-1">Penerima: {{ $curhat->nama_penerima ?? $curhat->penerima->name ?? 'Tidak diketahui' }}</p>
+            <p class="text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">{{ Str::limit($curhat->pesan, 160) }}</p>
+        </div>
+    </a>
+    @endforeach
+</div>
+@endif
 @endsection
