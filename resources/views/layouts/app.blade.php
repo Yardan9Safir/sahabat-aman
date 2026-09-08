@@ -15,132 +15,186 @@
             vertical-align: middle;
             line-height: 1;
         }
+        .material-symbols-outlined.hidden { display: none !important; }
         .soft-shadow {
             box-shadow: 0 4px 20px -2px rgba(45, 106, 79, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
-        }
-        .hover-lift {
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .hover-lift:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px -4px rgba(45, 106, 79, 0.08), 0 4px 8px -2px rgba(45, 106, 79, 0.03);
         }
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #bfc9c1; border-radius: 9999px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #707973; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+        /* Sidebar: hamburger collapse (desktop) + drawer (HP) */
+        #appSidebar { transition: transform .3s cubic-bezier(0.16,1,0.3,1), width .3s cubic-bezier(0.16,1,0.3,1), padding .3s; }
+        #appMainCol { transition: margin-left .3s cubic-bezier(0.16,1,0.3,1); }
+        @media (max-width: 1023.98px) {
+            body.sidebar-open #appSidebar { transform: translateX(0) !important; }
+            body.sidebar-open #sidebarOverlay { opacity: 1; pointer-events: auto; }
+        }
+        @media (min-width: 1024px) {
+            body.sidebar-collapsed #appSidebar { width: 92px !important; padding-left: 12px; padding-right: 12px; }
+            body.sidebar-collapsed #appSidebar .sidebar-label { display: none !important; }
+            body.sidebar-collapsed #sidebarHead { flex-direction: column; align-items: center; gap: 12px; padding-left: 0; padding-right: 0; }
+            body.sidebar-collapsed #appSidebar .sidebar-nav-link { justify-content: center; align-items: center; width: 52px; height: 52px; margin-left: auto; margin-right: auto; padding: 0; border-radius: 16px; }
+            body.sidebar-collapsed #appSidebar .sidebar-nav-link .material-symbols-outlined { font-size: 24px; }
+            body.sidebar-collapsed #appMainCol { margin-left: 92px !important; }
+            body.sidebar-collapsed #profileCard { justify-content: center; padding: 10px; background: transparent; }
+            body.sidebar-collapsed #logoutBtn { justify-content: center; padding-left: 0; padding-right: 0; }
+        }
+        #sidebarOverlay { opacity: 0; pointer-events: none; transition: opacity .25s ease; }
     </style>
 </head>
 <body class="bg-background font-sans text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-on-primary-fixed">
 
-    {{-- Desktop Side Navigation (hanya untuk user yang sudah login) --}}
     @auth
-    <aside class="fixed top-0 left-0 h-full w-72 bg-surface-container-lowest z-40 hidden lg:flex flex-col justify-between p-6 shadow-md border-r border-surface-variant/40">
-        <div class="flex flex-col gap-6">
-            <div class="flex items-center gap-3 px-2">
-                <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
-                    <span class="material-symbols-outlined">spa</span>
-                </div>
-                <div>
-                    <h1 class="text-headline-sm font-bold text-primary tracking-tight">Sahabat Aman</h1>
-                    <p class="text-label-sm text-outline">Sistem Konseling Terjaga & Aman</p>
-                </div>
-            </div>
+    {{-- Overlay drawer HP --}}
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-30 lg:hidden"></div>
 
-            <div class="p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-base">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-label-lg font-bold truncate text-on-surface">{{ Auth::user()->name }}</p>
-                    <span class="inline-flex items-center gap-1 text-label-sm text-outline">
-                        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-                        {{ ucfirst(Auth::user()->role) }}
-                    </span>
-                </div>
-            </div>
-
-            <nav class="flex flex-col gap-1.5">
-                <a class="flex items-center gap-3 {{ request()->routeIs('curhat.create') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('curhat.create') }}">
-                    <span class="material-symbols-outlined {{ request()->routeIs('curhat.create') ? 'text-primary' : 'text-outline' }}">add_notes</span>
-                    <span class="text-label-lg">Buat Curhat Baru</span>
-                </a>
-                <a class="flex items-center justify-between {{ request()->routeIs('dashboard') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('dashboard') }}">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined {{ request()->routeIs('dashboard') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
-                        <span class="text-label-lg">Kotak Masuk & Dialog</span>
+    {{-- Sidebar saja (tanpa topbar, tanpa dropdown): hamburger untuk collapse --}}
+    <aside id="appSidebar" class="fixed top-0 left-0 h-screen w-72 max-w-[85vw] bg-surface-container-lowest z-40 flex flex-col p-6 shadow-md border-r border-surface-variant/40 -translate-x-full lg:translate-x-0 overflow-hidden">
+        <div class="flex flex-col gap-6 min-h-0 flex-1">
+            {{-- Brand + hamburger --}}
+            <div id="sidebarHead" class="flex items-center justify-between gap-2 px-2 shrink-0">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 shrink-0 rounded-2xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+                        <span class="material-symbols-outlined">spa</span>
                     </div>
+                    <div class="sidebar-label min-w-0">
+                        <h1 class="text-headline-sm font-bold text-primary tracking-tight leading-none truncate">Sahabat Aman</h1>
+                        <p class="text-label-sm text-outline mt-1 leading-tight">Sistem Konseling Terjaga & Aman</p>
+                    </div>
+                </div>
+                <button id="btnSidebar" type="button" class="p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors shrink-0" aria-label="Buka / tutup sidebar" aria-expanded="true" aria-controls="appSidebar" title="Buka / tutup sidebar">
+                    <span id="btnSidebarIcon" class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+
+            <nav class="flex flex-col gap-1.5 overflow-y-auto custom-scroll min-h-0" aria-label="Navigasi utama">
+                <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('curhat.create') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('curhat.create') }}" title="Buat Curhat Baru">
+                    <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('curhat.create') ? 'text-primary' : 'text-outline' }}">add_notes</span>
+                    <span class="sidebar-label text-label-lg truncate">Buat Curhat Baru</span>
                 </a>
-                <a class="flex items-center gap-3 {{ request()->routeIs('riwayat*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('riwayat') }}">
-                    <span class="material-symbols-outlined {{ request()->routeIs('riwayat*') ? 'text-primary' : 'text-outline' }}">history_edu</span>
-                    <span class="text-label-lg">Riwayat Curhat</span>
+                <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('dashboard') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('dashboard') }}" title="Kotak Masuk & Dialog">
+                    <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('dashboard') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
+                    <span class="sidebar-label text-label-lg truncate">Kotak Masuk & Dialog</span>
+                </a>
+                <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('riwayat*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('riwayat') }}" title="Riwayat Curhat">
+                    <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('riwayat*') ? 'text-primary' : 'text-outline' }}">history_edu</span>
+                    <span class="sidebar-label text-label-lg truncate">Riwayat Curhat</span>
                 </a>
                 @if(Auth::user()->role === 'guru')
-                <a class="flex items-center gap-3 {{ request()->routeIs('admin.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('admin.index') }}">
-                    <span class="material-symbols-outlined {{ request()->routeIs('admin.*') ? 'text-primary' : 'text-outline' }}">dashboard</span>
-                    <span class="text-label-lg">Panel Guru BK</span>
+                <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('admin.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('admin.index') }}" title="Panel Guru BK">
+                    <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('admin.*') ? 'text-primary' : 'text-outline' }}">dashboard</span>
+                    <span class="sidebar-label text-label-lg truncate">Panel Guru BK</span>
                 </a>
                 @endif
             </nav>
         </div>
 
-        <div class="flex flex-col gap-3 pt-4 border-t border-surface-variant/40">
+        {{-- Profil statis + tombol keluar (dropdown dihapus) --}}
+        <div class="flex flex-col gap-3 pt-4 mt-6 border-t border-surface-variant/40 shrink-0">
+            <div id="profileCard" class="w-full p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3">
+                <span class="w-10 h-10 shrink-0 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-base">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                </span>
+                <span class="sidebar-label flex-1 min-w-0">
+                    <span class="block text-label-lg font-bold truncate text-on-surface">{{ Auth::user()->name }}</span>
+                    <span class="flex items-center gap-1 text-label-sm text-outline">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                        {{ ucfirst(Auth::user()->role) }}
+                    </span>
+                </span>
+            </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-2.5 font-normal transition-colors duration-150 w-full">
-                    <span class="material-symbols-outlined text-lg">logout</span>
-                    <span class="text-label-md">Keluar</span>
+                <button id="logoutBtn" type="submit" class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-2.5 font-normal transition-colors duration-150 w-full" title="Keluar">
+                    <span class="material-symbols-outlined text-lg shrink-0">logout</span>
+                    <span class="sidebar-label text-label-md">Keluar</span>
                 </button>
             </form>
         </div>
     </aside>
     @endauth
 
-    {{-- Mobile Top Bar (hanya untuk user login) --}}
-    @auth
-    <header class="lg:hidden fixed top-0 left-0 w-full bg-surface-container-lowest z-30 px-4 py-3 flex items-center justify-between shadow-sm">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-on-primary">
-                <span class="material-symbols-outlined text-sm">spa</span>
+    {{-- Konten --}}
+    <div id="appMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen @auth lg:ml-72 @endauth">
+        <main class="flex-1 w-full px-4 sm:px-8 max-w-7xl mx-auto flex flex-col gap-8 @auth pt-6 lg:pt-8 pb-28 lg:pb-12 @else py-10 @endauth">
+            @if(session('success'))
+            <div class="bg-primary-fixed/40 border border-primary/20 rounded-2xl px-5 py-3 text-sm font-semibold text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">check_circle</span>
+                {{ session('success') }}
             </div>
-            <span class="text-title-md font-bold text-primary">Sahabat Aman</span>
-        </div>
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">
-                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+            @endif
+            @yield('content')
+        </main>
+
+        @auth
+        {{-- Bottom nav HP dibenahi + tombol Menu untuk buka sidebar (pengganti topbar) --}}
+        <nav class="lg:hidden fixed bottom-0 left-0 w-full z-40 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
+            @php $isGuru = Auth::user()->role === 'guru'; @endphp
+            <div class="grid {{ $isGuru ? 'grid-cols-5' : 'grid-cols-4' }} gap-1 max-w-md mx-auto">
+                <a href="{{ route('curhat.create') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <span class="material-symbols-outlined text-[22px] leading-none">add_notes</span>
+                    <span class="text-[11px] leading-tight">Curhat</span>
+                </a>
+                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
+                    <span class="text-[11px] leading-tight">Pesan</span>
+                </a>
+                <a href="{{ route('riwayat') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('riwayat*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <span class="material-symbols-outlined text-[22px] leading-none">bookmark_heart</span>
+                    <span class="text-[11px] leading-tight">Riwayat</span>
+                </a>
+                @if($isGuru)
+                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('admin.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
+                    <span class="text-[11px] leading-tight">Panel</span>
+                </a>
+                @endif
+                <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
+                    <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
+                    <span class="text-[11px] leading-tight">Menu</span>
+                </button>
             </div>
-        </div>
-    </header>
-    @endauth
+        </nav>
+        @endauth
+    </div>
 
-    {{-- Main Content --}}
-    <main class="flex-1 min-h-screen px-4 sm:px-8 max-w-7xl mx-auto flex flex-col gap-8 @auth lg:ml-72 @endauth pt-16 lg:pt-8 pb-24 lg:pb-12">
-        @if(session('success'))
-        <div class="bg-primary-fixed/40 border border-primary/20 rounded-2xl px-5 py-3 text-sm font-semibold text-primary flex items-center gap-2">
-            <span class="material-symbols-outlined text-base">check_circle</span>
-            {{ session('success') }}
-        </div>
-        @endif
-        @yield('content')
-    </main>
-
-    {{-- Mobile Bottom Navigation --}}
     @auth
-    <nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest shadow-lg border-t border-surface-variant/30">
-        <a class="flex flex-col items-center justify-center {{ request()->routeIs('curhat.create') ? 'bg-primary-container text-on-primary-container rounded-xl' : 'text-on-surface-variant' }} px-3 py-1.5 transition-transform duration-150" href="{{ route('curhat.create') }}">
-            <span class="material-symbols-outlined text-xl">add_notes</span>
-            <span class="text-label-sm mt-0.5">Curhat</span>
-        </a>
-        <a class="flex flex-col items-center justify-center {{ request()->routeIs('dashboard') ? 'bg-primary-container text-on-primary-container rounded-xl' : 'text-on-surface-variant' }} px-3 py-1.5 transition-transform duration-150 relative" href="{{ route('dashboard') }}">
-            <span class="material-symbols-outlined text-xl">chat_bubble</span>
-            <span class="text-label-sm mt-0.5">Pesan</span>
-        </a>
-        <a class="flex flex-col items-center justify-center {{ request()->routeIs('riwayat*') ? 'bg-primary-container text-on-primary-container rounded-xl' : 'text-on-surface-variant' }} px-3 py-1.5 transition-transform duration-150" href="{{ route('riwayat') }}">
-            <span class="material-symbols-outlined text-xl">bookmark_heart</span>
-            <span class="text-label-sm mt-0.5">Riwayat</span>
-        </a>
-    </nav>
+    <script>
+        (function () {
+            var body = document.body;
+            var btnSidebar = document.getElementById('btnSidebar');
+            var btnMenuMobile = document.getElementById('btnMenuMobile');
+            var overlay = document.getElementById('sidebarOverlay');
+            var icon = document.getElementById('btnSidebarIcon');
+            var isDesktop = function () { return window.matchMedia('(min-width: 1024px)').matches; };
+
+            function syncIcon() {
+                var isOpen = isDesktop() ? !body.classList.contains('sidebar-collapsed') : body.classList.contains('sidebar-open');
+                if (icon) icon.textContent = isOpen ? 'close' : 'menu';
+                if (btnSidebar) btnSidebar.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            }
+            function toggleSidebar() {
+                if (isDesktop()) {
+                    body.classList.toggle('sidebar-collapsed');
+                    try { localStorage.setItem('sa-sidebar-collapsed', body.classList.contains('sidebar-collapsed') ? '1' : '0'); } catch (e) {}
+                } else {
+                    body.classList.toggle('sidebar-open');
+                }
+                syncIcon();
+            }
+            function closeMobile() { body.classList.remove('sidebar-open'); syncIcon(); }
+
+            if (btnSidebar) btnSidebar.addEventListener('click', toggleSidebar);
+            if (btnMenuMobile) btnMenuMobile.addEventListener('click', function () { body.classList.add('sidebar-open'); syncIcon(); });
+            if (overlay) overlay.addEventListener('click', closeMobile);
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMobile(); } });
+            window.addEventListener('resize', syncIcon);
+            try { if (isDesktop() && localStorage.getItem('sa-sidebar-collapsed') === '1') body.classList.add('sidebar-collapsed'); } catch (e) {}
+            syncIcon();
+        })();
+    </script>
     @endauth
 
     @yield('scripts')
