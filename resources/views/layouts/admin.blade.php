@@ -21,10 +21,10 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(112, 121, 115, 0.25); border-radius: 9999px; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 
-        #adminSidebar { transition: transform .3s cubic-bezier(0.16,1,0.3,1), width .3s cubic-bezier(0.16,1,0.3,1), padding .3s; }
+        #adminSidebar { transition: translate .3s cubic-bezier(0.16,1,0.3,1), transform .3s cubic-bezier(0.16,1,0.3,1), width .3s cubic-bezier(0.16,1,0.3,1), padding .3s; }
         #adminMainCol { transition: margin-left .3s cubic-bezier(0.16,1,0.3,1); }
         @media (max-width: 1023.98px) {
-            body.sidebar-open #adminSidebar { transform: translateX(0) !important; }
+            body.sidebar-open #adminSidebar { translate: 0 0 !important; transform: translateX(0) !important; }
             body.sidebar-open #sidebarOverlay { opacity: 1; pointer-events: auto; }
         }
         @media (min-width: 1024px) {
@@ -38,15 +38,17 @@
             body.sidebar-collapsed #adminLogoutBtn { justify-content: center; padding-left: 0; padding-right: 0; }
         }
         #sidebarOverlay { opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+        #adminSidebar, #adminSidebar nav { overscroll-behavior: contain; }
+        html.drawer-locked, html.drawer-locked body { overflow: hidden; }
     </style>
 </head>
 <body class="bg-background text-on-surface font-sans antialiased min-h-screen flex">
 
     {{-- Overlay drawer HP --}}
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-30 lg:hidden"></div>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 lg:hidden"></div>
 
     {{-- Sidebar saja (tanpa topbar, tanpa dropdown): hamburger collapse --}}
-    <aside id="adminSidebar" class="fixed top-0 left-0 h-screen w-72 max-w-[85vw] flex flex-col bg-surface-container-low border-r border-outline-variant z-40 -translate-x-full lg:translate-x-0 overflow-hidden">
+    <aside id="adminSidebar" class="fixed top-0 left-0 h-dvh w-72 max-w-[85vw] flex flex-col bg-surface-container-low border-r border-outline-variant z-50 -translate-x-full lg:translate-x-0 overflow-hidden">
         <div class="flex flex-col h-full p-4 w-full gap-6 min-h-0 flex-1">
             <div class="flex flex-col gap-6 min-h-0 flex-1">
                 {{-- Brand + hamburger --}}
@@ -120,27 +122,27 @@
             @yield('content')
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
-            <nav class="lg:hidden fixed bottom-0 left-0 w-full z-40 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah admin">
-                <div class="grid grid-cols-5 gap-1 max-w-md mx-auto">
-                    <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('admin.index','admin.show') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
+            <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah admin">
+                <div class="grid grid-cols-5 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                    <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.index','admin.show') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
-                        <span class="text-[11px] leading-tight">Ikhtisar</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Ikhtisar</span>
                     </a>
-                    <a href="{{ route('admin.siswa') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('admin.siswa*') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
+                    <a href="{{ route('admin.siswa') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.siswa*') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">school</span>
-                        <span class="text-[11px] leading-tight">Siswa</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Siswa</span>
                     </a>
-                    <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
+                    <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
-                        <span class="text-[11px] leading-tight">Dialog</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dialog</span>
                     </a>
-                    <a href="{{ route('admin.account') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
+                    <a href="{{ route('admin.account') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">settings</span>
-                        <span class="text-[11px] leading-tight">Akun</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Akun</span>
                     </a>
-                    <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-1 py-2 min-h-[60px] transition-colors text-on-surface-variant hover:bg-surface-container-high" aria-label="Buka menu sidebar">
+                    <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container-high" aria-label="Buka menu sidebar">
                         <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
-                        <span class="text-[11px] leading-tight">Menu</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Menu</span>
                     </button>
                 </div>
             </nav>
@@ -170,15 +172,25 @@
                 }
                 syncIcon();
             }
-            function closeMobile() { body.classList.remove('sidebar-open'); syncIcon(); }
+            function closeMobile() { body.classList.remove('sidebar-open'); syncIcon(); syncLock(); }
+            function syncLock() {
+                var locked = !isDesktop() && body.classList.contains('sidebar-open');
+                document.documentElement.classList.toggle('drawer-locked', locked);
+            }
 
-            if (btnSidebar) btnSidebar.addEventListener('click', toggleSidebar);
-            if (btnMenuMobile) btnMenuMobile.addEventListener('click', function () { body.classList.add('sidebar-open'); syncIcon(); });
+            if (btnSidebar) btnSidebar.addEventListener('click', function () { toggleSidebar(); syncLock(); });
+            if (btnMenuMobile) btnMenuMobile.addEventListener('click', function () { body.classList.add('sidebar-open'); syncIcon(); syncLock(); });
             if (overlay) overlay.addEventListener('click', closeMobile);
+            Array.prototype.forEach.call(document.querySelectorAll('#adminSidebar nav a'), function (el) {
+                el.addEventListener('click', closeMobile);
+            });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMobile(); } });
-            window.addEventListener('resize', syncIcon);
+            window.addEventListener('resize', function () {
+                if (isDesktop()) body.classList.remove('sidebar-open');
+                syncIcon(); syncLock();
+            });
             try { if (isDesktop() && localStorage.getItem('sa-admin-collapsed') === '1') body.classList.add('sidebar-collapsed'); } catch (e) {}
-            syncIcon();
+            syncIcon(); syncLock();
         })();
     </script>
 
