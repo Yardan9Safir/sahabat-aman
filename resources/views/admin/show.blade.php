@@ -69,7 +69,7 @@
     @if($curhat->status !== 'ditangani')
     <div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40">
         <h2 class="text-title-md font-bold text-on-surface mb-4">Balas Curhat</h2>
-        <form id="replyForm" class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
+        <form id="replyForm" data-endpoint="{{ route('dashboard.reply', $curhat) }}" class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
             @csrf
             <textarea name="isi" rows="4" required class="w-full resize-none border-none p-3 bg-transparent text-body-md text-on-surface placeholder:text-outline focus:ring-0 outline-none" placeholder="Tulis balasan yang empati dan membantu..."></textarea>
             <div class="flex items-center justify-between pt-2 px-1 border-t border-surface-container-low">
@@ -112,61 +112,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-document.getElementById('replyForm')?.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const form = this;
-    const btn = document.getElementById('replyBtn');
-    const textarea = form.querySelector('textarea[name="isi"]');
-    const isi = textarea.value.trim();
-    if (!isi) return;
-
-    btn.disabled = true;
-    btn.textContent = 'Mengirim...';
-
-    try {
-        const res = await fetch('{{ route("dashboard.reply", $curhat) }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ isi }),
-        });
-        const data = await res.json();
-        if (data.success) {
-            const list = document.getElementById('balasanList');
-            const emptyMsg = list.querySelector('.text-center');
-            if (emptyMsg) emptyMsg.remove();
-
-            const div = document.createElement('div');
-            div.className = 'rounded-2xl bg-primary-fixed/40 border border-primary/20 p-4';
-            div.innerHTML = `
-                <div class="flex items-center justify-between mb-2">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</div>
-                        <div>
-                            <p class="text-label-md font-bold text-on-surface">${data.balasan.pengirim_name}</p>
-                            <span class="text-label-sm text-outline capitalize">${data.balasan.pengirim_role}</span>
-                        </div>
-                    </div>
-                    <span class="text-label-sm text-outline">${data.balasan.created_at}</span>
-                </div>
-                <p class="text-body-md text-on-surface leading-relaxed">${data.balasan.isi}</p>
-            `;
-            list.appendChild(div);
-            textarea.value = '';
-        }
-    } catch (err) {
-        console.error(err);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<span>Kirim Balasan</span><span class="material-symbols-outlined text-lg">send</span>';
-    }
-});
-</script>
 @endsection

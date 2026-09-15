@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h3 class="text-headline-sm font-bold text-on-surface">Mulai Curhat Baru</h3>
-                <p class="text-body-sm text-on-surface-variant">Sampaikan apa yang terjadi. Setiap kata berada di bawah kode etik kerahasiaan.</p>
+                <p class="text-body-sm text-on-surface-variant">Sampaikan apa yang terjadi. </p>
             </div>
         </div>
         <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-low text-primary rounded-full text-label-sm font-semibold border border-primary/20">
@@ -23,7 +23,6 @@
 
     <form method="POST" action="{{ route('curhat.store') }}" class="flex flex-col gap-6" id="venting-form">
         @csrf
-
         <div>
             @error('penerima_id')
                 <p class="mt-2 text-xs text-error">{{ $message }}</p>
@@ -47,31 +46,23 @@
                     <input type="radio" name="tujuan_tipe" value="guru" class="peer sr-only" {{ old('tujuan_tipe', 'guru') === 'guru' ? 'checked' : '' }}>
                     <div class="flex items-center justify-between mb-2">
                         <span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container text-label-sm font-bold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">school</span> Guru BK Sekolah
+                            <span class="material-symbols-outlined text-xs">school</span> Guru BK
                         </span>
                         <div class="w-5 h-5 rounded-full {{ old('tujuan_tipe', 'guru') === 'guru' ? 'border-2 border-primary bg-primary text-white' : 'border border-outline flex items-center justify-center text-transparent' }}">
                             <span class="material-symbols-outlined text-xs font-bold">check</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <p class="text-body-sm font-semibold text-on-surface">Konselor Profesional Berlisensi</p>
-                    </div>
-                    <p class="text-body-sm text-outline mt-0.5 leading-snug">Cocok untuk bimbingan konseling formal & pemantauan berkala.</p>
                 </label>
                 <label class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe') === 'siswa' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
                     <input type="radio" name="tujuan_tipe" value="siswa" class="peer sr-only" {{ old('tujuan_tipe') === 'siswa' ? 'checked' : '' }}>
                     <div class="flex items-center justify-between mb-2">
                         <span class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-label-sm font-bold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">diversity_1</span> Teman Sebaya / Peer Counselor
+                            <span class="material-symbols-outlined text-xs">diversity_1</span> Teman Sebaya
                         </span>
                         <div class="w-5 h-5 rounded-full {{ old('tujuan_tipe') === 'siswa' ? 'border-2 border-primary bg-primary text-white' : 'border border-outline flex items-center justify-center text-transparent' }}">
                             <span class="material-symbols-outlined text-xs font-bold">check</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <p class="text-body-sm font-semibold text-on-surface">Kakak Kelas / Teman Terlatih</p>
-                    </div>
-                    <p class="text-body-sm text-outline mt-0.5 leading-snug">Ruang aman santai antar-siswa tanpa penghakiman.</p>
                 </label>
             </div>
         </div>
@@ -128,16 +119,12 @@
 
         {{-- 5. Actions --}}
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-            <p class="text-body-sm text-outline flex items-center gap-1.5 text-center sm:text-left">
-                <span class="material-symbols-outlined text-base text-primary flex-shrink-0">verified_user</span>
-                <span>Histori chat dengan Guru BK tercatat untuk bimbingan konseling. Obrolan dengan Teman Sebaya bersifat privat antar-siswa.</span>
-            </p>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <a href="{{ route('home') }}" class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">
                     Batal
                 </a>
-                <button class="flex-1 sm:flex-none px-7 py-3.5 rounded-2xl bg-primary-container text-white text-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
-                    <span class="material-symbols-outlined text-lg">send</span> Kirim Curhat
+                <button class="flex-1 sm:flex-none px-4 py-3 rounded-2xl bg-primary-container text-white text-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
+                    <span class="material-symbols-outlined text-md">send</span> Kirim Curhat
                 </button>
             </div>
         </div>
