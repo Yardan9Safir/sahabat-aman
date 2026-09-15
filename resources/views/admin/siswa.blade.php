@@ -54,9 +54,6 @@
             <article class="p-4 rounded-2xl bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/40 transition-all">
                 <div class="flex items-start justify-between gap-2">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-2xl {{ $siswa->curhats->count() > 0 ? 'bg-primary-container text-on-primary' : 'bg-surface-container-high text-on-surface-variant' }} font-bold flex items-center justify-center text-label-lg">
-                            {{ strtoupper(substr($siswa->name, 0, 2)) }}
-                        </div>
                         <div>
                             <h3 class="text-title-md text-on-surface">{{ $siswa->name }}</h3>
                             <p class="text-body-sm text-on-surface-variant mt-0.5">{{ $siswa->identifier ?? '-' }} &bull; {{ ucfirst($siswa->role) }}</p>

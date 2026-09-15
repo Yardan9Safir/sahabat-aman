@@ -103,9 +103,6 @@
             <article class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/80 custom-shadow-resting custom-shadow-interactive transition-all">
                 <div class="flex flex-wrap items-start justify-between gap-2 border-b border-outline-variant/40 pb-3">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-error-container text-on-error-container' : 'bg-primary-fixed text-primary' }} flex items-center justify-center font-bold text-base">
-                            {{ strtoupper(substr($curhat->siswa->name ?? 'S', 0, 2)) }}
-                        </div>
                         <div>
                             <div class="flex items-center gap-2">
                                 <h4 class="text-headline-sm text-base font-bold text-on-surface">{{ $curhat->siswa->name ?? 'Siswa' }}</h4>
@@ -145,7 +142,6 @@
 
                 <div class="mt-4 pt-3 border-t border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
-                        <span class="material-symbols-outlined text-base text-tertiary">sentiment_neutral</span>
                         <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Selesai') }}</span>
                     </div>
                     <a href="{{ route('admin.show', $curhat) }}" class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">

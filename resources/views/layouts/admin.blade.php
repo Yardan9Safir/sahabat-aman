@@ -6,7 +6,8 @@
     <title>@yield('title', 'Panel Guru BK - Sahabat Aman')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .material-symbols-outlined {
@@ -76,10 +77,6 @@
                         <span class="material-symbols-outlined shrink-0">school</span>
                         <span class="sidebar-label truncate">Data Siswa</span>
                     </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="{{ route('dashboard') }}" title="Ruang Dialog">
-                        <span class="material-symbols-outlined shrink-0">chat_bubble</span>
-                        <span class="sidebar-label truncate">Ruang Dialog</span>
-                    </a>
                 </nav>
             </div>
 
@@ -91,9 +88,6 @@
                 </a>
 
                 <div id="adminProfileCard" class="w-full flex items-center gap-3 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/50">
-                    <span class="w-10 h-10 shrink-0 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-sm">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                    </span>
                     <span class="sidebar-label flex flex-col min-w-0 flex-1">
                         <span class="text-label-md text-on-surface font-bold truncate">{{ Auth::user()->name }}</span>
                         <span class="text-label-sm text-primary font-medium truncate">Guru BK Pengampu</span>
@@ -148,51 +142,6 @@
             </nav>
         </main>
     </div>
-
-    <script>
-        (function () {
-            var body = document.body;
-            var btnSidebar = document.getElementById('btnSidebar');
-            var btnMenuMobile = document.getElementById('btnMenuMobile');
-            var overlay = document.getElementById('sidebarOverlay');
-            var icon = document.getElementById('btnSidebarIcon');
-            var isDesktop = function () { return window.matchMedia('(min-width: 1024px)').matches; };
-
-            function syncIcon() {
-                var isOpen = isDesktop() ? !body.classList.contains('sidebar-collapsed') : body.classList.contains('sidebar-open');
-                if (icon) icon.textContent = isOpen ? 'close' : 'menu';
-                if (btnSidebar) btnSidebar.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            }
-            function toggleSidebar() {
-                if (isDesktop()) {
-                    body.classList.toggle('sidebar-collapsed');
-                    try { localStorage.setItem('sa-admin-collapsed', body.classList.contains('sidebar-collapsed') ? '1' : '0'); } catch (e) {}
-                } else {
-                    body.classList.toggle('sidebar-open');
-                }
-                syncIcon();
-            }
-            function closeMobile() { body.classList.remove('sidebar-open'); syncIcon(); syncLock(); }
-            function syncLock() {
-                var locked = !isDesktop() && body.classList.contains('sidebar-open');
-                document.documentElement.classList.toggle('drawer-locked', locked);
-            }
-
-            if (btnSidebar) btnSidebar.addEventListener('click', function () { toggleSidebar(); syncLock(); });
-            if (btnMenuMobile) btnMenuMobile.addEventListener('click', function () { body.classList.add('sidebar-open'); syncIcon(); syncLock(); });
-            if (overlay) overlay.addEventListener('click', closeMobile);
-            Array.prototype.forEach.call(document.querySelectorAll('#adminSidebar nav a'), function (el) {
-                el.addEventListener('click', closeMobile);
-            });
-            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMobile(); } });
-            window.addEventListener('resize', function () {
-                if (isDesktop()) body.classList.remove('sidebar-open');
-                syncIcon(); syncLock();
-            });
-            try { if (isDesktop() && localStorage.getItem('sa-admin-collapsed') === '1') body.classList.add('sidebar-collapsed'); } catch (e) {}
-            syncIcon(); syncLock();
-        })();
-    </script>
 
     @yield('scripts')
 </body>
