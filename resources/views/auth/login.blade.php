@@ -40,9 +40,9 @@
         <button type="submit" class="w-full rounded-2xl bg-primary-container px-5 py-3.5 text-label-lg font-bold text-on-primary shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all">Masuk ke Akun</button>
     </form>
 
-    <p class="mt-5 text-center text-body-sm text-on-surface-variant">
+    {{-- <p class="mt-5 text-center text-body-sm text-on-surface-variant">
         Belum punya akun?
         <a href="{{ route('register') }}" class="font-semibold text-primary hover:underline">Daftar</a>
-    </p>
+    </p> --}}
 </div>
 @endsection

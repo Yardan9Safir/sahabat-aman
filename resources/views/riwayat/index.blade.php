@@ -3,15 +3,6 @@
 @section('title', 'Riwayat Curhat - Sahabat Aman')
 
 @section('content')
-<section class="bg-gradient-to-r from-surface-container-low via-surface-container-lowest to-surface-container-low p-6 sm:p-8 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-    <div class="max-w-xl">
-        <h2 class="text-headline-lg font-bold text-on-surface tracking-tight leading-snug">Riwayat Curhatmu</h2>
-        <p class="text-body-md text-on-surface-variant mt-2">Semua cerita yang sudah kamu kirim akan muncul di sini.</p>
-    </div>
-    <a href="{{ route('curhat.create') }}" class="px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center gap-2">
-        <span class="material-symbols-outlined text-lg">add_notes</span> Curhat Baru
-    </a>
-</section>
 
 @if($curhats->isEmpty())
 <div class="bg-surface-container-lowest p-10 rounded-3xl soft-shadow border border-surface-variant/40 text-center">

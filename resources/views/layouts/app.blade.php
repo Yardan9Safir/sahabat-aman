@@ -6,7 +6,8 @@
     <title>@yield('title', 'Sahabat Aman')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .material-symbols-outlined {
@@ -93,20 +94,21 @@
             </nav>
         </div>
 
-        {{-- Profil statis + tombol keluar (dropdown dihapus) --}}
+        {{-- Profil + tombol keluar --}}
         <div class="flex flex-col gap-3 pt-4 mt-6 border-t border-surface-variant/40 shrink-0">
-            <div id="profileCard" class="w-full p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3">
-                <span class="w-10 h-10 shrink-0 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-base">
+            <a href="{{ route('profile') }}" id="profileCard" class="w-full p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3 hover:bg-surface-container transition-colors group" title="Profil Saya">
+                <div class="w-10 h-10 shrink-0 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-sm">
                     {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                </span>
+                </div>
                 <span class="sidebar-label flex-1 min-w-0">
-                    <span class="block text-label-lg font-bold truncate text-on-surface">{{ Auth::user()->name }}</span>
+                    <span class="block text-label-lg font-bold truncate text-on-surface group-hover:text-primary transition-colors">{{ Auth::user()->name }}</span>
                     <span class="flex items-center gap-1 text-label-sm text-outline">
                         <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
                         {{ ucfirst(Auth::user()->role) }}
                     </span>
                 </span>
-            </div>
+                <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-lg">chevron_right</span>
+            </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button id="logoutBtn" type="submit" class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-2.5 font-normal transition-colors duration-150 w-full" title="Keluar">
@@ -135,25 +137,25 @@
         <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
             @php $isGuru = Auth::user()->role === 'guru'; @endphp
             <div class="grid {{ $isGuru ? 'grid-cols-5' : 'grid-cols-4' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
-                <a href="{{ route('curhat.create') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                <a href="{{ route('curhat.create') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">add_notes</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Curhat</span>
                 </a>
-                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>
                 </a>
-                <a href="{{ route('riwayat') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('riwayat*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                <a href="{{ route('riwayat') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('riwayat*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">bookmark_heart</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Riwayat</span>
                 </a>
                 @if($isGuru)
-                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Panel</span>
                 </a>
                 @endif
-                <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
+                <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
                     <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Menu</span>
                 </button>
@@ -161,53 +163,6 @@
         </nav>
         @endauth
     </div>
-
-    @auth
-    <script>
-        (function () {
-            var body = document.body;
-            var btnSidebar = document.getElementById('btnSidebar');
-            var btnMenuMobile = document.getElementById('btnMenuMobile');
-            var overlay = document.getElementById('sidebarOverlay');
-            var icon = document.getElementById('btnSidebarIcon');
-            var isDesktop = function () { return window.matchMedia('(min-width: 1024px)').matches; };
-
-            function syncIcon() {
-                var isOpen = isDesktop() ? !body.classList.contains('sidebar-collapsed') : body.classList.contains('sidebar-open');
-                if (icon) icon.textContent = isOpen ? 'close' : 'menu';
-                if (btnSidebar) btnSidebar.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            }
-            function toggleSidebar() {
-                if (isDesktop()) {
-                    body.classList.toggle('sidebar-collapsed');
-                    try { localStorage.setItem('sa-sidebar-collapsed', body.classList.contains('sidebar-collapsed') ? '1' : '0'); } catch (e) {}
-                } else {
-                    body.classList.toggle('sidebar-open');
-                }
-                syncIcon();
-            }
-            function closeMobile() { body.classList.remove('sidebar-open'); syncIcon(); syncLock(); }
-            function syncLock() {
-                var locked = !isDesktop() && body.classList.contains('sidebar-open');
-                document.documentElement.classList.toggle('drawer-locked', locked);
-            }
-
-            if (btnSidebar) btnSidebar.addEventListener('click', function () { toggleSidebar(); syncLock(); });
-            if (btnMenuMobile) btnMenuMobile.addEventListener('click', function () { body.classList.add('sidebar-open'); syncIcon(); syncLock(); });
-            if (overlay) overlay.addEventListener('click', closeMobile);
-            Array.prototype.forEach.call(document.querySelectorAll('#appSidebar nav a'), function (el) {
-                el.addEventListener('click', closeMobile);
-            });
-            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMobile(); } });
-            window.addEventListener('resize', function () {
-                if (isDesktop()) body.classList.remove('sidebar-open');
-                syncIcon(); syncLock();
-            });
-            try { if (isDesktop() && localStorage.getItem('sa-sidebar-collapsed') === '1') body.classList.add('sidebar-collapsed'); } catch (e) {}
-            syncIcon(); syncLock();
-        })();
-    </script>
-    @endauth
 
     @yield('scripts')
 </body>
