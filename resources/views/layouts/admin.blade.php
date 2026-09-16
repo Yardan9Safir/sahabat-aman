@@ -60,7 +60,6 @@
                         </div>
                         <div class="sidebar-label flex flex-col min-w-0">
                             <span class="text-headline-sm font-bold text-primary leading-tight truncate">Sahabat Aman</span>
-                            <span class="text-label-sm text-on-surface-variant">Portal Guru BK</span>
                         </div>
                     </div>
                     <button id="btnSidebar" type="button" class="p-2 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors shrink-0" aria-label="Buka / tutup sidebar" aria-expanded="true" aria-controls="adminSidebar" title="Buka / tutup sidebar">
@@ -90,7 +89,7 @@
                 <div id="adminProfileCard" class="w-full flex items-center gap-3 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/50">
                     <span class="sidebar-label flex flex-col min-w-0 flex-1">
                         <span class="text-label-md text-on-surface font-bold truncate">{{ Auth::user()->name }}</span>
-                        <span class="text-label-sm text-primary font-medium truncate">Guru BK Pengampu</span>
+                        <span class="text-label-sm text-primary font-medium truncate">Guru BK</span>
                     </span>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">
