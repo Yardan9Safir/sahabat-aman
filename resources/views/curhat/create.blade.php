@@ -12,12 +12,7 @@
             </div>
             <div>
                 <h3 class="text-headline-sm font-bold text-on-surface">Mulai Curhat Baru</h3>
-                <p class="text-body-sm text-on-surface-variant">Sampaikan apa yang terjadi. </p>
             </div>
-        </div>
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-low text-primary rounded-full text-label-sm font-semibold border border-primary/20">
-            <span class="material-symbols-outlined text-sm">lock</span>
-            <span>Aman & Terjaga</span>
         </div>
     </div>
 
