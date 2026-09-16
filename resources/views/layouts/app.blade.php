@@ -64,7 +64,6 @@
                     </div>
                     <div class="sidebar-label min-w-0">
                         <h1 class="text-headline-sm font-bold text-primary tracking-tight leading-none truncate">Sahabat Aman</h1>
-                        <p class="text-label-sm text-outline mt-1 leading-tight">Sistem Konseling Terjaga & Aman</p>
                     </div>
                 </div>
                 <button id="btnSidebar" type="button" class="p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors shrink-0" aria-label="Buka / tutup sidebar" aria-expanded="true" aria-controls="appSidebar" title="Buka / tutup sidebar">
@@ -97,9 +96,6 @@
         {{-- Profil + tombol keluar --}}
         <div class="flex flex-col gap-3 pt-4 mt-6 border-t border-surface-variant/40 shrink-0">
             <a href="{{ route('profile') }}" id="profileCard" class="w-full p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3 hover:bg-surface-container transition-colors group" title="Profil Saya">
-                <div class="w-10 h-10 shrink-0 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-sm">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                </div>
                 <span class="sidebar-label flex-1 min-w-0">
                     <span class="block text-label-lg font-bold truncate text-on-surface group-hover:text-primary transition-colors">{{ Auth::user()->name }}</span>
                     <span class="flex items-center gap-1 text-label-sm text-outline">

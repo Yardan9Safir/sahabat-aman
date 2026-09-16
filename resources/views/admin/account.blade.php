@@ -10,15 +10,6 @@
     </div>
 
     <div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40">
-        <div class="flex items-center gap-3 mb-6">
-            <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-lg">
-                {{ strtoupper(substr($user->name, 0, 2)) }}
-            </div>
-            <div>
-                <h2 class="text-headline-sm font-bold text-on-surface">{{ $user->name }}</h2>
-                <p class="text-body-sm text-on-surface-variant">{{ ucfirst($user->role) }} &bull; {{ $user->email }}</p>
-            </div>
-        </div>
 
         <form method="POST" action="{{ route('admin.account.update') }}" class="flex flex-col gap-5">
             @csrf

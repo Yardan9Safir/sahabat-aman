@@ -4,30 +4,12 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto space-y-6">
-    {{-- Privacy Banner --}}
-    <section class="bg-surface-container-low border border-outline-variant/60 rounded-2xl p-4 sm:p-5 flex items-start gap-4 custom-shadow-resting">
-        <div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0 mt-0.5">
-            <span class="material-symbols-outlined text-2xl">lock</span>
-        </div>
-        <div class="flex-1">
-            <div class="flex items-center gap-2">
-                <h2 class="text-headline-sm text-primary text-base font-bold">Kebijakan Privasi & Akses Komunikasi Siswa</h2>
-                <span class="bg-surface-container-highest text-on-surface-variant text-label-sm px-2 py-0.5 rounded font-medium">Etika Konseling BK</span>
-            </div>
-            <p class="text-body-md text-on-surface-variant mt-1 leading-relaxed">
-                <strong class="font-semibold text-on-surface">Kebijakan Akses Sahabat Aman:</strong> Anda hanya dapat memantau dan membalas curhat siswa yang ditujukan secara spesifik kepada Guru BK.
-            </p>
-        </div>
-    </section>
 
     {{-- Stat Cards --}}
     <section class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
         <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/60 custom-shadow-resting custom-shadow-interactive transition-all">
             <div class="flex items-center justify-between">
                 <span class="text-label-md text-on-surface-variant font-medium">Curhat Masuk Baru</span>
-                <div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-primary">
-                    <span class="material-symbols-outlined text-xl">inbox</span>
-                </div>
             </div>
             <div class="mt-3 flex items-baseline gap-2">
                 <span class="text-headline-lg text-on-surface font-bold">{{ $curhats->where('status', 'terkirim')->count() }} Pesan</span>
@@ -79,7 +61,8 @@
     </section>
 
     {{-- Main Content: Curhat List --}}
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+
         <section class="lg:col-span-8 flex flex-col gap-4">
             <div class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/60 custom-shadow-resting flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
@@ -98,7 +81,6 @@
                     </a>
                 </div>
             </div>
-
             @forelse($curhats as $curhat)
             <article class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/80 custom-shadow-resting custom-shadow-interactive transition-all">
                 <div class="flex flex-wrap items-start justify-between gap-2 border-b border-outline-variant/40 pb-3">
@@ -123,12 +105,12 @@
                         @if($curhat->status === 'terkirim')
                         <span class="bg-error-container text-on-error-container px-2.5 py-1 rounded-full text-label-sm font-bold flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
-                            Belum Dibalas
+                            Status : Belum Dibalas
                         </span>
                         @elseif($curhat->status === 'dibalas')
-                        <span class="bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">Dibalas</span>
+                        <span class="bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">Status : Dibalas</span>
                         @else
-                        <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">Selesai</span>
+                        <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">Status : Selesai</span>
                         @endif
                     </div>
                 </div>
@@ -159,30 +141,7 @@
             @endforelse
         </section>
 
-        {{-- Sidebar --}}
-        <aside class="lg:col-span-4 flex flex-col gap-5">
-            <div class="bg-surface-container-low p-5 rounded-2xl border border-primary/20 custom-shadow-resting">
-                <div class="flex items-center gap-2 text-primary font-bold mb-2">
-                    <span class="material-symbols-outlined text-xl">support_agent</span>
-                    <h3 class="text-headline-sm text-base">Pusat Intervensi Cepat BK</h3>
-                </div>
-                <p class="text-body-sm text-on-surface-variant mb-4 leading-relaxed">
-                    Jika mendapati siswa dalam kondisi krisis emosional darurat, hubungi:
-                </p>
-                <div class="space-y-2">
-                    <a class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-lowest hover:bg-surface-container border border-outline-variant/40 transition-colors" href="tel:119">
-                        <div class="flex items-center gap-2.5">
-                            <span class="material-symbols-outlined text-error">call</span>
-                            <div class="flex flex-col">
-                                <span class="text-label-md font-bold text-on-surface">Layanan Krisis Psikologi</span>
-                                <span class="text-label-sm text-on-surface-variant">Hotline 119 Ext. 8</span>
-                            </div>
-                        </div>
-                        <span class="material-symbols-outlined text-on-surface-variant text-sm">open_in_new</span>
-                    </a>
-                </div>
-            </div>
-        </aside>
     </div>
+    
 </div>
 @endsection
