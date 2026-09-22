@@ -19,7 +19,7 @@
         </h1>
         {{-- Hero Subheadline --}}
         <p class="text-body-lg text-on-surface-variant text-balance max-w-2xl mx-auto mb-10">
-            Bimbingan konseling sekolah modern tanpa tatap sinis atau rasa takut. Bebas curhat santai ke Teman Sebaya terlatih, atau konsultasi mendalam bersama Guru BK berlisensi dalam ekosistem digital yang hangat dan terlindungi.
+            Bimbingan konseling sekolah modern tanpa tatap sinis atau rasa takut. Bebas curhat santai ke Konselor Sebaya terlatih, atau konsultasi mendalam bersama Guru BK berlisensi dalam ekosistem digital yang hangat dan terlindungi.
         </p>
         {{-- Dual Main CTAs --}}
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -71,7 +71,7 @@
                 </div>
                 <div>
                     <p class="text-headline-sm font-bold text-on-surface">8+ Konselor</p>
-                    <p class="text-body-sm text-on-surface-variant">Guru BK & Peer Counselor Siaga</p>
+                    <p class="text-body-sm text-on-surface-variant">Guru BK & Konselor Sebaya Siaga</p>
                 </div>
             </div>
         </div>
@@ -125,7 +125,7 @@
                         </span>
                         <span class="text-label-sm text-outline">Bebas Stigma &bull; 24/7 Daring</span>
                     </div>
-                    <h3 class="text-headline-md text-on-surface mb-3">Pilih Nyamanmu: Guru BK atau Teman Sebaya</h3>
+                    <h3 class="text-headline-md text-on-surface mb-3">Pilih Nyamanmu: Guru BK atau Konselor Sebaya</h3>
                     <p class="text-body-md text-on-surface-variant mb-6 leading-relaxed">
                         Kamu memegang kendali sepenuhnya. Pilih berdiskusi dengan sesama teman sebaya yang terlatih, atau bimbingan resmi dengan Guru BK jika membutuhkan solusi terstruktur.
                     </p>
@@ -135,7 +135,7 @@
                                 <span class="material-symbols-outlined">groups</span>
                             </div>
                             <div>
-                                <h4 class="text-title-md text-on-surface">Curhat Teman Sebaya (Peer Counselor)</h4>
+                                <h4 class="text-title-md text-on-surface">Curhat Konselor Sebaya</h4>
                                 <p class="text-body-sm text-on-surface-variant mt-0.5">
                                     Ruang ngobrol santai antar siswa. <strong class="text-primary font-medium">Dijamin privat tidak dapat dibaca oleh Guru BK</strong> kecuali terdapat indikasi darurat bahaya fisik.
                                 </p>
@@ -279,7 +279,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-primary-fixed text-primary text-headline-sm font-bold flex items-center justify-center mb-6">1</div>
                 <h3 class="text-title-md text-on-surface mb-2">Pilih Teman Bicara</h3>
                 <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 flex-grow">
-                    Tentukan apakah kamu ingin berbagi cerita ke Teman Sebaya atau bimbingan terarah dengan Guru BK sekolah.
+                    Tentukan apakah kamu ingin berbagi cerita ke Konselor Sebaya atau bimbingan terarah dengan Guru BK sekolah.
                 </p>
                 <div class="p-3 rounded-xl bg-surface-container-low text-on-surface-variant text-label-sm flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary text-base">visibility_off</span>
@@ -392,11 +392,11 @@
             </details>
             <details class="group bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 custom-pill-shadow open:border-primary/40 transition-all">
                 <summary class="flex justify-between items-center cursor-pointer text-title-md text-on-surface list-none">
-                    <span>Apa bedanya curhat ke Teman Sebaya vs Guru BK?</span>
+                    <span>Apa bedanya curhat ke Konselor Sebaya vs Guru BK?</span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
                 </summary>
                 <p class="text-body-md text-on-surface-variant mt-4 leading-relaxed border-t border-surface-container pt-3">
-                    Teman Sebaya (Peer Listener) adalah sesama siswa terlatih untuk menjadi pendengar yang baik bagi keluhan ringan sehari-hari, stres tugas, atau obrolan santai. Sedangkan Guru BK adalah konselor profesional bersertifikat yang menangani pendampingan mendalam, arah karir, krisis trauma, dan advokasi akademik sekolah.
+                    Konselor Sebaya adalah sesama siswa terlatih untuk menjadi pendengar yang baik bagi keluhan ringan sehari-hari, stres tugas, atau obrolan santai. Sedangkan Guru BK adalah konselor profesional bersertifikat yang menangani pendampingan mendalam, arah karir, krisis trauma, dan advokasi akademik sekolah.
                 </p>
             </details>
             <details class="group bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 custom-pill-shadow open:border-primary/40 transition-all">
@@ -405,7 +405,7 @@
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
                 </summary>
                 <p class="text-body-md text-on-surface-variant mt-4 leading-relaxed border-t border-surface-container pt-3">
-                    Kamu bisa menuliskan pesan kapan saja 24 jam sehari. Guru BK atau Peer Counselor yang sedang bertugas akan merespon pada jam operasional berikutnya. Jika terjadi krisis mendesak di malam hari, kami menyediakan tombol siaga langsung menuju Hotline Psikologi Darurat Nasional.
+                    Kamu bisa menuliskan pesan kapan saja 24 jam sehari. Guru BK atau Konselor Sebaya yang sedang bertugas akan merespon pada jam operasional berikutnya. Jika terjadi krisis mendesak di malam hari, kami menyediakan tombol siaga langsung menuju Hotline Psikologi Darurat Nasional.
                 </p>
             </details>
         </div>
@@ -465,7 +465,7 @@
             <div>
                 <h4 class="text-title-md text-on-surface mb-4">Akses Siswa</h4>
                 <ul class="space-y-2.5 text-body-sm">
-                    <li><a class="hover:text-primary transition-colors" href="{{ route('curhat.create') }}">Pilih Teman Sebaya</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="{{ route('curhat.create') }}">Pilih Konselor Sebaya</a></li>
                     <li><a class="hover:text-primary transition-colors" href="{{ route('riwayat') }}">Riwayat Curhat</a></li>
                     <li><a class="hover:text-primary transition-colors" href="{{ route('dashboard') }}">Kotak Masuk & Dialog</a></li>
                 </ul>
@@ -473,7 +473,7 @@
             <div>
                 <h4 class="text-title-md text-on-surface mb-4">Portal Pendidik BK</h4>
                 <ul class="space-y-2.5 text-body-sm">
-                    <li><a class="hover:text-primary transition-colors" href="{{ route('admin.siswa') }}">Data & Riwayat Siswa</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="{{ route('admin.index') }}">Ikhtisar Konseling</a></li>
                 </ul>
             </div>
             <div>

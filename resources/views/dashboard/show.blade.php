@@ -15,7 +15,7 @@
                 <div class="flex items-center gap-2">
                     <h2 class="text-title-md font-bold text-on-surface">{{ $curhat->nama_penerima ?? $curhat->penerima->name ?? 'Tidak diketahui' }}</h2>
                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm font-semibold">
-                        {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Peer Counselor' }}
+                        {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Konselor Sebaya' }}
                     </span>
                 </div>
                 <div class="flex items-center gap-2 text-label-sm text-outline mt-0.5">
@@ -73,12 +73,12 @@
             <div class="flex items-start gap-3.5 max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
                 @if($balasan->pengirim_id !== auth()->id())
                 <div class="w-9 h-9 rounded-xl bg-surface-container-high flex-shrink-0 mt-1 shadow-xs flex items-center justify-center text-primary font-bold text-xs">
-                    {{ strtoupper(substr($balasan->pengirim->name ?? 'U', 0, 2)) }}
+                    {{ strtoupper(substr($balasan->pengirim->displayName() ?? 'U', 0, 2)) }}
                 </div>
                 @endif
                 <div class="flex flex-col {{ $balasan->pengirim_id === auth()->id() ? 'items-end' : 'items-start' }} space-y-2 flex-1">
                     <div class="flex items-center gap-2">
-                        <span class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim->name ?? 'Unknown' }}</span>
+                        <span class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim->displayName() ?? 'Unknown' }}</span>
                         <span class="text-label-sm text-outline">{{ $balasan->created_at->translatedFormat('H:i') }} WIB</span>
                     </div>
                     <div class="{{ $balasan->pengirim_id === auth()->id() ? 'bg-primary-container text-on-primary rounded-2xl rounded-tr-xs' : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs' }} p-4 shadow-sm">

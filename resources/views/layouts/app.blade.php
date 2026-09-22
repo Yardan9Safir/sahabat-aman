@@ -103,7 +103,7 @@
                     <span class="block text-label-lg font-bold truncate text-on-surface">{{ Auth::user()->name }}</span>
                     <span class="flex items-center gap-1 text-label-sm text-outline">
                         <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-                        {{ ucfirst(Auth::user()->role) }}
+                        {{ Auth::user()->role === 'konselor' ? 'Konselor Sebaya' : ucfirst(Auth::user()->role) }}
                     </span>
                 </span>
             </div>

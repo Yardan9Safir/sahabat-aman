@@ -17,9 +17,16 @@ class CurhatController extends Controller
     public function createForm()
     {
         $gurus = User::where('role', 'guru')->orderBy('name')->get();
-        $siswas = User::where('role', 'siswa')->where('id', '!=', Auth::id())->orderBy('name')->get();
 
-        return view('curhat.create', compact('gurus', 'siswas'));
+        $konselorQuery = User::where('role', 'konselor')->orderBy('kelas')->orderBy('anon_label');
+
+        if (Auth::user()->kelas) {
+            $konselorQuery->where('kelas', Auth::user()->kelas);
+        }
+
+        $konselors = $konselorQuery->get();
+
+        return view('curhat.create', compact('gurus', 'konselors'));
     }
 
     public function store(Request $request)
@@ -35,7 +42,7 @@ class CurhatController extends Controller
         $request->user()->curhats()->create([
             'penerima_id' => $penerima->id,
             'tujuan' => $penerima->role,
-            'nama_penerima' => $penerima->name,
+            'nama_penerima' => $penerima->displayName(),
             'kategori' => $validated['kategori'],
             'pesan' => $validated['pesan'],
             'status' => 'terkirim',
@@ -73,7 +80,12 @@ class CurhatController extends Controller
         }
 
         if (request('status')) {
-            $query->where('status', request('status'));
+            match (request('status')) {
+                'belum_dibalas' => $query->whereIn('status', ['terkirim', 'dilihat']),
+                'ongoing' => $query->where('status', 'dibalas'),
+                'selesai' => $query->where('status', 'ditangani'),
+                default => $query->where('status', request('status')),
+            };
         }
 
         $curhats = $query->latest()->get();
@@ -124,7 +136,7 @@ class CurhatController extends Controller
                 'balasan' => [
                     'id' => $balasan->id,
                     'isi' => $balasan->isi,
-                    'pengirim_name' => $user->name,
+                    'pengirim_name' => $user->displayName(),
                     'pengirim_role' => $user->role,
                     'created_at' => $balasan->created_at->translatedFormat('d M Y, H:i'),
                     'is_me' => true,

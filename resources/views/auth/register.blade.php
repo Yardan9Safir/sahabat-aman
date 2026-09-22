@@ -60,9 +60,17 @@
             <label for="role" class="text-label-lg font-bold text-on-surface mb-2 block">Peran</label>
             <select id="role" name="role"
                 class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
-                <option value="siswa">Siswa</option>
-                <option value="guru">Guru</option>
+                <option value="siswa" {{ old('role', 'siswa') === 'siswa' ? 'selected' : '' }}>Siswa</option>
+                <option value="guru" {{ old('role') === 'guru' ? 'selected' : '' }}>Guru</option>
             </select>
+        </div>
+
+        <div id="kelas-field" class="{{ old('role') === 'guru' ? 'hidden' : '' }}">
+            <label for="kelas" class="text-label-lg font-bold text-on-surface mb-2 block">Kelas</label>
+            <input id="kelas" name="kelas" type="text" value="{{ old('kelas') }}" maxlength="50"
+                class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                placeholder="contoh: 7A">
+            @error('kelas') <p class="mt-2 text-xs text-error">{{ $message }}</p> @enderror
         </div>
 
         @error('password')
@@ -77,4 +85,18 @@
         <a href="{{ route('login') }}" class="font-semibold text-primary hover:underline">Masuk</a>
     </p>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    const roleSelect = document.getElementById('role');
+    const kelasField = document.getElementById('kelas-field');
+
+    function toggleKelasField() {
+        kelasField.classList.toggle('hidden', roleSelect.value === 'guru');
+    }
+
+    roleSelect.addEventListener('change', toggleKelasField);
+    toggleKelasField();
+</script>
 @endsection

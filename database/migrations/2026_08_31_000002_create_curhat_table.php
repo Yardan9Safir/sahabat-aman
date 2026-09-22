@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('siswa_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('penerima_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->enum('tujuan', ['siswa', 'guru']);
+            $table->enum('tujuan', ['siswa', 'guru', 'konselor']);
             $table->string('nama_penerima')->nullable();
             $table->enum('kategori', ['pribadi', 'sosial', 'belajar', 'karier']);
             $table->text('pesan');

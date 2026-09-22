@@ -34,13 +34,13 @@
         <a href="{{ route('dashboard') }}" class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
             Semua ({{ $curhats->count() }})
         </a>
-        <a href="{{ route('dashboard', ['status' => 'terkirim']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
-            Baru
+        <a href="{{ route('dashboard', ['status' => 'belum_dibalas']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'belum_dibalas' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+            Belum Dibalas
         </a>
-        <a href="{{ route('dashboard', ['status' => 'dibalas']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
-            Dibalas
+        <a href="{{ route('dashboard', ['status' => 'ongoing']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'ongoing' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+            On-going
         </a>
-        <a href="{{ route('dashboard', ['status' => 'ditangani']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+        <a href="{{ route('dashboard', ['status' => 'selesai']) }}" class="px-3 py-1.5 rounded-lg {{ request('status') === 'selesai' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
             Selesai
         </a>
     </div>
@@ -48,19 +48,19 @@
 
 <div class="space-y-3">
     @foreach($curhats as $curhat)
-    <a href="{{ route('dashboard.show', $curhat) }}" class="block p-4 rounded-2xl {{ $curhat->status === 'terkirim' ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
+    <a href="{{ route('dashboard.show', $curhat) }}" class="block p-4 rounded-2xl {{ in_array($curhat->status, ['terkirim', 'dilihat'], true) ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
         <div class="flex items-start justify-between gap-2 mb-1.5">
             <div class="flex items-center gap-1.5">
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm">
                     <span class="material-symbols-outlined text-xs">{{ $curhat->tujuan === 'guru' ? 'school' : 'diversity_1' }}</span>
-                    {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Teman Sebaya' }}
+                    {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Konselor Sebaya' }}
                 </span>
                 @if($curhat->status === 'dibalas')
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E4F5EB] text-[#1B5E3B] text-label-sm font-semibold">
                     <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
-                    Dibalas
+                    On-going
                 </span>
-                @elseif($curhat->status === 'terkirim')
+                @elseif(in_array($curhat->status, ['terkirim', 'dilihat'], true))
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FEF3E2] text-[#964F06] text-label-sm">
                     <span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
                     Menunggu Balasan

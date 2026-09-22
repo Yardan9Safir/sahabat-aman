@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="mt-3 flex items-baseline gap-2">
-                <span class="text-headline-lg text-on-surface font-bold">{{ $curhats->where('status', 'terkirim')->count() }} Pesan</span>
+                <span class="text-headline-lg text-on-surface font-bold">{{ $curhats->whereIn('status', ['terkirim', 'dilihat'])->count() }} Pesan</span>
             </div>
             <p class="text-body-sm text-on-surface-variant mt-1">Memerlukan validasi awal konselor</p>
         </div>
@@ -90,11 +90,14 @@
                     <a href="{{ route('admin.index') }}" class="px-3 py-1.5 rounded-lg text-label-md {{ !request('kategori') && !request('status') ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                         Semua ({{ $curhats->count() }})
                     </a>
-                    <a href="{{ route('admin.index', ['status' => 'terkirim']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'terkirim' ? 'font-bold bg-error-container text-on-error-container' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
-                        Belum Dibalas ({{ $curhats->where('status', 'terkirim')->count() }})
+                    <a href="{{ route('admin.index', ['status' => 'belum_dibalas']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'belum_dibalas' ? 'font-bold bg-error-container text-on-error-container' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                        Belum Dibalas ({{ $curhats->whereIn('status', ['terkirim', 'dilihat'])->count() }})
                     </a>
-                    <a href="{{ route('admin.index', ['status' => 'dibalas']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'dibalas' ? 'font-bold bg-secondary-fixed text-on-secondary-fixed' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
-                        Dibalas ({{ $curhats->where('status', 'dibalas')->count() }})
+                    <a href="{{ route('admin.index', ['status' => 'ongoing']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'ongoing' ? 'font-bold bg-secondary-fixed text-on-secondary-fixed' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                        On-going ({{ $curhats->where('status', 'dibalas')->count() }})
+                    </a>
+                    <a href="{{ route('admin.index', ['status' => 'selesai']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'selesai' ? 'font-bold bg-primary-fixed text-on-primary-fixed' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                        Selesai ({{ $curhats->where('status', 'ditangani')->count() }})
                     </a>
                 </div>
             </div>
@@ -117,19 +120,19 @@
                                 <span class="material-symbols-outlined text-sm">schedule</span>
                                 <span>{{ $curhat->created_at->diffForHumans() }}</span>
                                 <span>&bull;</span>
-                                <span class="text-primary font-medium">Ditujukan: {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Peer' }}</span>
+                                <span class="text-primary font-medium">Ditujukan: {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Konselor Sebaya' }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="bg-surface-container-high text-primary px-2.5 py-1 rounded-full text-label-sm font-semibold">{{ ucfirst($curhat->kategori) }}</span>
-                        @if($curhat->status === 'terkirim')
+                        @if(in_array($curhat->status, ['terkirim', 'dilihat'], true))
                         <span class="bg-error-container text-on-error-container px-2.5 py-1 rounded-full text-label-sm font-bold flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
                             Belum Dibalas
                         </span>
                         @elseif($curhat->status === 'dibalas')
-                        <span class="bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">Dibalas</span>
+                        <span class="bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">On-going</span>
                         @else
                         <span class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded-full text-label-sm font-bold">Selesai</span>
                         @endif
@@ -146,7 +149,7 @@
                 <div class="mt-4 pt-3 border-t border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
                         <span class="material-symbols-outlined text-base text-tertiary">sentiment_neutral</span>
-                        <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Selesai') }}</span>
+                        <span>Kondisi: {{ in_array($curhat->status, ['terkirim', 'dilihat'], true) ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'On-going' : 'Selesai') }}</span>
                     </div>
                     <a href="{{ route('admin.show', $curhat) }}" class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
                         <span class="material-symbols-outlined text-base">reply</span>

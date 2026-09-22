@@ -20,7 +20,7 @@
                     <h1 class="text-headline-sm font-bold text-on-surface">{{ $curhat->siswa->name ?? 'Siswa' }}</h1>
                     <div class="flex items-center gap-2 mt-0.5">
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm font-semibold">
-                            {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Peer Counselor' }}
+                            {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Konselor Sebaya' }}
                         </span>
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-[#FEF3E2] text-[#964F06]' : ($curhat->status === 'dibalas' ? 'bg-[#E4F5EB] text-[#1B5E3B]' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold">
                             {{ ucfirst($curhat->status) }}

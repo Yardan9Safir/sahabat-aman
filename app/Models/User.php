@@ -18,6 +18,8 @@ class User extends Authenticatable
         'password',
         'role',
         'identifier',
+        'kelas',
+        'anon_label',
     ];
 
     protected $hidden = [
@@ -41,5 +43,16 @@ class User extends Authenticatable
     public function balasans()
     {
         return $this->hasMany(Balasan::class, 'pengirim_id');
+    }
+
+    public function displayName(): string
+    {
+        if ($this->role === 'konselor') {
+            return $this->anon_label
+                ? "Konselor Sebaya {$this->anon_label}"
+                : 'Konselor Sebaya';
+        }
+
+        return $this->name;
     }
 }

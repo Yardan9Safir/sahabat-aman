@@ -45,6 +45,7 @@ class AuthController extends Controller
             'identifier' => ['required', 'string', 'max:100', 'unique:users,identifier'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'role' => ['required', 'in:siswa,guru'],
+            'kelas' => ['nullable', 'string', 'max:50'],
         ]);
 
         $user = User::create([
@@ -53,6 +54,7 @@ class AuthController extends Controller
             'identifier' => $validated['identifier'],
             'password' => $validated['password'],
             'role' => $validated['role'],
+            'kelas' => $validated['role'] === 'siswa' ? ($validated['kelas'] ?? null) : null,
         ]);
 
         Auth::login($user);

@@ -58,20 +58,20 @@
                     </div>
                     <p class="text-body-sm text-outline mt-0.5 leading-snug">Cocok untuk bimbingan konseling formal & pemantauan berkala.</p>
                 </label>
-                <label class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe') === 'siswa' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
-                    <input type="radio" name="tujuan_tipe" value="siswa" class="peer sr-only" {{ old('tujuan_tipe') === 'siswa' ? 'checked' : '' }}>
+                <label class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe') === 'konselor' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
+                    <input type="radio" name="tujuan_tipe" value="konselor" class="peer sr-only" {{ old('tujuan_tipe') === 'konselor' ? 'checked' : '' }}>
                     <div class="flex items-center justify-between mb-2">
                         <span class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-label-sm font-bold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">diversity_1</span> Teman Sebaya / Peer Counselor
+                            <span class="material-symbols-outlined text-xs">diversity_1</span> Konselor Sebaya
                         </span>
-                        <div class="w-5 h-5 rounded-full {{ old('tujuan_tipe') === 'siswa' ? 'border-2 border-primary bg-primary text-white' : 'border border-outline flex items-center justify-center text-transparent' }}">
+                        <div class="w-5 h-5 rounded-full {{ old('tujuan_tipe') === 'konselor' ? 'border-2 border-primary bg-primary text-white' : 'border border-outline flex items-center justify-center text-transparent' }}">
                             <span class="material-symbols-outlined text-xs font-bold">check</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 mb-1">
-                        <p class="text-body-sm font-semibold text-on-surface">Kakak Kelas / Teman Terlatih</p>
+                        <p class="text-body-sm font-semibold text-on-surface">Teman Sebaya Terlatih & Anonim</p>
                     </div>
-                    <p class="text-body-sm text-outline mt-0.5 leading-snug">Ruang aman santai antar-siswa tanpa penghakiman.</p>
+                    <p class="text-body-sm text-outline mt-0.5 leading-snug">Ruang aman santai antar-siswa tanpa penghakiman dari konselor kelasmu.</p>
                 </label>
             </div>
         </div>
@@ -89,9 +89,9 @@
                         <option value="{{ $guru->id }}" data-tujuan="guru" {{ old('tujuan_tipe', 'guru') === 'guru' && old('penerima_id') == $guru->id ? 'selected' : '' }}>{{ $guru->name }}</option>
                     @endforeach
                 </optgroup>
-                <optgroup label="Siswa" id="optgroup-siswa">
-                    @foreach($siswas as $siswa)
-                        <option value="{{ $siswa->id }}" data-tujuan="siswa" {{ old('tujuan_tipe') === 'siswa' && old('penerima_id') == $siswa->id ? 'selected' : '' }}>{{ $siswa->name }}</option>
+                <optgroup label="Konselor Sebaya" id="optgroup-konselor">
+                    @foreach($konselors as $konselor)
+                        <option value="{{ $konselor->id }}" data-tujuan="konselor" {{ old('tujuan_tipe') === 'konselor' && old('penerima_id') == $konselor->id ? 'selected' : '' }}>{{ $konselor->displayName() }}{{ $konselor->kelas ? ' — Kelas ' . $konselor->kelas : '' }}</option>
                     @endforeach
                 </optgroup>
             </select>
@@ -130,7 +130,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
             <p class="text-body-sm text-outline flex items-center gap-1.5 text-center sm:text-left">
                 <span class="material-symbols-outlined text-base text-primary flex-shrink-0">verified_user</span>
-                <span>Histori chat dengan Guru BK tercatat untuk bimbingan konseling. Obrolan dengan Teman Sebaya bersifat privat antar-siswa.</span>
+                <span>Histori chat dengan Guru BK tercatat untuk bimbingan konseling. Obrolan dengan Konselor Sebaya bersifat privat & anonim.</span>
             </p>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <a href="{{ route('home') }}" class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">

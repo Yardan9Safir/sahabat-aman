@@ -72,14 +72,6 @@
                         <span class="material-symbols-outlined shrink-0">dashboard</span>
                         <span class="sidebar-label truncate">Ikhtisar Konseling</span>
                     </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.siswa*') ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors" href="{{ route('admin.siswa') }}" title="Data Siswa">
-                        <span class="material-symbols-outlined shrink-0">school</span>
-                        <span class="sidebar-label truncate">Data Siswa</span>
-                    </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="{{ route('dashboard') }}" title="Ruang Dialog">
-                        <span class="material-symbols-outlined shrink-0">chat_bubble</span>
-                        <span class="sidebar-label truncate">Ruang Dialog</span>
-                    </a>
                 </nav>
             </div>
 
@@ -91,9 +83,6 @@
                 </a>
 
                 <div id="adminProfileCard" class="w-full flex items-center gap-3 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/50">
-                    <span class="w-10 h-10 shrink-0 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-sm">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                    </span>
                     <span class="sidebar-label flex flex-col min-w-0 flex-1">
                         <span class="text-label-md text-on-surface font-bold truncate">{{ Auth::user()->name }}</span>
                         <span class="text-label-sm text-primary font-medium truncate">Guru BK Pengampu</span>
@@ -123,14 +112,10 @@
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah admin">
-                <div class="grid grid-cols-5 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
                     <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.index','admin.show') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
                         <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Ikhtisar</span>
-                    </a>
-                    <a href="{{ route('admin.siswa') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.siswa*') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">school</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Siswa</span>
                     </a>
                     <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
