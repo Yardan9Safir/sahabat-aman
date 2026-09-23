@@ -72,6 +72,10 @@
                         <span class="material-symbols-outlined shrink-0">dashboard</span>
                         <span class="sidebar-label truncate">Ikhtisar Konseling</span>
                     </a>
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.quotes.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors" href="{{ route('admin.quotes.index') }}" title="Quotes & Kata-Kata Hari Ini">
+                        <span class="material-symbols-outlined shrink-0">format_quote</span>
+                        <span class="sidebar-label truncate">Quotes & Kata Hari Ini</span>
+                    </a>
                 </nav>
             </div>
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CurhatController;
+use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CurhatController::class, 'landing'])->name('home');
@@ -35,5 +36,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/curhat/{curhat}', [AdminController::class, 'show'])->name('show');
         Route::get('/akun', [AdminController::class, 'account'])->name('account');
         Route::put('/akun', [AdminController::class, 'accountUpdate'])->name('account.update');
+
+        Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
+        Route::get('/quotes/create', [QuoteController::class, 'create'])->name('quotes.create');
+        Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+        Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');
+        Route::put('/quotes/{quote}', [QuoteController::class, 'update'])->name('quotes.update');
+        Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
+        Route::post('/quotes/{quote}/harian', [QuoteController::class, 'setDaily'])->name('quotes.daily');
     });
 });

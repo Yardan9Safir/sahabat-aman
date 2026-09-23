@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany(Balasan::class, 'pengirim_id');
     }
 
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class, 'id_pembuat');
+    }
+
     public function roleLabel(): string
     {
         return match ($this->role) {
