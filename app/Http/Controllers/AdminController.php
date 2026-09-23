@@ -32,6 +32,10 @@ class AdminController extends Controller
 
         $curhat->load(['siswa', 'penerima', 'balasans.pengirim']);
 
+        if ($curhat->penerima_id === Auth::id()) {
+            $curhat->setViewed();
+        }
+
         return view('admin.show', compact('curhat'));
     }
 

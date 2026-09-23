@@ -22,7 +22,7 @@
                     <div class="flex items-center gap-2 text-label-sm text-outline mt-0.5">
                         <span class="flex items-center gap-1 text-primary font-medium">
                             <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            {{ ucfirst($curhat->status) }}
+                            {{ $curhat->status === 'terkirim' ? 'Menunggu Balasan' : ucfirst($curhat->status) }}
                         </span>
                         <span>&bull;</span>
                         <span>Topik: {{ ucfirst($curhat->kategori) }}</span>
@@ -39,8 +39,7 @@
         <div
             class="bg-surface-container px-5 py-2.5 rounded-2xl flex items-center gap-2 text-label-sm text-on-surface-variant border border-surface-variant/40">
             <span class="material-symbols-outlined text-primary text-base">lock</span>
-            <span><strong>Akses Konseling:</strong> Percakapan ini hanya dapat dilihat oleh kamu dan
-                {{ $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'penerima') }}.</span>
+            <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
         </div>
 
         {{-- Chat Message Thread --}}
@@ -54,23 +53,22 @@
                 </div>
 
                 {{-- User's Original Vent --}}
-                <div class="flex flex-col items-end max-w-xl ml-auto">
-                    <div class="flex items-center gap-2 mb-1.5">
-                        <span class="text-label-sm text-outline">{{ $curhat->created_at->translatedFormat('H:i') }}
-                            WIB</span>
-                        <span class="text-label-sm font-bold text-on-surface">Kamu</span>
+                <div class="flex items-start gap-3.5 max-w-2xl">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-surface-container-high flex-shrink-0 mt-1 shadow-xs flex items-center justify-center text-primary font-bold text-xs">
+                        {{ strtoupper(substr($curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'S'), 0, 2)) }}
                     </div>
-                    <div class="bg-primary-container text-on-primary-container p-4 rounded-2xl rounded-tr-xs shadow-sm space-y-2">
-                        <div
-                            class="flex items-center gap-2 pb-1.5 border-b border-on-primary-container/20 text-on-primary-container text-label-sm">
-                            <span class="material-symbols-outlined text-sm">psychology</span>
-                            <span>{{ ucfirst($curhat->kategori) }}</span>
+                    <div class="flex flex-col items-start space-y-2 flex-1">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="text-label-sm font-bold text-on-surface">{{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</span>
+                            <span class="text-label-sm text-outline">{{ $curhat->created_at->translatedFormat('H:i') }}
+                                WIB</span>
                         </div>
-                        <p class="text-body-md leading-relaxed text-on-primary-container">{{ $curhat->pesan }}</p>
-                    </div>
-                    <div class="flex items-center gap-2 mt-1 text-label-sm text-outline">
-                        <span class="material-symbols-outlined text-xs text-primary">done_all</span>
-                        <span>Terkirim terenkripsi</span>
+                        <div
+                            class="bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs p-4 shadow-sm">
+                            <p class="text-body-md leading-relaxed">{{ $curhat->pesan }}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -78,17 +76,11 @@
                 @forelse($curhat->balasans as $balasan)
                     <div
                         class="flex items-start gap-3.5 max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
-                        @if ($balasan->pengirim_id !== auth()->id())
-                            <div
-                                class="w-9 h-9 rounded-xl bg-surface-container-high flex-shrink-0 mt-1 shadow-xs flex items-center justify-center text-primary font-bold text-xs">
-                                {{ strtoupper(substr($balasan->pengirim->name ?? 'U', 0, 2)) }}
-                            </div>
-                        @endif
                         <div
                             class="flex flex-col {{ $balasan->pengirim_id === auth()->id() ? 'items-end' : 'items-start' }} space-y-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim->name ?? 'Unknown' }}</span>
+                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim_id === auth()->id() ? 'Kamu' : ($balasan->pengirim->name ?? 'Unknown') }}</span>
                                 <span
                                     class="text-label-sm text-outline">{{ $balasan->created_at->translatedFormat('H:i') }}
                                     WIB</span>

@@ -87,7 +87,7 @@
                     <div class="flex items-center gap-3">
                         <div>
                             <div class="flex items-center gap-2">
-                                <h4 class="text-headline-sm text-base font-bold text-on-surface">{{ $curhat->siswa->name ?? 'Siswa' }}</h4>
+                                <h4 class="text-headline-sm text-base font-bold text-on-surface">{{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</h4>
                                 @if(isset($curhat->siswa->identifier))
                                 <span class="bg-surface-container px-2 py-0.5 rounded text-label-sm font-semibold text-on-surface-variant">{{ $curhat->siswa->identifier }}</span>
                                 @endif

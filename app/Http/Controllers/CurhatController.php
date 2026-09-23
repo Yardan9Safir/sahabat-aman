@@ -37,6 +37,8 @@ class CurhatController extends Controller
         $penerima = User::findOrFail($validated['penerima_id']);
 
         $request->user()->curhats()->create([
+            'siswa_id' => $request->user()->id,
+            'nama_pengirim' => $request->user()->name,
             'penerima_id' => $penerima->id,
             'tujuan' => $penerima->role,
             'nama_penerima' => $penerima->name,
@@ -123,7 +125,9 @@ class CurhatController extends Controller
             'isi' => $validated['isi'],
         ]);
 
-        $curhat->setReplied();
+        if ($isPenerima) {
+            $curhat->setReplied();
+        }
 
         if ($request->expectsJson()) {
             return response()->json([
