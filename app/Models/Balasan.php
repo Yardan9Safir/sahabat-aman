@@ -27,4 +27,13 @@ class Balasan extends Model
     {
         return $this->belongsTo(User::class, 'pengirim_id');
     }
+
+    public function getPengirimRoleLabelAttribute(): string
+    {
+        return match ($this->pengirim_role) {
+            User::ROLE_GURU => 'Guru BK',
+            User::ROLE_KONSELOR_SEBAYA => 'Konselor Sebaya',
+            default => 'Siswa',
+        };
+    }
 }

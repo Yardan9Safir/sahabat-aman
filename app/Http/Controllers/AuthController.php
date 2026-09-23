@@ -25,7 +25,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended($this->getDashboardRoute(Auth::user()));
+            return redirect($this->getDashboardRoute(Auth::user()));
         }
 
         throw ValidationException::withMessages([
@@ -45,7 +45,7 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'identifier' => ['required', 'string', 'max:100', 'unique:users,identifier'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'in:siswa,guru'],
+            'role' => ['required', 'in:siswa,guru,konselor sebaya'],
         ]);
 
         $user = User::create([
@@ -110,6 +110,14 @@ class AuthController extends Controller
     {
         if ($user->role === 'siswa') {
             return '/curhat';
+        }
+
+        if ($user->role === 'konselor sebaya') {
+            return '/dashboard';
+        }
+
+        if ($user->role === 'guru') {
+            return '/dashboard';
         }
 
         return '/dashboard';

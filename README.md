@@ -91,7 +91,6 @@ Setelah login:
 
 - **Data Curhat** (`/admin`): melihat seluruh curhat di semua siswa. Kolom yang ditampilkan: **pengirim, penerima, kategori, status, waktu**. Isi pesan **tidak** ditampilkan demi kerahasiaan.
 - **Detail Curhat** (`/admin/curhat/{id}`): hanya menampilkan pengirim, penerima, kategori, status, dan waktu. **Isi pesan dan balasan tidak ditampilkan.**
-- **Data Siswa** (`/admin/siswa`): daftar seluruh siswa terdaftar (nama, identitas, email).
 - Filter curhat berdasarkan kategori dan status.
 
 Status curhat: `terkirim`, `dilihat`, `dibalas`, `ditangani`.

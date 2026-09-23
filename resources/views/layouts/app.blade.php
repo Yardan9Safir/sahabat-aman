@@ -18,11 +18,11 @@
         }
         .material-symbols-outlined.hidden { display: none !important; }
         .soft-shadow {
-            box-shadow: 0 4px 20px -2px rgba(45, 106, 79, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+            box-shadow: 0 4px 20px -2px rgba(8, 145, 178, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
         }
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #bfc9c1; border-radius: 9999px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #c6c7bf; border-radius: 9999px; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 
         /* Sidebar: hamburger collapse (desktop) + drawer (HP) */
@@ -72,10 +72,12 @@
             </div>
 
             <nav class="flex flex-col gap-1.5 overflow-y-auto custom-scroll min-h-0" aria-label="Navigasi utama">
+                @if(Auth::user()->role === 'siswa')
                 <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('curhat.create') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('curhat.create') }}" title="Buat Curhat Baru">
                     <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('curhat.create') ? 'text-primary' : 'text-outline' }}">add_notes</span>
                     <span class="sidebar-label text-label-lg truncate">Buat Curhat Baru</span>
                 </a>
+                @endif
                 <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('dashboard') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('dashboard') }}" title="Kotak Masuk & Dialog">
                     <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('dashboard') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
                     <span class="sidebar-label text-label-lg truncate">Kotak Masuk & Dialog</span>
@@ -100,7 +102,7 @@
                     <span class="block text-label-lg font-bold truncate text-on-surface group-hover:text-primary transition-colors">{{ Auth::user()->name }}</span>
                     <span class="flex items-center gap-1 text-label-sm text-outline">
                         <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-                        {{ ucfirst(Auth::user()->role) }}
+                        {{ Auth::user()->roleLabel() }}
                     </span>
                 </span>
                 <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-lg">chevron_right</span>
@@ -131,12 +133,14 @@
         @auth
         {{-- Bottom nav HP dibenahi + tombol Menu untuk buka sidebar (pengganti topbar) --}}
         <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
-            @php $isGuru = Auth::user()->role === 'guru'; @endphp
-            <div class="grid {{ $isGuru ? 'grid-cols-5' : 'grid-cols-4' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+            @php $isSiswa = Auth::user()->role === 'siswa'; $isGuru = Auth::user()->role === 'guru'; @endphp
+            <div class="grid {{ $isGuru ? 'grid-cols-4' : ($isSiswa ? 'grid-cols-4' : 'grid-cols-3') }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                @if($isSiswa)
                 <a href="{{ route('curhat.create') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">add_notes</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Curhat</span>
                 </a>
+                @endif
                 <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>

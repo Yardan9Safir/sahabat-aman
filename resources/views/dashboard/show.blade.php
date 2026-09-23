@@ -14,8 +14,9 @@
                         <h2 class="text-title-md font-bold text-on-surface">
                             {{ $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui') }}</h2>
                         <span
-                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm font-semibold">
-                            {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Teman Sebaya' }}
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold">
+                            <span class="material-symbols-outlined text-xs">{{ $curhat->tujuanIcon }}</span>
+                            {{ $curhat->tujuanLabel }}
                         </span>
                     </div>
                     <div class="flex items-center gap-2 text-label-sm text-outline mt-0.5">
@@ -59,13 +60,13 @@
                             WIB</span>
                         <span class="text-label-sm font-bold text-on-surface">Kamu</span>
                     </div>
-                    <div class="bg-primary-container text-on-primary p-4 rounded-2xl rounded-tr-xs shadow-sm space-y-2">
+                    <div class="bg-primary-container text-on-primary-container p-4 rounded-2xl rounded-tr-xs shadow-sm space-y-2">
                         <div
                             class="flex items-center gap-2 pb-1.5 border-b border-on-primary-container/20 text-on-primary-container text-label-sm">
                             <span class="material-symbols-outlined text-sm">psychology</span>
                             <span>{{ ucfirst($curhat->kategori) }}</span>
                         </div>
-                        <p class="text-body-md leading-relaxed text-white">{{ $curhat->pesan }}</p>
+                        <p class="text-body-md leading-relaxed text-on-primary-container">{{ $curhat->pesan }}</p>
                     </div>
                     <div class="flex items-center gap-2 mt-1 text-label-sm text-outline">
                         <span class="material-symbols-outlined text-xs text-primary">done_all</span>
@@ -93,7 +94,7 @@
                                     WIB</span>
                             </div>
                             <div
-                                class="{{ $balasan->pengirim_id === auth()->id() ? 'bg-primary-container text-on-primary rounded-2xl rounded-tr-xs' : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs' }} p-4 shadow-sm">
+                                class="{{ $balasan->pengirim_id === auth()->id() ? 'bg-primary-container text-on-primary-container rounded-2xl rounded-tr-xs' : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs' }} p-4 shadow-sm">
                                 <p class="text-body-md leading-relaxed">{{ $balasan->isi }}</p>
                             </div>
                         </div>
@@ -108,7 +109,7 @@
 
             {{-- Composer --}}
             <div class="p-4 bg-surface-container-low border-t border-surface-variant/40">
-                @if ($curhat->status !== 'ditangani')
+                @if ($curhat->status !== 'ditangani' && in_array(Auth::user()->role, ['guru', 'konselor sebaya']))
                     <form id="replyForm" data-endpoint="{{ route('dashboard.reply', $curhat) }}" data-mode="chat" data-target=".space-y-6"
                         class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
                         @csrf
@@ -118,18 +119,27 @@
                         <div class="flex items-center justify-between pt-2 px-1 border-t border-surface-container-low">
                             <span class="text-label-sm text-outline hidden sm:inline">Tekan Enter untuk kirim</span>
                             <button type="submit" id="replyBtn"
-                                class="px-5 py-2.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary text-label-md font-semibold flex items-center gap-2 shadow-sm transition-all active:scale-95">
+                                class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold flex items-center gap-2 shadow-sm transition-all active:scale-95">
                                 <span>Kirim Balasan</span>
                                 <span class="material-symbols-outlined text-lg">send</span>
                             </button>
                         </div>
                     </form>
                 @else
-                    <div class="rounded-2xl bg-surface-container-low border border-outline-variant/40 p-4 text-center">
+                    <div class="rounded-2xl bg-error-container text-on-error-container border border-error/30 p-4 text-center">
                         <span class="material-symbols-outlined text-primary text-xl mb-1">check_circle</span>
-                        <p class="text-label-md font-semibold text-on-surface">Curhat ini sudah ditandai selesai</p>
-                        <p class="text-body-sm text-outline">Percakapan ini telah berakhir dengan baik.</p>
+                        <p class="text-label-md font-semibold">Sudah Ditangani</p>
+                        <p class="text-body-sm mt-0.5">Curhat ini sudah selesai ditangani. Percakapan telah berakhir.</p>
                     </div>
+                @endif
+                @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
+                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}" class="mt-3">
+                        @csrf
+                        <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-secondary-container text-on-secondary-container hover:bg-secondary-container/80 text-label-md font-semibold transition-colors">
+                            <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
+                        </button>
+                    </form>
                 @endif
             </div>
 

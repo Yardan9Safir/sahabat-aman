@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Sahabat Aman - BK')
 
@@ -19,23 +19,29 @@
         </h1>
         {{-- Hero Subheadline --}}
         <p class="text-body-lg text-on-surface-variant text-balance max-w-2xl mx-auto mb-10">
-            Bimbingan konseling sekolah modern tanpa tatap sinis atau rasa takut. Bebas curhat santai ke Teman Sebaya terlatih, atau konsultasi mendalam bersama Guru BK berlisensi dalam ekosistem digital yang hangat dan terlindungi.
+            Bimbingan konseling sekolah modern tanpa tatap sinis atau rasa takut. Bebas curhat santai ke Konselor Sebaya terlatih, atau konsultasi mendalam bersama Guru BK berlisensi dalam ekosistem digital yang hangat dan terlindungi.
         </p>
         {{-- Dual Main CTAs --}}
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             @auth
-            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-title-md shadow-md hover:shadow-lg transition-all duration-200" href="{{ route('curhat.create') }}">
+            @if(Auth::user()->role === 'guru')
+            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-title-md shadow-md hover:shadow-lg transition-all duration-200" href="{{ route('admin.index') }}">
+                <span class="material-symbols-outlined text-2xl">health_and_safety</span>
+                <span>Akses Portal Guru BK</span>
+            </a>
+            @elseif(Auth::user()->role === 'konselor sebaya')
+            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-title-md shadow-md hover:shadow-lg transition-all duration-200" href="{{ route('dashboard') }}">
+                <span class="material-symbols-outlined text-2xl">health_and_safety</span>
+                <span>Akses Portal Konselor Sebaya</span>
+            </a>
+            @else
+            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-title-md shadow-md hover:shadow-lg transition-all duration-200" href="{{ route('curhat.create') }}">
                 <span class="material-symbols-outlined text-2xl">edit_note</span>
                 <span>Mulai Curhat (Portal Siswa)</span>
             </a>
-            @if(Auth::user()->role === 'guru')
-            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-primary font-title-md transition-all duration-200" href="{{ route('admin.index') }}">
-                <span class="material-symbols-outlined text-xl text-secondary">health_and_safety</span>
-                <span>Akses Portal Guru BK</span>
-            </a>
             @endif
             @else
-            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-title-md shadow-md hover:shadow-lg transition-all duration-200" href="{{ route('curhat.create') }}">
+            <a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-title-md shadow-md hover:shadow-lg transition-all duration-200" href="{{ route('curhat.create') }}">
                 <span class="material-symbols-outlined text-2xl">edit_note</span>
                 <span>Mulai Curhat (Portal Siswa)</span>
             </a>
@@ -125,9 +131,9 @@
                         </span>
                         <span class="text-label-sm text-outline">Bebas Stigma &bull; 24/7 Daring</span>
                     </div>
-                    <h3 class="text-headline-md text-on-surface mb-3">Pilih Nyamanmu: Guru BK atau Teman Sebaya</h3>
+                    <h3 class="text-headline-md text-on-surface mb-3">Pilih Nyamanmu: Guru BK atau Konselor Sebaya</h3>
                     <p class="text-body-md text-on-surface-variant mb-6 leading-relaxed">
-                        Kamu memegang kendali sepenuhnya. Pilih berdiskusi dengan sesama teman sebaya yang terlatih, atau bimbingan resmi dengan Guru BK jika membutuhkan solusi terstruktur.
+                        Kamu memegang kendali sepenuhnya. Pilih berdiskusi dengan konselor sebaya yang terlatih, atau bimbingan resmi dengan Guru BK jika membutuhkan solusi terstruktur.
                     </p>
                     <div class="space-y-4 mb-8">
                         <div class="p-4 rounded-xl bg-surface-container-low border border-surface-container flex gap-3.5">
@@ -135,9 +141,9 @@
                                 <span class="material-symbols-outlined">groups</span>
                             </div>
                             <div>
-                                <h4 class="text-title-md text-on-surface">Curhat Teman Sebaya (Peer Counselor)</h4>
+                                <h4 class="text-title-md text-on-surface">Curhat Konselor Sebaya</h4>
                                 <p class="text-body-sm text-on-surface-variant mt-0.5">
-                                    Ruang ngobrol santai antar siswa. <strong class="text-primary font-medium">Dijamin privat tidak dapat dibaca oleh Guru BK</strong> kecuali terdapat indikasi darurat bahaya fisik.
+                                    Ruang ngobrol santai bersama konselor sebaya terlatih. <strong class="text-primary font-medium">Dijamin privat tidak dapat dibaca oleh Guru BK</strong> kecuali terdapat indikasi darurat bahaya fisik.
                                 </p>
                             </div>
                         </div>
@@ -155,7 +161,7 @@
                     </div>
                 </div>
                 <div class="pt-4 border-t border-surface-container">
-                    <a class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-primary text-on-primary text-label-lg hover:bg-primary-container transition-colors" href="{{ route('curhat.create') }}">
+                    <a class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-primary text-on-primary text-label-lg hover:bg-primary-container hover:text-on-primary-container transition-colors" href="{{ route('curhat.create') }}">
                         <span>Buka Ruang Curhat Siswa</span>
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
@@ -279,7 +285,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-primary-fixed text-primary text-headline-sm font-bold flex items-center justify-center mb-6">1</div>
                 <h3 class="text-title-md text-on-surface mb-2">Pilih Teman Bicara</h3>
                 <p class="text-body-md text-on-surface-variant leading-relaxed mb-4 flex-grow">
-                    Tentukan apakah kamu ingin berbagi cerita ke Teman Sebaya atau bimbingan terarah dengan Guru BK sekolah.
+                    Tentukan apakah kamu ingin berbagi cerita ke Konselor Sebaya atau bimbingan terarah dengan Guru BK sekolah.
                 </p>
                 <div class="p-3 rounded-xl bg-surface-container-low text-on-surface-variant text-label-sm flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary text-base">visibility_off</span>
@@ -392,11 +398,11 @@
             </details>
             <details class="group bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 custom-pill-shadow open:border-primary/40 transition-all">
                 <summary class="flex justify-between items-center cursor-pointer text-title-md text-on-surface list-none">
-                    <span>Apa bedanya curhat ke Teman Sebaya vs Guru BK?</span>
+                    <span>Apa bedanya curhat ke Konselor Sebaya vs Guru BK?</span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform group-open:rotate-180">expand_more</span>
                 </summary>
                 <p class="text-body-md text-on-surface-variant mt-4 leading-relaxed border-t border-surface-container pt-3">
-                    Teman Sebaya (Peer Listener) adalah sesama siswa terlatih untuk menjadi pendengar yang baik bagi keluhan ringan sehari-hari, stres tugas, atau obrolan santai. Sedangkan Guru BK adalah konselor profesional bersertifikat yang menangani pendampingan mendalam, arah karir, krisis trauma, dan advokasi akademik sekolah.
+                    Konselor Sebaya (Peer Counselor) adalah siswa yang dilatih untuk menjadi pendengar yang baik bagi keluhan ringan sehari-hari, stres tugas, atau obrolan santai. Sedangkan Guru BK adalah konselor profesional bersertifikat yang menangani pendampingan mendalam, arah karir, krisis trauma, dan advokasi akademik sekolah.
                 </p>
             </details>
             <details class="group bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/30 custom-pill-shadow open:border-primary/40 transition-all">
@@ -415,14 +421,14 @@
 {{-- SECTION 7: FINAL CTA --}}
 <section class="py-20 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="bg-primary-container text-on-primary rounded-3xl p-10 md:p-16 text-center relative overflow-hidden shadow-xl">
+        <div class="bg-primary-container text-on-primary-container rounded-3xl p-10 md:p-16 text-center relative overflow-hidden shadow-xl">
             <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-primary-fixed-dim/20 rounded-full blur-2xl pointer-events-none"></div>
             <div class="absolute -top-20 -left-20 w-80 h-80 bg-on-primary-container/10 rounded-full blur-2xl pointer-events-none"></div>
             <div class="max-w-2xl mx-auto relative z-10">
                 <div class="w-16 h-16 rounded-2xl bg-on-primary/10 flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-                    <span class="material-symbols-outlined text-on-primary text-3xl">spa</span>
+                    <span class="material-symbols-outlined text-on-primary-container text-3xl">spa</span>
                 </div>
-                <h2 class="text-headline-xl font-bold tracking-tight mb-4 text-white">
+                <h2 class="text-headline-xl font-bold tracking-tight mb-4 text-on-primary-container">
                     Jangan Pendam Sendiri.<br>Sahabat Aman Siap Menemanimu Hari Ini.
                 </h2>
                 <p class="text-body-lg text-on-primary-container mb-8 max-w-lg mx-auto">
@@ -465,7 +471,7 @@
             <div>
                 <h4 class="text-title-md text-on-surface mb-4">Akses Siswa</h4>
                 <ul class="space-y-2.5 text-body-sm">
-                    <li><a class="hover:text-primary transition-colors" href="{{ route('curhat.create') }}">Pilih Teman Sebaya</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="{{ route('curhat.create') }}">Pilih Konselor Sebaya</a></li>
                     <li><a class="hover:text-primary transition-colors" href="{{ route('riwayat') }}">Riwayat Curhat</a></li>
                     <li><a class="hover:text-primary transition-colors" href="{{ route('dashboard') }}">Kotak Masuk & Dialog</a></li>
                 </ul>
@@ -473,7 +479,7 @@
             <div>
                 <h4 class="text-title-md text-on-surface mb-4">Portal Pendidik BK</h4>
                 <ul class="space-y-2.5 text-body-sm">
-                    <li><a class="hover:text-primary transition-colors" href="{{ route('admin.siswa') }}">Data & Riwayat Siswa</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="{{ route('admin.index') }}">Ikhtisar Konseling</a></li>
                 </ul>
             </div>
             <div>

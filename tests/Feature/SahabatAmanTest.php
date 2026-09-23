@@ -55,9 +55,8 @@ class SahabatAmanTest extends TestCase
 
         $this->actingAs($guru);
 
-        $this->get('/admin')->assertOk()->assertSee('Data Curhat');
+        $this->get('/admin')->assertOk()->assertSee('Ikhtisar Konseling');
         $this->get('/admin/curhat/'.$curhat->id)->assertOk()->assertSee('Detail Curhat');
-        $this->get('/admin/siswa')->assertOk()->assertSee($student->name);
     }
 
     public function test_siswa_cannot_access_admin_panel(): void
@@ -69,7 +68,7 @@ class SahabatAmanTest extends TestCase
         $this->get('/admin')->assertForbidden();
     }
 
-    public function test_siswa_recipient_can_reply(): void
+    public function test_siswa_cannot_reply_to_curhat(): void
     {
         $sender = User::factory()->create(['role' => 'siswa', 'identifier' => '2024003']);
         $recipient = User::factory()->create(['role' => 'siswa', 'identifier' => '2024004']);
@@ -87,9 +86,359 @@ class SahabatAmanTest extends TestCase
 
         $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
             'isi' => 'Coba konsultasikan ke guru BK ya.',
+        ])->assertForbidden();
+    }
+
+    public function test_guru_can_reply_and_close_curhat(): void
+    {
+        $student = User::factory()->create(['role' => 'siswa', 'identifier' => '2024009']);
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-3']);
+
+        $curhat = Curhat::create([
+            'siswa_id' => $student->id,
+            'penerima_id' => $guru->id,
+            'tujuan' => 'guru',
+            'kategori' => 'belajar',
+            'pesan' => 'Saya kesulitan fokus belajar.',
+            'status' => 'terkirim',
+        ]);
+
+        $this->actingAs($guru);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
+            'isi' => 'Mari kita cari solusi bersama.',
         ])->assertRedirect();
 
         $curhat->refresh();
         $this->assertSame('dibalas', $curhat->status);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
+
+        $curhat->refresh();
+        $this->assertSame('ditangani', $curhat->status);
+    }
+
+    public function test_student_can_send_curhat_to_peer_counselor(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'siswa',
+            'identifier' => '2024006',
+        ]);
+
+        $konselor = User::factory()->konselorSebaya()->create();
+
+        $this->actingAs($student);
+
+        $this->post('/curhat', [
+            'penerima_id' => $konselor->id,
+            'kategori' => 'pribadi',
+            'pesan' => 'Saya merasa tidak nyaman di kelas akhir-akhir ini.',
+        ])->assertRedirect('/riwayat');
+
+        $this->assertDatabaseHas('curhats', [
+            'siswa_id' => $student->id,
+            'penerima_id' => $konselor->id,
+            'tujuan' => 'konselor sebaya',
+            'status' => 'terkirim',
+        ]);
+    }
+
+    public function test_peer_counselor_and_guru_cannot_send_curhat(): void
+    {
+        $konselor = User::factory()->konselorSebaya()->create();
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-4']);
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024011']);
+
+        $this->actingAs($konselor);
+
+        $this->get('/curhat')->assertForbidden();
+        $this->post('/curhat', [
+            'penerima_id' => $guru->id,
+            'kategori' => 'pribadi',
+            'pesan' => 'Ini tidak seharusnya bisa dikirim oleh konselor.',
+        ])->assertForbidden();
+
+        $this->actingAs($guru);
+
+        $this->get('/curhat')->assertForbidden();
+        $this->post('/curhat', [
+            'penerima_id' => $siswa->id,
+            'kategori' => 'pribadi',
+            'pesan' => 'Ini tidak seharusnya bisa dikirim oleh guru.',
+        ])->assertForbidden();
+    }
+
+    public function test_peer_counselor_can_reply_and_close_curhat(): void
+    {
+        $sender = User::factory()->create(['role' => 'siswa', 'identifier' => '2024007']);
+        $konselor = User::factory()->konselorSebaya()->create();
+
+        $curhat = Curhat::create([
+            'siswa_id' => $sender->id,
+            'penerima_id' => $konselor->id,
+            'tujuan' => 'konselor sebaya',
+            'kategori' => 'sosial',
+            'pesan' => 'Saya merasa dikucilkan oleh teman sekelas.',
+            'status' => 'terkirim',
+        ]);
+
+        $this->actingAs($konselor);
+
+        $this->get('/dashboard')->assertOk()->assertSee('Konselor Sebaya');
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
+            'isi' => 'Kamu tidak sendiri, ceritakan lebih lanjut ya.',
+        ])->assertRedirect();
+
+        $curhat->refresh();
+        $this->assertSame('dibalas', $curhat->status);
+        $this->assertDatabaseHas('balasans', [
+            'curhat_id' => $curhat->id,
+            'pengirim_id' => $konselor->id,
+            'pengirim_role' => 'konselor sebaya',
+        ]);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
+
+        $curhat->refresh();
+        $this->assertSame('ditangani', $curhat->status);
+    }
+
+    public function test_peer_counselor_cannot_access_admin_panel(): void
+    {
+        $konselor = User::factory()->konselorSebaya()->create();
+
+        $this->actingAs($konselor);
+
+        $this->get('/admin')->assertForbidden();
+    }
+
+    public function test_peer_counselor_can_register_and_lands_on_inbox(): void
+    {
+        $this->post('/register', [
+            'name' => 'Konselor Sebaya Tingkat 7',
+            'email' => 'konselor7@test.local',
+            'identifier' => 'KON-700',
+            'password' => 'secret99',
+            'password_confirmation' => 'secret99',
+            'role' => 'konselor sebaya',
+        ])->assertRedirect('/dashboard');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'konselor7@test.local',
+            'role' => 'konselor sebaya',
+        ]);
+    }
+
+    public function test_guest_trying_to_open_restricted_page_sets_intended_url()
+    {
+        $this->get('/riwayat')->assertRedirect('/login');
+    }
+
+    public function test_peer_counselor_login_ignores_stale_intended_url()
+    {
+        $konselor = User::factory()->konselorSebaya()->create([
+            'password' => 'password123',
+        ]);
+
+        $this->withSession(['url.intended' => '/curhat'])
+            ->post('/login', [
+                'email' => $konselor->email,
+                'password' => 'password123',
+            ])
+            ->assertRedirect('/dashboard');
+
+        $this->assertAuthenticatedAs($konselor);
+    }
+
+    public function test_guru_login_lands_on_dashboard()
+    {
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-5']);
+
+        $this->post('/login', [
+            'email' => $guru->email,
+            'password' => 'password',
+        ])->assertRedirect('/dashboard');
+
+        $this->assertAuthenticatedAs($guru);
+    }
+
+    public function test_student_login_lands_on_curhat()
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024012']);
+
+        $this->post('/login', [
+            'email' => $siswa->email,
+            'password' => 'password',
+        ])->assertRedirect('/curhat');
+
+        $this->assertAuthenticatedAs($siswa);
+    }
+
+    public function test_student_can_reply_in_ongoing_curhat(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024013']);
+        $konselor = User::factory()->konselorSebaya()->create();
+
+        $curhat = Curhat::create([
+            'siswa_id' => $siswa->id,
+            'penerima_id' => $konselor->id,
+            'tujuan' => 'konselor sebaya',
+            'kategori' => 'pribadi',
+            'pesan' => 'Saya ingin bercerita tentang masalah di rumah.',
+            'status' => 'dibalas',
+        ]);
+
+        $this->actingAs($siswa);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
+            'isi' => 'Terima kasih sudah mau mendengar.',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('balasans', [
+            'curhat_id' => $curhat->id,
+            'pengirim_id' => $siswa->id,
+            'pengirim_role' => 'siswa',
+            'isi' => 'Terima kasih sudah mau mendengar.',
+        ]);
+
+        $curhat->refresh();
+        $this->assertSame('dibalas', $curhat->status);
+    }
+
+    public function test_student_can_reply_back_and_forth_on_riwayat_page(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024014']);
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-6']);
+
+        $curhat = Curhat::create([
+            'siswa_id' => $siswa->id,
+            'penerima_id' => $guru->id,
+            'tujuan' => 'guru',
+            'kategori' => 'belajar',
+            'pesan' => 'Saya sulit membagi waktu belajar.',
+            'status' => 'dibalas',
+        ]);
+
+        $this->actingAs($siswa);
+
+        $this->get('/riwayat/'.$curhat->id)
+            ->assertOk()
+            ->assertSee('Kirim Balasan');
+    }
+
+    public function test_student_cannot_reply_after_curhat_handled(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024015']);
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-7']);
+
+        $curhat = Curhat::create([
+            'siswa_id' => $siswa->id,
+            'penerima_id' => $guru->id,
+            'tujuan' => 'guru',
+            'kategori' => 'karier',
+            'pesan' => 'Saya bingung menentukan arah masa depan.',
+            'status' => 'terkirim',
+        ]);
+
+        $curhat->setHandled($guru);
+
+        $this->actingAs($siswa);
+
+        $this->get('/riwayat/'.$curhat->id)
+            ->assertOk()
+            ->assertDontSee('Kirim Balasan')
+            ->assertSee('Curhat ini sudah ditangani');
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
+            'isi' => 'Boleh satu pesan lagi?',
+        ])->assertForbidden();
+    }
+
+    public function test_guru_sees_handled_state_on_done_curhat(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024016']);
+        $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-8']);
+
+        $curhat = Curhat::create([
+            'siswa_id' => $siswa->id,
+            'penerima_id' => $guru->id,
+            'tujuan' => 'guru',
+            'kategori' => 'sosial',
+            'pesan' => 'Saya merasa canggung saat presentasi di depan kelas.',
+            'status' => 'terkirim',
+        ]);
+
+        $curhat->setHandled($guru);
+
+        $this->actingAs($guru);
+
+        $this->get('/admin')
+            ->assertOk()
+            ->assertSee('Sudah Ditangani')
+            ->assertDontSee('Balas Curhat');
+
+        $this->get('/admin/curhat/'.$curhat->id)
+            ->assertOk()
+            ->assertSee('Sudah Ditangani')
+            ->assertDontSee('Kirim Balasan');
+    }
+
+    public function test_peer_counselor_sees_handled_state_on_done_curhat(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024017']);
+        $konselor = User::factory()->konselorSebaya()->create();
+
+        $curhat = Curhat::create([
+            'siswa_id' => $siswa->id,
+            'penerima_id' => $konselor->id,
+            'tujuan' => 'konselor sebaya',
+            'kategori' => 'pribadi',
+            'pesan' => 'Saya ingin membicarakan tekanan dari keluarga.',
+            'status' => 'terkirim',
+        ]);
+
+        $curhat->setHandled($konselor);
+
+        $this->actingAs($konselor);
+
+        $this->get('/dashboard/'.$curhat->id)
+            ->assertOk()
+            ->assertSee('Sudah Ditangani')
+            ->assertDontSee('Kirim Balasan');
+    }
+
+    public function test_user_auto_logged_out_after_10_minutes_idle(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024018']);
+
+        $this->actingAs($siswa);
+
+        $this->get('/riwayat')->assertOk();
+
+        $this->withSession(['last_activity_at' => now()->subMinutes(11)->timestamp]);
+
+        $this->get('/riwayat')
+            ->assertRedirect('/login')
+            ->assertSessionHas('warning');
+
+        $this->assertGuest();
+    }
+
+    public function test_active_user_not_logged_out_before_10_minutes(): void
+    {
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024019']);
+
+        $this->actingAs($siswa);
+
+        $this->withSession(['last_activity_at' => now()->subMinutes(9)->timestamp]);
+
+        $response = $this->get('/riwayat');
+        dump($response->headers->get('Location'));
+        $response->assertOk();
+
+        $this->get('/riwayat')->assertOk();
+
+        $this->assertAuthenticatedAs($siswa);
     }
 }

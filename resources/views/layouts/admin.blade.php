@@ -68,13 +68,9 @@
                 </div>
 
                 <nav aria-label="Menu Utama Konseling" class="flex flex-col gap-1.5 overflow-y-auto custom-scrollbar min-h-0">
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.index', 'admin.show') ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors" href="{{ route('admin.index') }}" title="Ikhtisar Konseling">
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.index', 'admin.show') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors" href="{{ route('admin.index') }}" title="Ikhtisar Konseling">
                         <span class="material-symbols-outlined shrink-0">dashboard</span>
                         <span class="sidebar-label truncate">Ikhtisar Konseling</span>
-                    </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.siswa*') ? 'bg-primary-container text-on-primary font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors" href="{{ route('admin.siswa') }}" title="Data Siswa">
-                        <span class="material-symbols-outlined shrink-0">school</span>
-                        <span class="sidebar-label truncate">Data Siswa</span>
                     </a>
                 </nav>
             </div>
@@ -116,14 +112,10 @@
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah admin">
-                <div class="grid grid-cols-5 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
                     <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.index','admin.show') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
                         <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Ikhtisar</span>
-                    </a>
-                    <a href="{{ route('admin.siswa') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('admin.siswa*') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">school</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Siswa</span>
                     </a>
                     <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-[60px] min-w-0 transition-colors {{ request()->routeIs('dashboard') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
