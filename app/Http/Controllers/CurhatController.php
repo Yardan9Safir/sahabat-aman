@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curhat;
+use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,9 @@ class CurhatController extends Controller
 {
     public function landing()
     {
-        return view('home');
+        $dailyQuote = Quote::where('is_daily', true)->latest()->first();
+
+        return view('home', compact('dailyQuote'));
     }
 
     public function createForm()

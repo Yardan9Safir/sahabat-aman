@@ -3,6 +3,21 @@
 @section('title', 'Masuk - Sahabat Aman')
 
 @section('content')
+    @if(isset($dailyQuote) && $dailyQuote)
+    <div class="mx-auto max-w-md mb-5 relative bg-surface-container-lowest p-5 rounded-3xl border border-primary/30 soft-shadow overflow-hidden">
+        <div class="absolute -top-8 -right-8 w-24 h-24 bg-primary-fixed/30 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="flex items-center gap-2 mb-3">
+            <div class="flex flex-col">
+                <span class="text-label-md text-primary font-bold flex items-center gap-1">
+                    Kata-Kata Hari Ini
+                </span>
+            </div>
+        </div>
+        <blockquote class="text-title-md text-on-surface italic leading-relaxed">"{{ $dailyQuote->isi_quotes }}"</blockquote>
+        <p class="mt-3 text-label-md text-on-surface-variant">{{ $dailyQuote->pembuat?->name ?? 'Guru BK' }}</p>
+    </div>
+    @endif
+
     <div class="mx-auto max-w-md bg-surface-container-lowest p-7 rounded-3xl soft-shadow border border-surface-variant/40">
         <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center text-on-primary shadow-sm">

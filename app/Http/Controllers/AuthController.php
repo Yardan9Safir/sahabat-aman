@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,9 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        return view('auth.login');
+        $dailyQuote = Quote::where('is_daily', true)->latest()->first();
+
+        return view('auth.login', compact('dailyQuote'));
     }
 
     public function login(Request $request)

@@ -5,7 +5,9 @@ Keterangan :
 - d(delete)
 
 Draft: 
-8. Guru/konselor sebaya dapat membuat dan memilih kata-kata hari ini lalu ditampilkan di homepage website (tampil di halaman login maupun di landing page). otomatis nambah database dan nambah fiture untuk upload kata" hari ini ke template grid yang disesuaikan. style nya pasti merujuk ke anak" yang SMP. Untuk fitur ini nantinya akan dikelompokkan berdasarkan hari siswa mengirim . guru bisa upload quotes dan delete saja gausa edit/ create.
+8. Buat Tabel Quotes(id_quotes, id_pembuat(ambil dari id guru), judul_quotes, category_quotes , isi_quotes, created_at, updated_at). 
+Guru dapat membuat dan memilih kata-kata hari ini lalu ditampilkan di homepage website (tampil di halaman login maupun di landing page). 
+9. Hanya Guru yang dapat CRUD "Quotes" ini ke template grid yang disesuaikan.
 
 Completed : 
 - Tema website ganti warna biru (cyan-400/sky-400), kuning (yellow-300/amber-300), Orange/peach (orange-400/rose-300) & warm (slate-50/stone-50)
