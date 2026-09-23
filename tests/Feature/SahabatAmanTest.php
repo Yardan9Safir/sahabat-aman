@@ -114,8 +114,8 @@ class SahabatAmanTest extends TestCase
 
         $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
 
-        $curhat->refresh();
-        $this->assertSame('ditangani', $curhat->status);
+        $this->assertDatabaseMissing('curhats', ['id' => $curhat->id]);
+        $this->assertDatabaseMissing('balasans', ['curhat_id' => $curhat->id]);
     }
 
     public function test_student_can_send_curhat_to_peer_counselor(): void
@@ -200,8 +200,8 @@ class SahabatAmanTest extends TestCase
 
         $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
 
-        $curhat->refresh();
-        $this->assertSame('ditangani', $curhat->status);
+        $this->assertDatabaseMissing('curhats', ['id' => $curhat->id]);
+        $this->assertDatabaseMissing('balasans', ['curhat_id' => $curhat->id]);
     }
 
     public function test_peer_counselor_cannot_access_admin_panel(): void
@@ -341,21 +341,22 @@ class SahabatAmanTest extends TestCase
             'status' => 'terkirim',
         ]);
 
-        $curhat->setHandled($guru);
+        $this->actingAs($guru);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
+
+        $this->assertDatabaseMissing('curhats', ['id' => $curhat->id]);
 
         $this->actingAs($siswa);
 
-        $this->get('/riwayat/'.$curhat->id)
-            ->assertOk()
-            ->assertDontSee('Kirim Balasan')
-            ->assertSee('Curhat ini sudah ditangani');
+        $this->get('/riwayat/'.$curhat->id)->assertNotFound();
 
         $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
             'isi' => 'Boleh satu pesan lagi?',
-        ])->assertForbidden();
+        ])->assertNotFound();
     }
 
-    public function test_guru_sees_handled_state_on_done_curhat(): void
+    public function test_guru_handled_curhat_is_deleted_from_list(): void
     {
         $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024016']);
         $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-8']);
@@ -369,22 +370,20 @@ class SahabatAmanTest extends TestCase
             'status' => 'terkirim',
         ]);
 
-        $curhat->setHandled($guru);
-
         $this->actingAs($guru);
+
+        $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
+
+        $this->assertDatabaseMissing('curhats', ['id' => $curhat->id]);
 
         $this->get('/admin')
             ->assertOk()
-            ->assertSee('Sudah Ditangani')
-            ->assertDontSee('Balas Curhat');
+            ->assertDontSee('Saya merasa canggung saat presentasi di depan kelas.');
 
-        $this->get('/admin/curhat/'.$curhat->id)
-            ->assertOk()
-            ->assertSee('Sudah Ditangani')
-            ->assertDontSee('Kirim Balasan');
+        $this->get('/admin/curhat/'.$curhat->id)->assertNotFound();
     }
 
-    public function test_peer_counselor_sees_handled_state_on_done_curhat(): void
+    public function test_peer_counselor_handled_curhat_is_deleted_from_dashboard(): void
     {
         $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024017']);
         $konselor = User::factory()->konselorSebaya()->create();
@@ -398,14 +397,17 @@ class SahabatAmanTest extends TestCase
             'status' => 'terkirim',
         ]);
 
-        $curhat->setHandled($konselor);
-
         $this->actingAs($konselor);
 
-        $this->get('/dashboard/'.$curhat->id)
+        $this->post('/dashboard/curhat/'.$curhat->id.'/tangani')->assertRedirect();
+
+        $this->assertDatabaseMissing('curhats', ['id' => $curhat->id]);
+
+        $this->get('/dashboard')
             ->assertOk()
-            ->assertSee('Sudah Ditangani')
-            ->assertDontSee('Kirim Balasan');
+            ->assertDontSee('Saya ingin membicarakan tekanan dari keluarga.');
+
+        $this->get('/dashboard/'.$curhat->id)->assertNotFound();
     }
 
     public function test_user_auto_logged_out_after_10_minutes_idle(): void

@@ -160,12 +160,12 @@ class CurhatController extends Controller
             403
         );
 
-        $curhat->setHandled($user);
+        $curhat->delete();
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('dashboard')->with('success', 'Curhat telah ditandai selesai.');
+        return redirect()->route('dashboard')->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
     }
 }
