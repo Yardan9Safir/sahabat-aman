@@ -32,8 +32,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'Guru Demo',
-            'email' => 'guru@sahabataman.test',
+            'name' => 'Guru BK',
+            'email' => 'guru@gmail.com',
             'role' => 'guru',
             'identifier' => 'GRU-001',
             'password' => bcrypt('password'),
@@ -41,19 +41,19 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Konselor Sebaya A',
-            'email' => 'konselor@sahabataman.test',
+            'email' => 'konselorA@gmail.com',
             'role' => 'konselor sebaya',
-            'identifier' => 'KON-001',
+            'identifier' => 'KON-7A',
             'kelas' => '7A',
             'password' => bcrypt('password'),
         ]);
 
         User::factory()->create([
             'name' => 'Konselor Sebaya B',
-            'email' => 'konselor2@sahabataman.test',
+            'email' => 'konselorB@gmail.com',
             'role' => 'konselor sebaya',
-            'identifier' => 'KON-002',
-            'kelas' => '8B',
+            'identifier' => 'KON-7B',
+            'kelas' => '7B',
             'password' => bcrypt('password'),
         ]);
 
