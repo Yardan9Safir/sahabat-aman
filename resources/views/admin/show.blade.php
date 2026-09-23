@@ -33,7 +33,8 @@
                     </div>
                 </div>
                 @if (Auth::user()->role === 'guru' && $curhat->penerima_id === Auth::id() && $curhat->status !== 'ditangani')
-                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}">
+                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
+                            onsubmit="return confirm('Tandai selesai dan hapus riwayat chat ini? Tindakan ini permanen dan tidak dapat dibatalkan.');">
                         @csrf
                         <button type="submit"
                             class="flex items-center gap-1.5 bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">

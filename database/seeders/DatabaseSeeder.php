@@ -35,7 +35,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Guru BK',
             'email' => 'guru@gmail.com',
             'role' => 'guru',
-            'identifier' => 'GRU-001',
+            'identifier' => 'GURU-01',
+            'kelas' => '',
             'password' => bcrypt('password'),
         ]);
 
