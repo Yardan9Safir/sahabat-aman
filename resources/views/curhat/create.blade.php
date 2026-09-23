@@ -48,13 +48,13 @@
                         </div>
                     </div>
                 </label>
-                <label class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe') === 'siswa' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
-                    <input type="radio" name="tujuan_tipe" value="siswa" class="peer sr-only" {{ old('tujuan_tipe') === 'siswa' ? 'checked' : '' }}>
+                <label class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe') === 'konselor sebaya' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
+                    <input type="radio" name="tujuan_tipe" value="konselor sebaya" class="peer sr-only" {{ old('tujuan_tipe') === 'konselor sebaya' ? 'checked' : '' }}>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="px-2.5 py-1 rounded-full bg-surface-container text-primary text-label-sm font-bold flex items-center gap-1">
-                            <span class="material-symbols-outlined text-xs">diversity_1</span> Teman Sebaya
+                        <span class="px-2.5 py-1 rounded-full bg-tertiary-container/60 text-on-tertiary-container text-label-sm font-bold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">handshake</span> Konselor Sebaya
                         </span>
-                        <div class="w-5 h-5 rounded-full {{ old('tujuan_tipe') === 'siswa' ? 'border-2 border-primary bg-primary text-white' : 'border border-outline flex items-center justify-center text-transparent' }}">
+                        <div class="w-5 h-5 rounded-full {{ old('tujuan_tipe') === 'konselor sebaya' ? 'border-2 border-primary bg-primary text-white' : 'border border-outline flex items-center justify-center text-transparent' }}">
                             <span class="material-symbols-outlined text-xs font-bold">check</span>
                         </div>
                     </div>
@@ -68,16 +68,16 @@
                 <span class="material-symbols-outlined text-primary text-lg">person</span>
                 Pilih Penerima:
             </label>
-            <select id="penerima_id" name="penerima_id" required class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+            <select id="penerima_id" name="penerima_id" required class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
                 <option value="">-- Pilih penerima --</option>
                 <optgroup label="Guru" id="optgroup-guru">
                     @foreach($gurus as $guru)
                         <option value="{{ $guru->id }}" data-tujuan="guru" {{ old('tujuan_tipe', 'guru') === 'guru' && old('penerima_id') == $guru->id ? 'selected' : '' }}>{{ $guru->name }}</option>
                     @endforeach
                 </optgroup>
-                <optgroup label="Siswa" id="optgroup-siswa">
-                    @foreach($siswas as $siswa)
-                        <option value="{{ $siswa->id }}" data-tujuan="siswa" {{ old('tujuan_tipe') === 'siswa' && old('penerima_id') == $siswa->id ? 'selected' : '' }}>{{ $siswa->name }}</option>
+                <optgroup label="Konselor Sebaya" id="optgroup-konselor">
+                    @foreach($konselors as $konselor)
+                        <option value="{{ $konselor->id }}" data-tujuan="konselor sebaya" {{ old('tujuan_tipe') === 'konselor sebaya' && old('penerima_id') == $konselor->id ? 'selected' : '' }}>{{ $konselor->name }}</option>
                     @endforeach
                 </optgroup>
             </select>
@@ -109,7 +109,7 @@
                 </label>
                 <span class="text-label-sm text-outline" id="char-counter">0 / 2000 karakter</span>
             </div>
-            <textarea class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 sm:p-5 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all resize-y outline-none" id="curhat-text" name="pesan" rows="6" placeholder="Tuliskan apa saja yang kamu rasakan, tidak ada penilaian di sini... Ceritakan beban ujian, rasa lelah, kesal, atau hal yang mengganjal hatimu.">{{ old('pesan') }}</textarea>
+            <textarea class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 sm:p-5 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all resize-y outline-none" id="curhat-text" name="pesan" rows="6" placeholder="Tuliskan apa saja yang kamu rasakan, tidak ada penilaian di sini... Ceritakan beban ujian, rasa lelah, kesal, atau hal yang mengganjal hatimu.">{{ old('pesan') }}</textarea>
         </div>
 
         {{-- 5. Actions --}}
@@ -118,7 +118,7 @@
                 <a href="{{ route('home') }}" class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">
                     Batal
                 </a>
-                <button class="flex-1 sm:flex-none px-4 py-3 rounded-2xl bg-primary-container text-white text-label-lg font-bold shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
+                <button class="flex-1 sm:flex-none px-4 py-3 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
                     <span class="material-symbols-outlined text-md">send</span> Kirim Curhat
                 </button>
             </div>

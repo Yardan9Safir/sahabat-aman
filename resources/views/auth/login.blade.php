@@ -15,13 +15,20 @@
 
         <p class="mt-2 text-body-md text-on-surface-variant">Tolong Masukkan Info Anda</p>
 
+        @if(session('warning'))
+        <div class="mt-4 flex items-start gap-2.5 bg-error-container/70 text-on-error-container border border-error/30 rounded-2xl p-3.5 text-label-md font-semibold">
+            <span class="material-symbols-outlined text-lg mt-0.5">warning</span>
+            <p>{{ session('warning') }}</p>
+        </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-5">
             @csrf
 
             <div>
                 <label for="email" class="text-label-lg font-bold text-on-surface mb-2 block">Email</label>
                 <input id="email" name="email" type="email" value="{{ old('email') }}" required
-                    class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                    class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                     placeholder="contoh@email.com">
                 @error('email')
                     <p class="mt-2 text-xs text-error">{{ $message }}</p>
@@ -31,12 +38,12 @@
             <div>
                 <label for="password" class="text-label-lg font-bold text-on-surface mb-2 block">Password</label>
                 <input id="password" name="password" type="password" required
-                    class="w-full bg-surface-container-lowest border-1.5 border-[#E1E8E4] rounded-2xl p-4 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                    class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none"
                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
             </div>
 
             <button type="submit"
-                class="w-full rounded-2xl bg-primary-container px-5 py-3.5 text-label-lg font-bold text-on-primary shadow-md hover:bg-primary hover:-translate-y-0.5 transition-all">Masuk
+                class="w-full rounded-2xl bg-primary px-5 py-3.5 text-label-lg font-bold text-on-primary shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all">Masuk
                 ke Akun</button>
         </form>
 

@@ -44,6 +44,22 @@ class Curhat extends Model
         return $this->hasMany(Balasan::class)->orderBy('created_at');
     }
 
+    public function getTujuanLabelAttribute(): string
+    {
+        return match ($this->tujuan) {
+            User::ROLE_GURU => 'Guru BK',
+            default => 'Konselor Sebaya',
+        };
+    }
+
+    public function getTujuanIconAttribute(): string
+    {
+        return match ($this->tujuan) {
+            User::ROLE_GURU => 'school',
+            default => 'handshake',
+        };
+    }
+
     public function setViewed(): void
     {
         if ($this->status === 'terkirim') {

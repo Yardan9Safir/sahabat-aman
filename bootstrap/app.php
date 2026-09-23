@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Middleware\EnsureUserIsGuru;
+use App\Http\Middleware\LogoutAfterIdle;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,18 +18,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'guru' => EnsureUserIsGuru::class,
         ]);
+
+        $middleware->web(append: [
+            LogoutAfterIdle::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->renderable(function (\Illuminate\Http\Exceptions\ThrottleRequestsException $e, Request $request) {
+        $exceptions->renderable(function (ThrottleRequestsException $e, Request $request) {
+            $retryAfter = (int) ($e->getHeaders()['Retry-After'] ?? 60);
+            $minutes = max(1, (int) ceil($retryAfter / 60));
+
             if ($request->is('login')) {
-                return redirect()->route('login')->withErrors([
-                    'email' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam 1 menit.',
-                ]);
+                return redirect()->route('login')->with('warning', 'Terlalu banyak percobaan login. Server sedang penuh / sibuk, coba lagi dalam sekitar ' . $minutes . ' menit.');
             }
             if ($request->is('register')) {
-                return redirect()->route('register')->withErrors([
-                    'name' => 'Terlalu banyak percobaan registrasi. Silakan coba lagi dalam 1 menit.',
-                ]);
+                return redirect()->route('register')->with('warning', 'Terlalu banyak percobaan registrasi. Server sedang penuh / sibuk, coba lagi dalam sekitar ' . $minutes . ' menit.');
             }
             return response()->view('errors.429', ['message' => $e->getMessage()], 429);
         });

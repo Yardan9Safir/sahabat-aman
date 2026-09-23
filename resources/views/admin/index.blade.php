@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+﻿@extends('layouts.admin')
 
 @section('title', 'Ikhtisar Konseling - BK')
 
@@ -126,10 +126,17 @@
                     <div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
                         <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Selesai') }}</span>
                     </div>
-                    <a href="{{ route('admin.show', $curhat) }}" class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
+                    @if ($curhat->status === 'ditangani')
+                    <span class="inline-flex items-center gap-1.5 bg-error text-on-error font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs">
+                        <span class="material-symbols-outlined text-base">task_alt</span>
+                        Sudah Ditangani
+                    </span>
+                    @else
+                    <a href="{{ route('admin.show', $curhat) }}" class="flex items-center gap-1.5 bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
                         <span class="material-symbols-outlined text-base">reply</span>
                         <span>Balas Curhat</span>
                     </a>
+                    @endif
                 </div>
             </article>
             @empty

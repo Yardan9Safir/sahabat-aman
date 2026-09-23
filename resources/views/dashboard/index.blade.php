@@ -13,10 +13,12 @@
             <h2 class="text-headline-sm font-bold text-on-surface">Belum ada percakapan</h2>
             <p class="text-body-md text-on-surface-variant mt-2">Ketika kamu atau orang lain membalas curhatmu, percakapan
                 akan muncul di sini.</p>
+            @if(Auth::user()->role === 'siswa')
             <a href="{{ route('curhat.create') }}"
-                class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary transition-all">
+                class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white font-label-lg font-bold shadow-md hover:bg-primary-container transition-all">
                 <span class="material-symbols-outlined text-lg">edit_note</span> Mulai Curhat
             </a>
+            @endif
         </div>
     @else
         <div
@@ -27,19 +29,19 @@
             </div>
             <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
                 <a href="{{ route('dashboard') }}"
-                    class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                    class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                     Semua ({{ $curhats->count() }})
                 </a>
                 <a href="{{ route('dashboard', ['status' => 'terkirim']) }}"
-                    class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                    class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                     Baru
                 </a>
                 <a href="{{ route('dashboard', ['status' => 'dibalas']) }}"
-                    class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                    class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                     Dibalas
                 </a>
                 <a href="{{ route('dashboard', ['status' => 'ditangani']) }}"
-                    class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                    class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                     Selesai
                 </a>
             </div>
@@ -52,20 +54,20 @@
                     <div class="flex items-start justify-between gap-2 mb-1.5">
                         <div class="flex items-center gap-1.5">
                             <span
-                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm">
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm">
                                 <span
-                                    class="material-symbols-outlined text-xs">{{ $curhat->tujuan === 'guru' ? 'school' : 'diversity_1' }}</span>
-                                {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Teman Sebaya' }}
+                                    class="material-symbols-outlined text-xs">{{ $curhat->tujuanIcon }}</span>
+                                {{ $curhat->tujuanLabel }}
                             </span>
                             @if ($curhat->status === 'dibalas')
                                 <span
-                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E4F5EB] text-[#1B5E3B] text-label-sm font-semibold">
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container text-label-sm font-semibold">
                                     <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
                                     Dibalas
                                 </span>
                             @elseif($curhat->status === 'terkirim')
                                 <span
-                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FEF3E2] text-[#964F06] text-label-sm">
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-label-sm">
                                     <span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
                                     Menunggu Balasan
                                 </span>

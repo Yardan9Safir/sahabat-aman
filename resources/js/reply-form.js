@@ -46,8 +46,8 @@ export function initReplyForms() {
                                 <span class="text-label-sm text-outline">${data.balasan.created_at}</span>
                                 <span class="text-label-sm font-bold text-on-surface">Kamu</span>
                             </div>
-                            <div class="bg-primary-container text-on-primary p-4 rounded-2xl rounded-tr-xs shadow-sm">
-                                <p class="text-body-md leading-relaxed text-white">${esc(data.balasan.isi)}</p>
+                            <div class="bg-primary-container text-on-primary-container p-4 rounded-2xl rounded-tr-xs shadow-sm">
+                                <p class="text-body-md leading-relaxed">${esc(data.balasan.isi)}</p>
                             </div>
                             <div class="flex items-center gap-2 mt-1 text-label-sm text-outline">
                                 <span class="material-symbols-outlined text-xs text-primary">done_all</span>
@@ -62,7 +62,7 @@ export function initReplyForms() {
                                     <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-bold">${initials(data.balasan.pengirim_name)}</div>
                                     <div>
                                         <p class="text-label-md font-bold text-on-surface">${esc(data.balasan.pengirim_name)}</p>
-                                        <span class="text-label-sm text-outline capitalize">${esc(data.balasan.pengirim_role)}</span>
+                                        <span class="text-label-sm text-outline">${esc(data.balasan.pengirim_role_label)}</span>
                                     </div>
                                 </div>
                                 <span class="text-label-sm text-outline">${data.balasan.created_at}</span>

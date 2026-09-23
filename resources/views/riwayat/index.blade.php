@@ -11,9 +11,11 @@
     </div>
     <h2 class="text-headline-sm font-bold text-on-surface">Belum ada riwayat curhat</h2>
     <p class="text-body-md text-on-surface-variant mt-2">Semua cerita yang kamu kirim akan muncul di sini.</p>
-    <a href="{{ route('curhat.create') }}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary-container text-white font-label-lg font-bold shadow-md hover:bg-primary transition-all">
+    @if(Auth::user()->role === 'siswa')
+    <a href="{{ route('curhat.create') }}" class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white font-label-lg font-bold shadow-md hover:bg-primary-container transition-all">
         <span class="material-symbols-outlined text-lg">edit_note</span> Mulai Curhat
     </a>
+    @endif
 </div>
 @else
 <div class="space-y-3">
@@ -21,11 +23,11 @@
     <a href="{{ route('riwayat.show', $curhat) }}" class="block p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 hover-lift cursor-pointer transition-all hover:shadow-md">
         <div class="flex items-start justify-between gap-2 mb-1.5">
             <div class="flex items-center gap-1.5">
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-[#ECE8F6] text-[#534675]' : 'bg-[#E5F6EB] text-[#21633A]' }} text-label-sm">
-                    <span class="material-symbols-outlined text-xs">{{ $curhat->tujuan === 'guru' ? 'school' : 'diversity_1' }}</span>
-                    {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Teman Sebaya' }}
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm">
+                    <span class="material-symbols-outlined text-xs">{{ $curhat->tujuanIcon }}</span>
+                    {{ $curhat->tujuanLabel }}
                 </span>
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-[#FEF3E2] text-[#964F06]' : ($curhat->status === 'dibalas' ? 'bg-[#E4F5EB] text-[#1B5E3B]' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-tertiary-container text-on-tertiary-container' : ($curhat->status === 'dibalas' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold">
                     {{ ucfirst($curhat->status) }}
                 </span>
             </div>

@@ -16,14 +16,18 @@ class CurhatController extends Controller
 
     public function createForm()
     {
-        $gurus = User::where('role', 'guru')->orderBy('name')->get();
-        $siswas = User::where('role', 'siswa')->where('id', '!=', Auth::id())->orderBy('name')->get();
+        abort_unless(Auth::user()->role === User::ROLE_SISWA, 403);
 
-        return view('curhat.create', compact('gurus', 'siswas'));
+        $gurus = User::where('role', User::ROLE_GURU)->orderBy('name')->get();
+        $konselors = User::where('role', User::ROLE_KONSELOR_SEBAYA)->orderBy('name')->get();
+
+        return view('curhat.create', compact('gurus', 'konselors'));
     }
 
     public function store(Request $request)
     {
+        abort_unless($request->user()->role === User::ROLE_SISWA, 403);
+
         $validated = $request->validate([
             'penerima_id' => ['required', 'exists:users,id'],
             'kategori' => ['required', 'in:pribadi,sosial,belajar,karier'],
@@ -101,10 +105,13 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        abort_unless(
-            $curhat->penerima_id === $user->id || $curhat->siswa_id === $user->id,
-            403
-        );
+        $isPenerima = in_array($user->role, [User::ROLE_GURU, User::ROLE_KONSELOR_SEBAYA], true)
+            && $curhat->penerima_id === $user->id;
+
+        $isSiswaOwns = $user->role === User::ROLE_SISWA && $curhat->siswa_id === $user->id;
+
+        abort_unless($isPenerima || $isSiswaOwns, 403);
+        abort_if($curhat->status === 'ditangani', 403);
 
         $validated = $request->validate([
             'isi' => ['required', 'string', 'min:3'],
@@ -126,6 +133,7 @@ class CurhatController extends Controller
                     'isi' => $balasan->isi,
                     'pengirim_name' => $user->name,
                     'pengirim_role' => $user->role,
+                    'pengirim_role_label' => $user->roleLabel(),
                     'created_at' => $balasan->created_at->translatedFormat('d M Y, H:i'),
                     'is_me' => true,
                 ],
@@ -139,7 +147,11 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        abort_unless($curhat->penerima_id === $user->id, 403);
+        abort_unless(
+            in_array($user->role, [User::ROLE_GURU, User::ROLE_KONSELOR_SEBAYA], true)
+                && $curhat->penerima_id === $user->id,
+            403
+        );
 
         $curhat->setHandled($user);
 
