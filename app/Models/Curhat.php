@@ -13,6 +13,7 @@ class Curhat extends Model
 
     protected $fillable = [
         'siswa_id',
+        'nama_pengirim',
         'penerima_id',
         'tujuan',
         'nama_penerima',

@@ -69,7 +69,6 @@
                     </span>
                 </div>
 
-                {{-- Student's Original Vent --}}
                 <div class="flex flex-col items-end max-w-xl ml-auto">
                     <div class="flex items-center gap-2 mb-1.5">
                         <span class="text-label-sm text-outline">{{ $curhat->created_at->translatedFormat('H:i') }}
@@ -84,10 +83,6 @@
                             <span>{{ ucfirst($curhat->kategori) }}</span>
                         </div>
                         <p class="text-body-md leading-relaxed text-on-primary-container">{{ $curhat->pesan }}</p>
-                    </div>
-                    <div class="flex items-center gap-2 mt-1 text-label-sm text-outline">
-                        <span class="material-symbols-outlined text-xs text-primary">done_all</span>
-                        <span>Terkirim</span>
                     </div>
                 </div>
 
@@ -105,7 +100,7 @@
                             class="flex flex-col {{ $balasan->pengirim_id === auth()->id() ? 'items-end' : 'items-start' }} space-y-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim->name ?? 'Unknown' }}</span>
+                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim_id === auth()->id() ? 'Kamu' : ($balasan->pengirim->name ?? 'Unknown') }}</span>
                                 <span
                                     class="text-label-sm text-outline">{{ $balasan->created_at->translatedFormat('H:i') }}
                                     WIB</span>

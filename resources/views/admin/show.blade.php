@@ -16,10 +16,10 @@
                 <div class="flex items-center gap-4">
                     <div
                         class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-lg">
-                        {{ strtoupper(substr($curhat->siswa->name ?? 'S', 0, 2)) }}
+                        {{ strtoupper(substr($curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'S'), 0, 2)) }}
                     </div>
                     <div>
-                        <h1 class="text-headline-sm font-bold text-on-surface">{{ $curhat->siswa->name ?? 'Siswa' }}</h1>
+                        <h1 class="text-headline-sm font-bold text-on-surface">{{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</h1>
                         <div class="flex items-center gap-2 mt-0.5">
                             <span
                                 class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container' }} text-label-sm font-semibold">
@@ -27,7 +27,7 @@
                             </span>
                             <span
                                 class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-tertiary-container text-on-tertiary-container' : ($curhat->status === 'dibalas' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold">
-                                {{ ucfirst($curhat->status) }}
+                                {{ $curhat->status === 'terkirim' ? 'Belum Dibalas' : ucfirst($curhat->status) }}
                             </span>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="p-3 rounded-xl bg-surface-container-low">
                     <p class="text-label-sm text-outline">Status</p>
-                    <p class="text-label-md font-bold text-on-surface mt-1">{{ ucfirst($curhat->status) }}</p>
+                    <p class="text-label-md font-bold text-on-surface mt-1">{{ $curhat->status === 'terkirim' ? 'Belum Dibalas' : ucfirst($curhat->status) }}</p>
                 </div>
             </div>
         </div>
