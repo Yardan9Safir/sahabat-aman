@@ -14,19 +14,15 @@
         <div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-4">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-lg">
-                        {{ strtoupper(substr($curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'S'), 0, 2)) }}
-                    </div>
                     <div>
-                        <h1 class="text-headline-sm font-bold text-on-surface">{{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</h1>
+                        <h1 class="text-headline-sm font-bold text-on-surface"> Pengirim : {{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</h1>
                         <div class="flex items-center gap-2 mt-0.5">
                             <span
-                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container' }} text-label-sm font-semibold">
-                                {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Peer Counselor' }}
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container' }} text-label-sm font-semibold"> Tujuan : 
+                                {{ $curhat->tujuan === 'guru' ? 'Guru BK' : 'Konselor Sebaya' }}
                             </span>
                             <span
-                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-tertiary-container text-on-tertiary-container' : ($curhat->status === 'dibalas' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold">
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->status === 'terkirim' ? 'bg-tertiary-container text-on-tertiary-container' : ($curhat->status === 'dibalas' ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container text-on-surface-variant') }} text-label-sm font-semibold"> Status : 
                                 {{ $curhat->status === 'terkirim' ? 'Belum Dibalas' : ucfirst($curhat->status) }}
                             </span>
                         </div>

@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="bg-surface-container-high text-primary px-2.5 py-1 rounded-full text-label-sm font-semibold">{{ ucfirst($curhat->kategori) }}</span>
+                        <span class="bg-surface-container-high text-primary px-2.5 py-1 rounded-full text-label-sm font-semibold">Kategori Masalah : {{ ucfirst($curhat->kategori) }}</span>
                         @if($curhat->status === 'terkirim')
                         <span class="bg-error-container text-on-error-container px-2.5 py-1 rounded-full text-label-sm font-bold flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>

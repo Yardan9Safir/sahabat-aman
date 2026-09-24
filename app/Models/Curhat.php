@@ -15,10 +15,9 @@ class Curhat extends Model
         'siswa_id',
         'nama_pengirim',
         'penerima_id',
-        'tujuan',
         'nama_penerima',
+        'tujuan',
         'kategori',
-        'pesan',
         'status',
         'dilihat_at',
         'ditangani_by',
@@ -43,6 +42,11 @@ class Curhat extends Model
     public function balasans()
     {
         return $this->hasMany(Balasan::class)->orderBy('created_at');
+    }
+
+    public function getPesanAttribute(): string
+    {
+        return $this->balasans->first()?->isi ?? '';
     }
 
     public function getTujuanLabelAttribute(): string

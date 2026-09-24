@@ -51,17 +51,10 @@ Untuk testing, tester dapat menggunakan data dummy berikut (disiapkan via seeder
   password: `password`
 
 - `Guru:`
-  email: `guru@sahabataman.test`
+  email: `guru@gmail.com`
   password: `password`
 
 > Catatan: akun-akun ini dibuat melalui `DatabaseSeeder` (lihat bagian seeder di bawah).
-
-### Role yang tersedia
-
-Saat register, user memilih role:
-
-- `siswa`
-- `guru`
 
 Setelah login:
 
@@ -119,26 +112,26 @@ php artisan migrate:fresh --seed
 ```
 
 ### Kalau Belum Pernah Instalasi Lokal Ikutin Cara Ini : 
-### 6.1 Clone project
+### 6.a.1 Clone project
 
 ```bash
 git clone <url-repository>
 cd sahabat-aman
 ```
 
-### 6.2 Install dependency PHP
+### 6.a.2 Install dependency PHP
 
 ```bash
 composer install
 ```
 
-### 6.3 Install dependency frontend
+### 6.a.3 Install dependency frontend
 
 ```bash
 npm install
 ```
 
-### 6.4 Siapkan file environment
+### 6.a.4 Siapkan file environment
 
 Salin file `.env.example` menjadi `.env`:
 
@@ -152,7 +145,7 @@ Jika Linux/macOS:
 cp .env.example .env
 ```
 
-### 6.5 Konfigurasi database MySQL
+### 6.a.5 Konfigurasi database MySQL
 
 Edit file `.env` dan atur konfigurasi database seperti berikut:
 
@@ -171,13 +164,13 @@ Pastikan database sudah dibuat di MySQL:
 CREATE DATABASE db_sahabat_aman;
 ```
 
-### 6.6 Generate key aplikasi
+### 6.a.6 Generate key aplikasi
 
 ```bash
 php artisan key:generate
 ```
 
-### 6.7 Jalankan migrasi database
+### 6.a.7 Jalankan migrasi database
 
 ```bash
 php artisan migrate
@@ -193,7 +186,20 @@ Seeder (`DatabaseSeeder`) membuat:
 
 - `Udin` (siswa) — `udin@gmail.com` / `password`
 - `Adit` (siswa) — `adit@gmail.com` / `password`
-- `Guru Demo` (guru) — `guru@sahabataman.test` / `password`
+- `Guru Demo` (guru) — `guru@gmail.com` / `password`
+
+### Kalau SUDAH Pernah Instalasi Lokal Ikutin Cara Ini : 
+### 6.b.1 Install Ulang migrasi database
+
+```bash
+php artisan migrate:fresh
+```
+
+### 6.b.2 Isi Data Menggunakan Seeder 
+
+```bash
+php artisan db:seed
+```
 
 ## 7. Menjalankan Aplikasi
 
@@ -227,13 +233,6 @@ php artisan serve
 
 ## 8. Cara Pakai Aplikasi
 
-### Register akun
-
-1. Buka halaman `/register`
-2. Isi data sesuai form
-3. Pilih role: `siswa` atau `guru`
-4. Klik daftar
-
 ### Login
 
 1. Buka halaman `/login`
@@ -247,57 +246,15 @@ php artisan serve
 - Pilih kategori masalah
 - Tulis pesan
 - Kirim curhat
-- Cek status di menu `Riwayat`
-- Cek curhat yang masuk ke dirinya di menu `Inbox` dan balas bila perlu
+- Cek curhat yang masuk ke dirinya di menu `Pesan` dan balas bila perlu
 
 ### Untuk guru
 
 - Login dengan akun role guru
 - Akan diarahkan ke Panel Admin (sidebar)
 - Menu **Data Curhat**: lihat seluruh curhat (pengirim, penerima, kategori, status, waktu) tanpa isi pesan, dan filter berdasarkan kategori/status
-- Menu **Data Siswa**: lihat daftar seluruh siswa
 
-## 9. Struktur Project
-
-```text
-sahabat-aman/
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── AdminController.php
-│   │   ├── AuthController.php
-│   │   └── CurhatController.php
-│   ├── Http/Middleware/EnsureUserIsGuru.php
-│   └── Models/
-│       ├── Balasan.php
-│       ├── Curhat.php
-│       └── User.php
-├── bootstrap/
-├── config/
-├── database/
-│   ├── migrations/
-│   └── seeders/DatabaseSeeder.php
-├── public/
-├── resources/views/
-│   ├── layouts/
-│   │   ├── admin.blade.php
-│   │   └── app.blade.php
-│   ├── admin/
-│   ├── curhat/
-│   ├── dashboard/
-│   └── riwayat/
-├── routes/web.php
-├── storage/
-├── tests/
-├── .env.example
-├── composer.json
-├── package.json
-├── phpunit.xml
-├── vite.config.js
-├── artisan
-└── README.md
-```
-
-## 10. Troubleshooting
+## 9. Troubleshooting
 
 ### Error database connection
 
@@ -328,17 +285,3 @@ npm run dev
 ```bash
 php artisan key:generate
 ```
-
-## 11. Catatan Penting
-
-- Aplikasi ini default menggunakan MySQL dan port `3306`.
-- Versi Laravel yang digunakan adalah `12.x`.
-- Login menggunakan email + password bawaan Laravel Auth.
-- Role dibuat saat registrasi, dan akun demo disiapkan melalui seeder.
-- Guru bersifat **admin murni**: isi pesan curhat **tidak** ditampilkan di Panel Admin demi kerahasiaan.
-- Penerima curhat dipilih berdasarkan user terdaftar (`penerima_id`), bukan nama bebas.
-- Jika ingin deploy ke hosting, pastikan konfigurasi `.env` disesuaikan dengan database hosting.
-
-## 12. Lisensi
-
-Project ini menggunakan lisensi default Laravel/MIT sesuai pengaturan awal proyek.
