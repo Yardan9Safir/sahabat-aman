@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LogoutAfterIdle
 {
-    public const IDLE_MINUTES = 10;
+    public const IDLE_MINUTES = 7;
 
     public function handle(Request $request, Closure $next): Response
     {
