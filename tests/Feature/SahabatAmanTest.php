@@ -350,11 +350,11 @@ class SahabatAmanTest extends TestCase
 
         $this->actingAs($siswa);
 
-        $this->get('/dashboard/'.$curhat->id)->assertNotFound();
+        $this->get('/dashboard/'.$curhat->id)->assertRedirect(route('dashboard'));
 
         $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
             'isi' => 'Boleh satu pesan lagi?',
-        ])->assertNotFound();
+        ])->assertRedirect(route('dashboard'));
     }
 
     public function test_guru_handled_curhat_is_deleted_from_list(): void
@@ -380,7 +380,7 @@ class SahabatAmanTest extends TestCase
             ->assertOk()
             ->assertDontSee('Saya merasa canggung saat presentasi di depan kelas.');
 
-        $this->get('/admin/curhat/'.$curhat->id)->assertNotFound();
+        $this->get('/admin/curhat/'.$curhat->id)->assertRedirect(route('dashboard'));
     }
 
     public function test_peer_counselor_handled_curhat_is_deleted_from_dashboard(): void
@@ -406,7 +406,7 @@ class SahabatAmanTest extends TestCase
             ->assertOk()
             ->assertDontSee('Saya ingin membicarakan tekanan dari keluarga.');
 
-        $this->get('/dashboard/'.$curhat->id)->assertNotFound();
+        $this->get('/dashboard/'.$curhat->id)->assertRedirect(route('dashboard'));
     }
 
     public function test_user_auto_logged_out_after_10_minutes_idle(): void

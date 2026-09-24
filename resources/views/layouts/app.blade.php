@@ -123,6 +123,12 @@
                 {{ session('success') }}
             </div>
             @endif
+            @if(session('info'))
+            <div class="bg-surface-container px-5 py-3 rounded-2xl text-sm font-semibold text-on-surface-variant border border-surface-variant/40 flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">info</span>
+                {{ session('info') }}
+            </div>
+            @endif
             @yield('content')
         </main>
 

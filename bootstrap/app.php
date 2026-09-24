@@ -2,11 +2,15 @@
 
 use App\Http\Middleware\EnsureUserIsGuru;
 use App\Http\Middleware\LogoutAfterIdle;
+use App\Models\Curhat;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,5 +39,18 @@ return Application::configure(basePath: dirname(__DIR__))
                 return redirect()->route('register')->with('warning', 'Terlalu banyak percobaan registrasi. Server sedang penuh / sibuk, coba lagi dalam sekitar ' . $minutes . ' menit.');
             }
             return response()->view('errors.429', ['message' => $e->getMessage()], 429);
+        });
+
+        $exceptions->renderable(function (NotFoundHttpException $e, Request $request) {
+            $previous = $e->getPrevious();
+
+            if (! $previous instanceof ModelNotFoundException
+                || $previous->getModel() !== Curhat::class
+                || ! Auth::check()) {
+                return null;
+            }
+
+            return redirect()->route('dashboard')
+                ->with('info', 'Percakapan ini telah ditutup oleh penerima dan sudah tidak tersedia lagi.');
         });
     })->create();

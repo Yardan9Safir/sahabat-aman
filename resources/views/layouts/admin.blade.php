@@ -214,6 +214,13 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if (session('info'))
+                <div
+                    class="mb-6 bg-surface-container border border-surface-variant/40 rounded-2xl px-5 py-3 text-sm font-semibold text-on-surface-variant flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">info</span>
+                    {{ session('info') }}
+                </div>
+            @endif
             @yield('content')
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
