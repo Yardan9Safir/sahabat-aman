@@ -115,7 +115,7 @@
         {{-- 5. Actions --}}
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <a href="{{ route('home') }}" class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">
+                <a href="{{ url()->previous() }}" class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">
                     Batal
                 </a>
                 <button class="flex-1 sm:flex-none px-4 py-3 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">

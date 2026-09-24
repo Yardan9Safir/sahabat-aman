@@ -208,8 +208,6 @@
                     <ul class="space-y-2.5 text-body-sm">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('curhat.create') }}">Pilih
                                 Konselor Sebaya</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="{{ route('riwayat') }}">Riwayat
-                                Curhat</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('dashboard') }}">Kotak Masuk &
                                 Dialog</a></li>
                     </ul>

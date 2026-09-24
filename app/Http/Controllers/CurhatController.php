@@ -39,32 +39,23 @@ class CurhatController extends Controller
 
         $penerima = User::findOrFail($validated['penerima_id']);
 
-        $request->user()->curhats()->create([
+        $curhat = $request->user()->curhats()->create([
             'siswa_id' => $request->user()->id,
             'nama_pengirim' => $request->user()->name,
             'penerima_id' => $penerima->id,
             'tujuan' => $penerima->role,
             'nama_penerima' => $penerima->name,
             'kategori' => $validated['kategori'],
-            'pesan' => $validated['pesan'],
             'status' => 'terkirim',
         ]);
 
-        return redirect()->route('riwayat')->with('success', 'Curhatmu terkirim.');
-    }
+        $curhat->balasans()->create([
+            'pengirim_id' => $request->user()->id,
+            'pengirim_role' => $request->user()->role,
+            'isi' => $validated['pesan'],
+        ]);
 
-    public function history()
-    {
-        $curhats = Auth::user()->curhats()->latest()->get();
-
-        return view('riwayat.index', compact('curhats'));
-    }
-
-    public function detail(Curhat $curhat)
-    {
-        abort_unless(Auth::id() === $curhat->siswa_id, 403);
-
-        return view('riwayat.show', compact('curhat'));
+        return redirect()->route('dashboard')->with('success', 'Curhatmu terkirim.');
     }
 
     public function dashboard()
@@ -75,7 +66,12 @@ class CurhatController extends Controller
             return redirect()->route('admin.index');
         }
 
-        $query = Curhat::query()->where('penerima_id', $user->id);
+        $query = Curhat::query()
+            ->with('balasans')
+            ->where(function ($q) use ($user) {
+                $q->where('penerima_id', $user->id)
+                    ->orWhere('siswa_id', $user->id);
+            });
 
         if (request('kategori')) {
             $query->where('kategori', request('kategori'));
@@ -96,12 +92,15 @@ class CurhatController extends Controller
 
         if ($user->role === 'guru') {
             abort_unless($curhat->tujuan === 'guru', 403);
+
             return redirect()->route('admin.show', $curhat);
         }
 
-        abort_unless($curhat->penerima_id === $user->id, 403);
+        abort_unless($curhat->penerima_id === $user->id || $curhat->siswa_id === $user->id, 403);
 
-        $curhat->setViewed();
+        if ($curhat->penerima_id === $user->id) {
+            $curhat->setViewed();
+        }
 
         return view('dashboard.show', compact('curhat'));
     }

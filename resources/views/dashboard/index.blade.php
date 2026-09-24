@@ -91,7 +91,9 @@
                             {{ ucfirst($curhat->kategori) }}
                         </h3>
                         <p class="text-label-sm text-primary font-semibold mb-1">
-                            {{ $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui') }}
+                            {{ $curhat->siswa_id === Auth::id()
+                                ? ($curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui'))
+                                : ($curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa')) }}
                         </p>
                         <p class="text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
                             {{ Str::limit($curhat->pesan, 160) }}

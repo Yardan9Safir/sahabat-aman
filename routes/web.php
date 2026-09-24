@@ -23,8 +23,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/curhat', [CurhatController::class, 'createForm'])->name('curhat.create');
     Route::post('/curhat', [CurhatController::class, 'store'])->name('curhat.store');
-    Route::get('/riwayat', [CurhatController::class, 'history'])->name('riwayat');
-    Route::get('/riwayat/{curhat}', [CurhatController::class, 'detail'])->name('riwayat.show');
 
     Route::get('/dashboard', [CurhatController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard/{curhat}', [CurhatController::class, 'recipientDetail'])->name('dashboard.show');

@@ -12,7 +12,10 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h2 class="text-title-md font-bold text-on-surface">
-                            {{ $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui') }}</h2>
+                            {{ $curhat->siswa_id === auth()->id()
+                                ? $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui')
+                                : $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}
+                        </h2>
                         <span
                             class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold">
                             <span class="material-symbols-outlined text-xs">{{ $curhat->tujuanIcon }}</span>
@@ -35,52 +38,41 @@
             </a>
         </div>
 
-        {{-- Confidentiality Banner --}}
-        <div
-            class="bg-surface-container px-5 py-2.5 rounded-2xl flex items-center gap-2 text-label-sm text-on-surface-variant border border-surface-variant/40">
-            <span class="material-symbols-outlined text-primary text-base">lock</span>
-            <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
+        <div class="bg-surface-container-lowest p-5 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            {{-- Tandai Selesai Button --}}
+            <div>
+                @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
+                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
+                        onsubmit="return confirm('Tandai selesai dan hapus riwayat chat ini? Tindakan ini permanen dan tidak dapat dibatalkan.');">
+                        @csrf
+                        <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-secondary-container text-on-secondary-container hover:bg-secondary-container/80 text-label-md font-semibold transition-colors">
+                            <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
+                        </button>
+                    </form>
+                @endif
+            </div>
+
+            {{-- Confidentiality Banner --}}
+            <div
+                class="bg-surface-container px-5 py-2.5 rounded-2xl flex items-center gap-2 text-label-sm text-on-surface-variant border border-surface-variant/40">
+                <span class="material-symbols-outlined text-primary text-base">lock</span>
+                <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
+            </div>
         </div>
 
         {{-- Chat Message Thread --}}
         <div class="bg-surface-container-lowest rounded-3xl soft-shadow border border-surface-variant/40 overflow-hidden">
             <div class="p-6 space-y-6">
-                {{-- Date Divider --}}
-                <div class="flex items-center justify-center">
-                    <span class="px-3 py-1 rounded-full bg-surface-container-high/60 text-outline text-label-sm">
-                        {{ $curhat->created_at->translatedFormat('d M Y') }}
-                    </span>
-                </div>
-
-                {{-- User's Original Vent --}}
-                <div class="flex items-start gap-3.5 max-w-2xl">
-                    <div
-                        class="w-9 h-9 rounded-xl bg-surface-container-high flex-shrink-0 mt-1 shadow-xs flex items-center justify-center text-primary font-bold text-xs">
-                        {{ strtoupper(substr($curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'S'), 0, 2)) }}
-                    </div>
-                    <div class="flex flex-col items-start space-y-2 flex-1">
-                        <div class="flex items-center gap-2">
-                            <span
-                                class="text-label-sm font-bold text-on-surface">{{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</span>
-                            <span class="text-label-sm text-outline">{{ $curhat->created_at->translatedFormat('H:i') }}
-                                WIB</span>
-                        </div>
-                        <div
-                            class="bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs p-4 shadow-sm">
-                            <p class="text-body-md leading-relaxed">{{ $curhat->pesan }}</p>
-                        </div>
-                    </div>
-                </div>
-
                 {{-- Balasan --}}
                 @forelse($curhat->balasans as $balasan)
                     <div
-                        class="flex items-start gap-3.5 max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
+                        class="flex gap-3.5 max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
                         <div
                             class="flex flex-col {{ $balasan->pengirim_id === auth()->id() ? 'items-end' : 'items-start' }} space-y-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim_id === auth()->id() ? 'Kamu' : ($balasan->pengirim->name ?? 'Unknown') }}</span>
+                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim_id === auth()->id() ? 'Kamu' : $balasan->pengirim->name ?? 'Unknown' }}</span>
                                 <span
                                     class="text-label-sm text-outline">{{ $balasan->created_at->translatedFormat('H:i') }}
                                     WIB</span>
@@ -101,15 +93,15 @@
 
             {{-- Composer --}}
             <div class="p-4 bg-surface-container-low border-t border-surface-variant/40">
-                @if ($curhat->status !== 'ditangani' && in_array(Auth::user()->role, ['guru', 'konselor sebaya']))
-                    <form id="replyForm" data-endpoint="{{ route('dashboard.reply', $curhat) }}" data-mode="chat" data-target=".space-y-6"
+                @if ($curhat->status !== 'ditangani' && ($curhat->penerima_id === auth()->id() || $curhat->siswa_id === auth()->id()))
+                    <form id="replyForm" data-endpoint="{{ route('dashboard.reply', $curhat) }}" data-mode="chat"
+                        data-target=".space-y-6"
                         class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
                         @csrf
                         <textarea name="isi" rows="3" required
                             class="w-full resize-none border-none p-2 bg-transparent text-body-md text-on-surface placeholder:text-outline focus:ring-0 outline-none"
-                            placeholder="Tuliskan apa yang sedang membebani pikiranmu di sini... Ruang ini aman untukmu."></textarea>
+                            placeholder="Ketik disini untuk membalas curhat / menerima curhat"></textarea>
                         <div class="flex items-center justify-between pt-2 px-1 border-t border-surface-container-low">
-                            <span class="text-label-sm text-outline hidden sm:inline">Tekan Enter untuk kirim</span>
                             <button type="submit" id="replyBtn"
                                 class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold flex items-center gap-2 shadow-sm transition-all active:scale-95">
                                 <span>Kirim Balasan</span>
@@ -118,21 +110,12 @@
                         </div>
                     </form>
                 @else
-                    <div class="rounded-2xl bg-error-container text-on-error-container border border-error/30 p-4 text-center">
+                    <div
+                        class="rounded-2xl bg-error-container text-on-error-container border border-error/30 p-4 text-center">
                         <span class="material-symbols-outlined text-primary text-xl mb-1">check_circle</span>
                         <p class="text-label-md font-semibold">Sudah Ditangani</p>
                         <p class="text-body-sm mt-0.5">Curhat ini sudah selesai ditangani. Percakapan telah berakhir.</p>
                     </div>
-                @endif
-                @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
-                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}" class="mt-3"
-                        onsubmit="return confirm('Tandai selesai dan hapus riwayat chat ini? Tindakan ini permanen dan tidak dapat dibatalkan.');">
-                        @csrf
-                        <button type="submit"
-                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-secondary-container text-on-secondary-container hover:bg-secondary-container/80 text-label-md font-semibold transition-colors">
-                            <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
-                        </button>
-                    </form>
                 @endif
             </div>
 

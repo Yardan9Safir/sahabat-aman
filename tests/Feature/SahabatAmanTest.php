@@ -28,7 +28,7 @@ class SahabatAmanTest extends TestCase
             'pesan' => 'Saya merasa cemas saat ujian.',
         ]);
 
-        $response->assertRedirect('/riwayat');
+        $response->assertRedirect('/dashboard');
         $this->assertDatabaseHas('curhats', [
             'siswa_id' => $student->id,
             'penerima_id' => $guru->id,
@@ -36,7 +36,15 @@ class SahabatAmanTest extends TestCase
             'status' => 'terkirim',
         ]);
 
-        $this->get('/riwayat')->assertOk();
+        $curhat = Curhat::where('siswa_id', $student->id)->first();
+        $this->assertDatabaseHas('balasans', [
+            'curhat_id' => $curhat->id,
+            'pengirim_id' => $student->id,
+            'pengirim_role' => 'siswa',
+            'isi' => 'Saya merasa cemas saat ujian.',
+        ]);
+
+        $this->get('/dashboard')->assertOk()->assertSee('Saya merasa cemas saat ujian.');
     }
 
     public function test_guru_can_access_admin_panel(): void
@@ -49,7 +57,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $guru->id,
             'tujuan' => 'guru',
             'kategori' => 'sosial',
-            'pesan' => 'Saya sedang kesulitan bergaul di kelas.',
             'status' => 'terkirim',
         ]);
 
@@ -78,7 +85,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $recipient->id,
             'tujuan' => 'siswa',
             'kategori' => 'belajar',
-            'pesan' => 'Saya bingung memilih jurusan kuliah.',
             'status' => 'terkirim',
         ]);
 
@@ -99,7 +105,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $guru->id,
             'tujuan' => 'guru',
             'kategori' => 'belajar',
-            'pesan' => 'Saya kesulitan fokus belajar.',
             'status' => 'terkirim',
         ]);
 
@@ -133,7 +138,7 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $konselor->id,
             'kategori' => 'pribadi',
             'pesan' => 'Saya merasa tidak nyaman di kelas akhir-akhir ini.',
-        ])->assertRedirect('/riwayat');
+        ])->assertRedirect('/dashboard');
 
         $this->assertDatabaseHas('curhats', [
             'siswa_id' => $student->id,
@@ -178,7 +183,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $konselor->id,
             'tujuan' => 'konselor sebaya',
             'kategori' => 'sosial',
-            'pesan' => 'Saya merasa dikucilkan oleh teman sekelas.',
             'status' => 'terkirim',
         ]);
 
@@ -232,7 +236,7 @@ class SahabatAmanTest extends TestCase
 
     public function test_guest_trying_to_open_restricted_page_sets_intended_url()
     {
-        $this->get('/riwayat')->assertRedirect('/login');
+        $this->get('/dashboard')->assertRedirect('/login');
     }
 
     public function test_peer_counselor_login_ignores_stale_intended_url()
@@ -285,7 +289,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $konselor->id,
             'tujuan' => 'konselor sebaya',
             'kategori' => 'pribadi',
-            'pesan' => 'Saya ingin bercerita tentang masalah di rumah.',
             'status' => 'dibalas',
         ]);
 
@@ -306,7 +309,7 @@ class SahabatAmanTest extends TestCase
         $this->assertSame('dibalas', $curhat->status);
     }
 
-    public function test_student_can_reply_back_and_forth_on_riwayat_page(): void
+    public function test_student_can_reply_back_and_forth_on_dashboard_page(): void
     {
         $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024014']);
         $guru = User::factory()->create(['role' => 'guru', 'identifier' => 'guru-6']);
@@ -316,13 +319,12 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $guru->id,
             'tujuan' => 'guru',
             'kategori' => 'belajar',
-            'pesan' => 'Saya sulit membagi waktu belajar.',
             'status' => 'dibalas',
         ]);
 
         $this->actingAs($siswa);
 
-        $this->get('/riwayat/'.$curhat->id)
+        $this->get('/dashboard/'.$curhat->id)
             ->assertOk()
             ->assertSee('Kirim Balasan');
     }
@@ -337,7 +339,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $guru->id,
             'tujuan' => 'guru',
             'kategori' => 'karier',
-            'pesan' => 'Saya bingung menentukan arah masa depan.',
             'status' => 'terkirim',
         ]);
 
@@ -349,7 +350,7 @@ class SahabatAmanTest extends TestCase
 
         $this->actingAs($siswa);
 
-        $this->get('/riwayat/'.$curhat->id)->assertNotFound();
+        $this->get('/dashboard/'.$curhat->id)->assertNotFound();
 
         $this->post('/dashboard/curhat/'.$curhat->id.'/balas', [
             'isi' => 'Boleh satu pesan lagi?',
@@ -366,7 +367,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $guru->id,
             'tujuan' => 'guru',
             'kategori' => 'sosial',
-            'pesan' => 'Saya merasa canggung saat presentasi di depan kelas.',
             'status' => 'terkirim',
         ]);
 
@@ -393,7 +393,6 @@ class SahabatAmanTest extends TestCase
             'penerima_id' => $konselor->id,
             'tujuan' => 'konselor sebaya',
             'kategori' => 'pribadi',
-            'pesan' => 'Saya ingin membicarakan tekanan dari keluarga.',
             'status' => 'terkirim',
         ]);
 
@@ -416,11 +415,11 @@ class SahabatAmanTest extends TestCase
 
         $this->actingAs($siswa);
 
-        $this->get('/riwayat')->assertOk();
+        $this->get('/dashboard')->assertOk();
 
         $this->withSession(['last_activity_at' => now()->subMinutes(11)->timestamp]);
 
-        $this->get('/riwayat')
+        $this->get('/dashboard')
             ->assertRedirect('/login')
             ->assertSessionHas('warning');
 
@@ -435,11 +434,11 @@ class SahabatAmanTest extends TestCase
 
         $this->withSession(['last_activity_at' => now()->subMinutes(9)->timestamp]);
 
-        $response = $this->get('/riwayat');
+        $response = $this->get('/dashboard');
         dump($response->headers->get('Location'));
         $response->assertOk();
 
-        $this->get('/riwayat')->assertOk();
+        $this->get('/dashboard')->assertOk();
 
         $this->assertAuthenticatedAs($siswa);
     }
