@@ -5,7 +5,7 @@
 @section('content')
     <div class="flex flex-col gap-6 max-w-4xl mx-auto">
 
-        {{-- Conversation Header --}}
+        {{-- Tampilan Header Percakapan --}}
         <div
             class="bg-surface-container-lowest p-5 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -38,32 +38,38 @@
             </a>
         </div>
 
-        <div class="bg-surface-container-lowest p-5 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {{-- Tampilan Banner Enkripsi + Done Button --}}
+        <div
+            class="bg-surface-container-lowest p-5 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+            {{-- Banner Enkripsi --}}
+            <div
+                class="bg-surface-container px-5 py-2.5 rounded-2xl flex items-center gap-2 text-label-sm text-on-surface-variant border border-surface-variant/40">
+                <span class="material-symbols-outlined text-primary text-base">lock</span>
+                <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
+            </div>
+
             {{-- Tandai Selesai Button --}}
             <div>
                 @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
                     <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
-                        onsubmit="return confirm('Tandai selesai dan hapus riwayat chat ini? Tindakan ini permanen dan tidak dapat dibatalkan.');">
+                        data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
+                        data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
+                        data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai" data-swal-cancel-text="Batal">
                         @csrf
                         <button type="submit"
-                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-secondary-container text-on-secondary-container hover:bg-secondary-container/80 text-label-md font-semibold transition-colors">
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold transition-colors">
                             <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
                         </button>
                     </form>
                 @endif
             </div>
 
-            {{-- Confidentiality Banner --}}
-            <div
-                class="bg-surface-container px-5 py-2.5 rounded-2xl flex items-center gap-2 text-label-sm text-on-surface-variant border border-surface-variant/40">
-                <span class="material-symbols-outlined text-primary text-base">lock</span>
-                <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
-            </div>
         </div>
 
-        {{-- Chat Message Thread --}}
+        {{-- Tampilan Chat Message --}}
         <div class="bg-surface-container-lowest rounded-3xl soft-shadow border border-surface-variant/40 overflow-hidden">
-            <div class="p-6 space-y-6">
+            <div id="chatList" class="p-6 space-y-6">
                 {{-- Balasan --}}
                 @forelse($curhat->balasans as $balasan)
                     <div
@@ -84,18 +90,21 @@
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-4">
+                    <div id="chatEmpty" class="text-center py-4">
                         <span class="material-symbols-outlined text-outline text-3xl mb-2">chat_bubble</span>
                         <p class="text-body-sm text-outline">Belum ada balasan. Menunggu respon dari pendengar...</p>
                     </div>
                 @endforelse
             </div>
+        </div>
 
-            {{-- Composer --}}
+        {{-- Tombol Button + Refresh --}}
+        <div class="bg-surface-container-lowest rounded-3xl soft-shadow border border-surface-variant/40 overflow-hidden">
+            {{-- Form Reply --}}
             <div class="p-4 bg-surface-container-low border-t border-surface-variant/40">
                 @if ($curhat->status !== 'ditangani' && ($curhat->penerima_id === auth()->id() || $curhat->siswa_id === auth()->id()))
-                    <form id="replyForm" data-endpoint="{{ route('dashboard.reply', $curhat) }}" data-mode="chat"
-                        data-target=".space-y-6"
+                    <form method="POST" action="{{ route('dashboard.reply', $curhat) }}" data-mode="chat"
+                        data-target="#chatList" data-empty="#chatEmpty"
                         class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
                         @csrf
                         <textarea name="isi" rows="3" required
@@ -127,5 +136,4 @@
                 </button>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection

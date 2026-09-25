@@ -141,6 +141,7 @@ class CurhatController extends Controller
                     'pengirim_role' => $user->role,
                     'pengirim_role_label' => $user->roleLabel(),
                     'created_at' => $balasan->created_at->translatedFormat('d M Y, H:i'),
+                    'created_time' => $balasan->created_at->translatedFormat('H:i'),
                     'is_me' => true,
                 ],
             ]);

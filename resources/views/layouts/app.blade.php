@@ -47,7 +47,7 @@
         html.drawer-locked, html.drawer-locked body { overflow: hidden; }
     </style>
 </head>
-<body class="bg-background font-sans text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-on-primary-fixed">
+<body class="bg-background font-sans text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-on-primary-fixed" data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
 
     @auth
     {{-- Overlay drawer HP --}}
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <button id="btnSidebar" type="button" class="p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors shrink-0" aria-label="Buka / tutup sidebar" aria-expanded="true" aria-controls="appSidebar" title="Buka / tutup sidebar">
-                    <span id="btnSidebarIcon" class="material-symbols-outlined">Pengaturan Akun</span>
+                    <span id="btnSidebarIcon" class="material-symbols-outlined">menu</span>
                 </button>
             </div>
 
@@ -82,12 +82,6 @@
                     <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('dashboard') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
                     <span class="sidebar-label text-label-lg truncate">Kotak Masuk & Dialog</span>
                 </a>
-                @if(Auth::user()->role === 'guru')
-                <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('admin.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150" href="{{ route('admin.index') }}" title="Panel Guru BK">
-                    <span class="material-symbols-outlined shrink-0 {{ request()->routeIs('admin.*') ? 'text-primary' : 'text-outline' }}">dashboard</span>
-                    <span class="sidebar-label text-label-lg truncate">Panel Guru BK</span>
-                </a>
-                @endif
             </nav>
         </div>
 
@@ -117,18 +111,6 @@
     {{-- Konten --}}
     <div id="appMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen @auth lg:ml-72 @endauth">
         <main class="flex-1 w-full px-4 sm:px-8 max-w-7xl mx-auto flex flex-col gap-8 @auth pt-6 lg:pt-8 pb-28 lg:pb-12 @else py-10 @endauth">
-            @if(session('success'))
-            <div class="bg-primary-fixed/40 border border-primary/20 rounded-2xl px-5 py-3 text-sm font-semibold text-primary flex items-center gap-2">
-                <span class="material-symbols-outlined text-base">check_circle</span>
-                {{ session('success') }}
-            </div>
-            @endif
-            @if(session('info'))
-            <div class="bg-surface-container px-5 py-3 rounded-2xl text-sm font-semibold text-on-surface-variant border border-surface-variant/40 flex items-center gap-2">
-                <span class="material-symbols-outlined text-base">info</span>
-                {{ session('info') }}
-            </div>
-            @endif
             @yield('content')
         </main>
 
@@ -147,10 +129,10 @@
                     <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>
                 </a>
-                <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
-                    <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
+                <a href="{{ route('profile') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('profile') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <span class="material-symbols-outlined text-[22px] leading-none">person</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
-                </button>
+                </a>
             </div>
         </nav>
         @endauth

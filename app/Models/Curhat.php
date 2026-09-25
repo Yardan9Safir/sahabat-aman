@@ -81,12 +81,4 @@ class Curhat extends Model
             $this->save();
         }
     }
-
-    public function setHandled(User $user): void
-    {
-        $this->status = 'ditangani';
-        $this->ditangani_by = $user->id;
-        $this->ditangani_at = now();
-        $this->save();
-    }
 }

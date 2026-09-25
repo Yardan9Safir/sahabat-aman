@@ -30,7 +30,11 @@
                 </div>
                 @if (Auth::user()->role === 'guru' && $curhat->penerima_id === Auth::id() && $curhat->status !== 'ditangani')
                     <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
-                            onsubmit="return confirm('Tandai selesai dan hapus riwayat chat ini? Tindakan ini permanen dan tidak dapat dibatalkan.');">
+                        data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
+                        data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
+                        data-swal-icon="warning"
+                        data-swal-confirm-text="Ya, tandai selesai"
+                        data-swal-cancel-text="Batal">
                         @csrf
                         <button type="submit"
                             class="flex items-center gap-1.5 bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
@@ -93,7 +97,7 @@
                         <p class="text-body-md text-on-surface leading-relaxed">{{ $balasan->isi }}</p>
                     </div>
                 @empty
-                    <div class="text-center py-6">
+                    <div id="balasanEmpty" class="text-center py-6">
                         <span class="material-symbols-outlined text-outline text-3xl mb-2">chat_bubble</span>
                         <p class="text-body-sm text-outline">Belum ada balasan.</p>
                     </div>
@@ -113,14 +117,14 @@
         @elseif ($curhat->status !== 'ditangani' && Auth::user()->role === 'guru' && $curhat->penerima_id === Auth::id())
             <div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40">
                 <h2 class="text-title-md font-bold text-on-surface mb-4">Balas Curhat</h2>
-                <form id="replyForm" data-endpoint="{{ route('dashboard.reply', $curhat) }}"
+                <form method="POST" action="{{ route('dashboard.reply', $curhat) }}"
+                    data-target="#balasanList" data-empty="#balasanEmpty"
                     class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
                     @csrf
                     <textarea name="isi" rows="4" required
                         class="w-full resize-none border-none p-3 bg-transparent text-body-md text-on-surface placeholder:text-outline focus:ring-0 outline-none"
                         placeholder="Tulis balasan yang empati dan membantu..."></textarea>
                     <div class="flex items-center justify-between pt-2 px-1 border-t border-surface-container-low">
-                        <span class="text-label-sm text-outline">Tekan Enter untuk kirim</span>
                         <button type="submit" id="replyBtn"
                             class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold flex items-center gap-2 shadow-sm transition-all active:scale-95">
                             <span>Kirim Balasan</span>

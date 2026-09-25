@@ -132,7 +132,7 @@
     </style>
 </head>
 
-<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex">
+<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex" data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
 
     {{-- Overlay drawer HP --}}
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 lg:hidden"></div>
@@ -207,20 +207,6 @@
     {{-- Main --}}
     <div id="adminMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen lg:pl-72">
         <main class="p-4 sm:p-6 lg:p-8 min-h-screen bg-background pb-28 lg:pb-12">
-            @if (session('success'))
-                <div
-                    class="mb-6 bg-primary-fixed/40 border border-primary/20 rounded-2xl px-5 py-3 text-sm font-semibold text-primary flex items-center gap-2">
-                    <span class="material-symbols-outlined text-base">check_circle</span>
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if (session('info'))
-                <div
-                    class="mb-6 bg-surface-container border border-surface-variant/40 rounded-2xl px-5 py-3 text-sm font-semibold text-on-surface-variant flex items-center gap-2">
-                    <span class="material-symbols-outlined text-base">info</span>
-                    {{ session('info') }}
-                </div>
-            @endif
             @yield('content')
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
