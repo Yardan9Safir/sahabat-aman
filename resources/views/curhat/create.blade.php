@@ -90,7 +90,7 @@
                 Topik Pembahasan:
             </label>
             <div class="flex flex-wrap gap-2" id="category-tags">
-                @foreach(['belajar' => ['Akademik & Ujian', 'menu_book'], 'sosial' => ['Pertemanan / Relasi', 'group'], 'pribadi' => ['Keluarga & Pribadi', 'psychology'], 'karier' => ['Pengembangan Diri', 'self_improvement']] as $key => [$label, $icon])
+                @foreach(['belajar' => ['Belajar', 'menu_book'], 'sosial' => ['Sosial', 'group'], 'pribadi' => ['Pribadi', 'psychology'], 'karier' => ['Karier', 'self_improvement']] as $key => [$label, $icon])
                 <button class="category-tag px-3.5 py-2 rounded-xl text-label-md border-2 {{ old('kategori') === $key ? 'border-primary bg-surface-container text-primary font-bold' : 'border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary' }} flex items-center gap-1.5 transition-colors" type="button" data-value="{{ $key }}">
                     <span class="material-symbols-outlined text-base">{{ $icon }}</span>
                     {{ $label }}

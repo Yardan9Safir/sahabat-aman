@@ -233,16 +233,16 @@
                         <span
                             class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
                     </a>
-                    <a href="{{ route('admin.account') }}"
+                    {{-- <a href="{{ route('admin.account') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">settings</span>
                         <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Akun</span>
-                    </a>
+                    </a> --}}
                     <button id="btnMenuMobile" type="button"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container-high"
                         aria-label="Buka menu sidebar">
                         <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Menu</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
                     </button>
                 </div>
             </nav>

@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <button id="btnSidebar" type="button" class="p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors shrink-0" aria-label="Buka / tutup sidebar" aria-expanded="true" aria-controls="appSidebar" title="Buka / tutup sidebar">
-                    <span id="btnSidebarIcon" class="material-symbols-outlined">menu</span>
+                    <span id="btnSidebarIcon" class="material-symbols-outlined">Pengaturan Akun</span>
                 </button>
             </div>
 
@@ -155,7 +155,7 @@
                 @endif
                 <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
                     <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
-                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Menu</span>
+                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
                 </button>
             </div>
         </nav>
