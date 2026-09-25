@@ -135,8 +135,8 @@
         @auth
         {{-- Bottom nav HP dibenahi + tombol Menu untuk buka sidebar (pengganti topbar) --}}
         <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
-            @php $isSiswa = Auth::user()->role === 'siswa'; $isGuru = Auth::user()->role === 'guru'; @endphp
-            <div class="grid {{ $isSiswa || $isGuru ? 'grid-cols-3' : 'grid-cols-2' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+            @php $isSiswa = Auth::user()->role === 'siswa'; @endphp
+            <div class="grid {{ $isSiswa ? 'grid-cols-3' : 'grid-cols-2' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
                 @if($isSiswa)
                 <a href="{{ route('curhat.create') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">add_notes</span>
@@ -147,12 +147,6 @@
                     <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>
                 </a>
-                @if($isGuru)
-                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                    <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
-                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Panel</span>
-                </a>
-                @endif
                 <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
                     <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>

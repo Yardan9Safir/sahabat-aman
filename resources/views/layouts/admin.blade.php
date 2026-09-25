@@ -224,7 +224,7 @@
             @yield('content')
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
-            <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
+            {{-- <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah admin">
                 <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
                     <a href="{{ route('admin.index') }}"
@@ -233,11 +233,11 @@
                         <span
                             class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
                     </a>
-                    {{-- <a href="{{ route('admin.account') }}"
+                    <a href="{{ route('admin.account') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">settings</span>
                         <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Akun</span>
-                    </a> --}}
+                    </a>
                     <button id="btnMenuMobile" type="button"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container-high"
                         aria-label="Buka menu sidebar">
@@ -245,7 +245,21 @@
                         <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
                     </button>
                 </div>
-            </nav>
+            </nav> --}}
+
+            <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
+            <div class="grid grid-cols-2 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors bg-primary-container/60 font-bold text-on-surface-variant hover:bg-surface-container hover:text-primary">
+                    <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
+                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
+                </a>
+                <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
+                    <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
+                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
+                </button>
+            </div>
+        </nav>
+
         </main>
     </div>
 
