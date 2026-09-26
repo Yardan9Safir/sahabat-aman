@@ -141,6 +141,7 @@ class CurhatController extends Controller
                     'pengirim_role' => $user->role,
                     'pengirim_role_label' => $user->roleLabel(),
                     'created_at' => $balasan->created_at->translatedFormat('d M Y, H:i'),
+                    'created_time' => $balasan->created_at->translatedFormat('H:i'),
                     'is_me' => true,
                 ],
             ]);
@@ -165,6 +166,9 @@ class CurhatController extends Controller
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('dashboard')->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
+        $target = $user->role === User::ROLE_GURU ? 'admin.index' : 'dashboard';
+
+        return redirect()->route($target)
+            ->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
     }
 }

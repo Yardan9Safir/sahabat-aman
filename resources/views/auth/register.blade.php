@@ -18,9 +18,8 @@
     <p class="mt-2 text-body-md text-on-surface-variant">Daftar sebagai siswa, guru, atau konselor sebaya.</p>
 
     @if(session('warning'))
-    <div class="mt-4 flex items-start gap-2.5 bg-error-container/70 text-on-error-container border border-error/30 rounded-2xl p-3.5 text-label-md font-semibold">
-        <span class="material-symbols-outlined text-lg mt-0.5">warning</span>
-        <p>{{ session('warning') }}</p>
+    <div class="mt-4">
+        @include('component.alert.failed', ['message' => session('warning')])
     </div>
     @endif
 

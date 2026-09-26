@@ -25,7 +25,7 @@
             class="bg-surface-container-lowest p-4 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
                 <h3 class="text-title-md font-bold text-on-surface">Dialog Siswa</h3>
-                <p class="text-body-sm text-on-surface-variant">{{ $curhats->count() }} Percakapan</p>
+                <p class="text-body-sm text-on-surface-variant">Total Percakapan : {{ $curhats->count() }}</p>
             </div>
             <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
                 <a href="{{ route('dashboard') }}"
