@@ -13,9 +13,9 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        $dailyQuote = Quote::where('is_daily', true)->latest()->first();
+        $loginQuotes = Quote::untukLogin();
 
-        return view('auth.login', compact('dailyQuote'));
+        return view('auth.login', compact('loginQuotes'));
     }
 
     public function login(Request $request)
@@ -87,7 +87,7 @@ class AuthController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'current_password' => ['nullable', 'string'],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
         ]);
@@ -95,8 +95,8 @@ class AuthController extends Controller
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        if (!empty($validated['password'])) {
-            if (empty($validated['current_password']) || !Hash::check($validated['current_password'], $user->password)) {
+        if (! empty($validated['password'])) {
+            if (empty($validated['current_password']) || ! Hash::check($validated['current_password'], $user->password)) {
                 throw ValidationException::withMessages([
                     'current_password' => ['Password lama salah.'],
                 ]);

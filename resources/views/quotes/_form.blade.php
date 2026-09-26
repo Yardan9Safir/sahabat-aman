@@ -1,5 +1,6 @@
 @php
     $quote = $quote ?? null;
+    $isGuru = auth()->user()->isGuru();
 @endphp
 
 <div class="bg-surface-container-lowest p-6 rounded-3xl soft-shadow border border-surface-variant/40">
@@ -42,18 +43,20 @@
             @enderror
         </div>
 
-        <label class="flex items-center gap-3 p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-low/60 cursor-pointer select-none">
-            <input type="checkbox" name="is_daily" value="1" id="is_daily"
-                class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/30"
-                {{ old('is_daily', $quote?->is_daily) ? 'checked' : '' }}>
-            <span class="flex flex-col">
-                <span class="text-label-lg font-semibold text-on-surface">Jadikan sebagai kata-kata hari ini</span>
-                <span class="text-label-sm text-on-surface-variant">Quotes ini akan tampil di halaman utama dan halaman login.</span>
-            </span>
-        </label>
+        @if ($isGuru)
+            <label class="flex items-center gap-3 p-4 rounded-2xl border border-outline-variant/50 bg-surface-container/60 cursor-pointer select-none">
+                <input type="checkbox" name="is_daily" value="1" id="is_daily"
+                    class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/30"
+                    {{ old('is_daily', $quote?->is_daily) ? 'checked' : '' }}>
+                <span class="flex flex-col">
+                    <span class="text-label-lg font-semibold text-on-surface">Jadikan sebagai kata-kata hari ini</span>
+                    <span class="text-label-sm text-on-surface-variant">Quotes ini akan tampil di beranda. Penempatan di halaman login diatur terpisah di menu Tampilan Login.</span>
+                </span>
+            </label>
+        @endif
 
-        <div class="flex items-center gap-3 pt-2">
-            <a href="{{ route('admin.quotes.index') }}" class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">Batal</a>
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a href="{{ route('quotes.index') }}" class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">Batal</a>
             <button type="submit" class="px-7 py-3.5 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center gap-2">
                 <span class="material-symbols-outlined text-lg">{{ $submitIcon ?? 'save' }}</span>
                 {{ $submitLabel }}

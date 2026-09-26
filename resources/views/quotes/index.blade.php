@@ -1,0 +1,182 @@
+@extends('layouts.app')
+
+@section('title', 'Quotes - Sahabat Aman')
+
+@section('content')
+@php
+    $isGuru = auth()->user()->isGuru();
+@endphp
+
+<div class="space-y-6">
+
+    {{-- Header --}}
+    <section class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+            <h1 class="text-headline-lg font-bold text-on-surface">Quotes & Kata-Kata Hari Ini</h1>
+            <p class="text-body-md text-on-surface-variant mt-1">
+                Koleksi quotes dari siswa, konselor sebaya, dan guru.
+                @if ($isGuru)
+                    Quote yang tampil di halaman login diatur di menu
+                    <a href="{{ route('admin.login-display.index') }}" class="font-semibold text-primary hover:underline">Tampilan Login</a>.
+                @endif
+            </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 self-start">
+            @if ($isGuru)
+                <a href="{{ route('admin.login-display.index') }}"
+                    class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-semibold hover:bg-surface-container-high transition-colors">
+                    <span class="material-symbols-outlined text-lg">tune</span>
+                    Atur Tampilan Login
+                </a>
+            @endif
+            <a href="{{ route('quotes.create') }}"
+                class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-primary text-on-primary text-label-lg font-semibold shadow-md hover:bg-primary-container hover:text-on-primary-container hover:-translate-y-0.5 transition-all">
+                <span class="material-symbols-outlined text-lg">add_notes</span>
+                Tambah Quotes
+            </a>
+        </div>
+    </section>
+
+    {{-- Filter kategori --}}
+    <section class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/60 soft-shadow">
+        <div class="flex flex-wrap items-center gap-1.5 p-1">
+            <a href="{{ route('quotes.index', array_filter(['mine' => $mine ? 1 : null])) }}"
+                class="px-3 py-1.5 rounded-lg text-label-md {{ !$category ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                Semua ({{ $total }})
+            </a>
+            @foreach (\App\Models\Quote::CATEGORIES as $item)
+                <a href="{{ route('quotes.index', array_filter(['category' => $item, 'mine' => $mine ? 1 : null])) }}"
+                    class="px-3 py-1.5 rounded-lg text-label-md {{ $category === $item ? 'font-bold bg-primary-fixed text-primary' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                    {{ ucfirst($item) }} ({{ $counts[$item] ?? 0 }})
+                </a>
+            @endforeach
+            <span class="w-px h-6 bg-outline-variant/50 mx-1 self-stretch"></span>
+            <a href="{{ route('quotes.index', array_filter(['category' => $category, 'mine' => $mine ? null : 1])) }}"
+                class="px-3 py-1.5 rounded-lg text-label-md {{ $mine ? 'font-bold bg-tertiary-container text-on-tertiary-container shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                Milik Saya
+            </a>
+        </div>
+    </section>
+
+    {{-- Grid Quotes --}}
+    <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+        @forelse ($quotes as $quote)
+            <article
+                class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 soft-shadow transition-all flex flex-col overflow-hidden {{ $quote->is_daily ? 'ring-2 ring-primary/70' : '' }} {{ $quote->tampil_di_login ? 'ring-2 ring-amber-400/80' : '' }}">
+                {{-- Card header --}}
+                <div class="p-5 pb-4 border-b border-outline-variant/40 flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-11 h-11 rounded-xl bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+                            <span class="material-symbols-outlined">{{ $quote->category_icon }}</span>
+                        </div>
+                        <div class="min-w-0">
+                            <span
+                                class="bg-surface-container-high text-primary px-2.5 py-0.5 rounded-full text-label-sm font-semibold inline-block">{{ $quote->category_label }}</span>
+                            <h3 class="text-title-md text-on-surface font-bold mt-1.5 truncate">{{ $quote->judul_quotes }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1.5 shrink-0">
+                        @if ($quote->is_daily)
+                            <span
+                                class="inline-flex items-center gap-1 bg-primary text-on-primary px-2.5 py-1 rounded-full text-label-sm font-bold">
+                                <span class="material-symbols-outlined text-sm">today</span>
+                                Hari Ini
+                            </span>
+                        @endif
+                        @if ($quote->tampil_di_login)
+                            <span
+                                class="inline-flex items-center gap-1 bg-amber-300 text-amber-950 px-2.5 py-1 rounded-full text-label-sm font-bold">
+                                <span class="material-symbols-outlined text-sm">login</span>
+                                Login #{{ $quote->urutan_login }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Card body --}}
+                <div class="p-5 flex-grow">
+                    <div class="p-4 bg-surface-container-low/70 rounded-xl border border-outline-variant/40">
+                        <p class="text-body-sm text-on-surface italic leading-relaxed">{{ $quote->isi_quotes }}</p>
+                    </div>
+                </div>
+
+                {{-- Card footer --}}
+                <div class="px-5 py-4 border-t border-outline-variant/40 flex flex-col gap-3">
+                    <div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+                        <span class="font-semibold text-on-surface truncate">{{ $quote->displayAuthor() }}</span>
+                        <span class="shrink-0">{{ $quote->created_at?->diffForHumans() ?? '-' }}</span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        @can('setDaily', \App\Models\Quote::class)
+                            @if ($quote->is_daily)
+                                <form method="POST" action="{{ route('quotes.update', $quote) }}" class="inline">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="judul_quotes" value="{{ $quote->judul_quotes }}">
+                                    <input type="hidden" name="category_quotes" value="{{ $quote->category_quotes }}">
+                                    <input type="hidden" name="isi_quotes" value="{{ $quote->isi_quotes }}">
+                                    <button type="submit"
+                                        class="flex items-center gap-1.5 bg-surface-container text-primary text-label-sm font-semibold px-3.5 py-2 rounded-xl hover:bg-surface-container-high transition-colors">
+                                        <span class="material-symbols-outlined text-base">event_busy</span>
+                                        Batalkan
+                                    </button>
+                                </form>
+                            @else
+                                <form method="POST" action="{{ route('admin.quotes.daily', $quote) }}" class="inline">
+                                    @csrf
+                                    <button type="submit"
+                                        class="flex items-center gap-1.5 bg-primary text-on-primary text-label-sm font-semibold px-3.5 py-2 rounded-xl shadow-xs hover:bg-primary-container hover:text-on-primary-container transition-colors">
+                                        <span class="material-symbols-outlined text-base">today</span>
+                                        Jadikan Hari Ini
+                                    </button>
+                                </form>
+                            @endif
+                        @endcan
+
+                        @can('update', $quote)
+                            <a href="{{ route('quotes.edit', $quote) }}"
+                                class="flex items-center gap-1.5 bg-surface-container text-on-surface text-label-sm font-semibold px-3.5 py-2 rounded-xl hover:bg-surface-container-high transition-colors">
+                                <span class="material-symbols-outlined text-base">edit</span>
+                                Edit
+                            </a>
+                        @endcan
+
+                        @can('delete', $quote)
+                            <form method="POST" action="{{ route('quotes.destroy', $quote) }}" class="inline"
+                                data-swal-confirm="Hapus quotes ini?"
+                                data-swal-text="Quotes yang sudah dihapus tidak bisa dikembalikan."
+                                data-swal-confirm-text="Ya, hapus" data-swal-danger="true">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="flex items-center gap-1.5 bg-error-container text-on-error-container text-label-sm font-semibold px-3.5 py-2 rounded-xl hover:bg-error hover:text-on-error transition-colors">
+                                    <span class="material-symbols-outlined text-base">delete</span>
+                                    Hapus
+                                </button>
+                            </form>
+                        @endcan
+                    </div>
+                </div>
+            </article>
+        @empty
+            <div
+                class="sm:col-span-2 xl:col-span-3 bg-surface-container-lowest p-12 rounded-3xl border border-dashed border-outline-variant/60 text-center">
+                <span class="material-symbols-outlined text-outline text-4xl mb-3">format_quote</span>
+                <p class="text-headline-sm font-bold text-on-surface">
+                    {{ $mine ? 'Kamu belum membuat quotes' : 'Belum ada quotes' }}
+                </p>
+                <p class="text-body-sm text-on-surface-variant mt-1">
+                    {{ $mine ? 'Buat quotes pertamamu dan dukung teman-teman lain.' : 'Tambahkan quotes pertama agar bisa dipilih sebagai kata-kata hari ini.' }}
+                </p>
+                <a href="{{ route('quotes.create') }}"
+                    class="inline-flex items-center gap-2 mt-5 px-5 py-3 rounded-2xl bg-primary text-on-primary text-label-lg font-semibold shadow-md hover:bg-primary-container hover:text-on-primary-container transition-all">
+                    <span class="material-symbols-outlined text-lg">add_notes</span>
+                    Tambah Quotes
+                </a>
+            </div>
+        @endforelse
+    </section>
+
+</div>
+@endsection

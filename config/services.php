@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Hotline Bimbingan & Konseling
+    |--------------------------------------------------------------------------
+    |
+    | Nomor yang bisa dihubungi siswa saat butuh bantuan mendesak. Kosongkan
+    | bila belum ada; tombol hotline di beranda akan mengarah ke halaman
+    | masuk sebagai gantinya.
+    |
+    */
+
+    'hotline' => [
+        'phone' => env('HOTLINE_BK_PHONE'),
+    ],
+
 ];

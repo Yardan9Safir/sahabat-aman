@@ -25,6 +25,10 @@
             display: none !important;
         }
 
+        .soft-shadow {
+            box-shadow: 0 4px 20px -2px rgba(8, 145, 178, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -169,10 +173,15 @@
                         <span class="material-symbols-outlined shrink-0">dashboard</span>
                         <span class="sidebar-label truncate">Dashboard Admin</span>
                     </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.quotes.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
-                        href="{{ route('admin.quotes.index') }}" title="Quotes & Kata-Kata Hari Ini">
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('quotes.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
+                        href="{{ route('quotes.index') }}" title="Quotes & Kata-Kata">
                         <span class="material-symbols-outlined shrink-0">format_quote</span>
-                        <span class="sidebar-label truncate">Quotes & Kata Hari Ini</span>
+                        <span class="sidebar-label truncate">Quotes & Kata-Kata</span>
+                    </a>
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.login-display.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
+                        href="{{ route('admin.login-display.index') }}" title="Tampilan Halaman Login">
+                        <span class="material-symbols-outlined shrink-0">tune</span>
+                        <span class="sidebar-label truncate">Tampilan Halaman Login</span>
                     </a>
                 </nav>
             </div>

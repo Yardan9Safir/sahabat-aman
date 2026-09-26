@@ -12,9 +12,9 @@ class CurhatController extends Controller
 {
     public function landing()
     {
-        $dailyQuote = Quote::where('is_daily', true)->latest()->first();
+        $quotes = Quote::untukBeranda();
 
-        return view('home', compact('dailyQuote'));
+        return view('home', compact('quotes'));
     }
 
     public function createForm()

@@ -183,6 +183,12 @@
                             class="material-symbols-outlined shrink-0 {{ request()->routeIs('dashboard','dashboard.show', 'dashboard.reply', 'dashboard.handle') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
                         <span class="sidebar-label text-label-lg truncate">Kotak Masuk & Dialog</span>
                     </a>
+                    <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('quotes.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                        href="{{ route('quotes.index') }}" title="Quotes & Kata-Kata">
+                        <span
+                            class="material-symbols-outlined shrink-0 {{ request()->routeIs('quotes.*') ? 'text-primary' : 'text-outline' }}">format_quote</span>
+                        <span class="sidebar-label text-label-lg truncate">Quotes & Kata-Kata</span>
+                    </a>
                 </nav>
             </div>
 
@@ -228,7 +234,7 @@
                 aria-label="Navigasi bawah">
                 @php $isSiswa = Auth::user()->role === 'siswa'; @endphp
                 <div
-                    class="grid {{ $isSiswa ? 'grid-cols-3' : 'grid-cols-2' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                    class="grid grid-cols-{{ $isSiswa ? '4' : '3' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
                     @if ($isSiswa)
                         <a href="{{ route('curhat.create') }}"
                             class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
@@ -246,8 +252,12 @@
                     <a href="{{ route('profile') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('profile') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">person</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan
-                            Akun</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Akun</span>
+                    </a>
+                    <a href="{{ route('quotes.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>
                     </a>
                 </div>
             </nav>
