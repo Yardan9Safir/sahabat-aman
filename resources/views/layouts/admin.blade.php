@@ -136,7 +136,8 @@
     </style>
 </head>
 
-<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex" data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
+<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex"
+    data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
 
     {{-- Overlay drawer HP --}}
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 lg:hidden"></div>
@@ -242,18 +243,35 @@
                 </div>
             </nav> --}}
 
-            <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
-            <div class="grid grid-cols-2 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
-                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.index','admin.show') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                    <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
-                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
-                </a>
-                <a href="{{ route('admin.account') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                    <span class="material-symbols-outlined text-[22px] leading-none">person</span>
-                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Profile</span>
-                </a>
-            </div>
-        </nav>
+            <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
+                aria-label="Navigasi bawah">
+                <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                    <a href="{{ route('admin.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.index', 'admin.show') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
+                        <span
+                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
+                    </a>
+                    <a href="{{ route('admin.login-display.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.login-display.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
+                        <span
+                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Setting Tampilan</span>
+                    </a>
+                    <a href="{{ route('quotes.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
+                        <span
+                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>
+                    </a>
+                    <a href="{{ route('admin.account') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">person</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan
+                            Akun</span>
+                    </a>
+                </div>
+            </nav>
 
         </main>
     </div>
