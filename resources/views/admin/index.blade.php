@@ -124,7 +124,7 @@
 
                 <div class="mt-4 pt-3 border-t border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
-                        <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Selesai') }}</span>
+                        <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Sedang Ditangani') }}</span>
                     </div>
                     @if ($curhat->status === 'ditangani')
                     <span class="inline-flex items-center gap-1.5 bg-error text-on-error font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs">

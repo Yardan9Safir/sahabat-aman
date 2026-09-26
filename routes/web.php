@@ -6,7 +6,7 @@ use App\Http\Controllers\CurhatController;
 use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [CurhatController::class, 'landing'])->name('home');
+Route::get('/', [CurhatController::class, 'landing'])->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

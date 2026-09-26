@@ -178,7 +178,7 @@
             </div>
             {{-- Profile Section --}}
             <div class="flex flex-col gap-3 pt-4 mt-6 border-t border-surface-variant/40 shrink-0">
-                <a href="{{ route('admin.account') }}" id="profileCard"
+                <a href="{{ route('admin.account') }}" id="adminProfileCard"
                     class="w-full p-3.5 bg-surface-container-low rounded-2xl flex items-center gap-3 hover:bg-surface-container transition-colors group"
                     title="Profil Saya">
                     <span class="sidebar-label flex-1 min-w-0">
@@ -193,7 +193,7 @@
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button id="logoutBtn" type="submit"
+                    <button id="adminLogoutBtn" type="submit"
                         class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container hover:text-primary rounded-xl px-4 py-2.5 font-normal transition-colors duration-150 w-full"
                         title="Keluar">
                         <span class="material-symbols-outlined text-lg shrink-0">logout</span>
@@ -206,7 +206,7 @@
 
     {{-- Main --}}
     <div id="adminMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen lg:pl-72">
-        <main class="p-4 sm:p-6 lg:p-8 min-h-screen bg-background pb-28 lg:pb-12">
+        <main class="sm:p-6 lg:p-8 min-h-screen bg-background pb-28 lg:pb-12">
             @yield('content')
 
             {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
@@ -235,14 +235,14 @@
 
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]" aria-label="Navigasi bawah">
             <div class="grid grid-cols-2 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
-                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors bg-primary-container/60 font-bold text-on-surface-variant hover:bg-surface-container hover:text-primary">
+                <a href="{{ route('admin.index') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.index') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                     <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
                     <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
                 </a>
-                <button id="btnMenuMobile" type="button" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container hover:text-primary" aria-label="Buka menu sidebar">
-                    <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
-                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
-                </button>
+                <a href="{{ route('admin.account') }}" class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <span class="material-symbols-outlined text-[22px] leading-none">person</span>
+                    <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Profile</span>
+                </a>
             </div>
         </nav>
 

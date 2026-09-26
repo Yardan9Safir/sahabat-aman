@@ -166,6 +166,9 @@ class CurhatController extends Controller
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('dashboard')->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
+        $target = $user->role === User::ROLE_GURU ? 'admin.index' : 'dashboard';
+
+        return redirect()->route($target)
+            ->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
     }
 }

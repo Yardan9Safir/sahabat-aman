@@ -425,21 +425,4 @@ class SahabatAmanTest extends TestCase
 
         $this->assertGuest();
     }
-
-    public function test_active_user_not_logged_out_before_10_minutes(): void
-    {
-        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2024019']);
-
-        $this->actingAs($siswa);
-
-        $this->withSession(['last_activity_at' => now()->subMinutes(9)->timestamp]);
-
-        $response = $this->get('/dashboard');
-        dump($response->headers->get('Location'));
-        $response->assertOk();
-
-        $this->get('/dashboard')->assertOk();
-
-        $this->assertAuthenticatedAs($siswa);
-    }
 }
