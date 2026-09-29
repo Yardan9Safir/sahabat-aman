@@ -30,8 +30,8 @@
                 </div>
                 @if (Auth::user()->role === 'guru' && $curhat->penerima_id === Auth::id() && $curhat->status !== 'ditangani')
                     <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
-                        data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
-                        data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
+                        data-swal-confirm="Tandai selesai dan tutup sesi chat ini ?"
+                        data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen pada riwayat akun siswa."
                         data-swal-icon="warning"
                         data-swal-confirm-text="Ya, tandai selesai"
                         data-swal-cancel-text="Batal">

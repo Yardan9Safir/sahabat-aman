@@ -73,6 +73,10 @@ class CurhatController extends Controller
                     ->orWhere('siswa_id', $user->id);
             });
 
+        if ($user->role === User::ROLE_SISWA) {
+            $query->where('status', '!=', 'ditangani');
+        }
+
         if (request('kategori')) {
             $query->where('kategori', request('kategori'));
         }
@@ -94,6 +98,10 @@ class CurhatController extends Controller
             abort_unless($curhat->tujuan === 'guru', 403);
 
             return redirect()->route('admin.show', $curhat);
+        }
+
+        if ($user->role === User::ROLE_SISWA && $curhat->status === 'ditangani') {
+            return redirect()->route('dashboard')->with('error', 'Riwayat percakapan ini sudah ditutup.');
         }
 
         abort_unless($curhat->penerima_id === $user->id || $curhat->siswa_id === $user->id, 403);
@@ -160,7 +168,9 @@ class CurhatController extends Controller
             403
         );
 
-        $curhat->delete();
+        $curhat->update([
+            'status' => 'ditangani'
+        ]);
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true]);
@@ -170,5 +180,25 @@ class CurhatController extends Controller
 
         return redirect()->route($target)
             ->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
+    }
+
+    public function destroy(Curhat $curhat)
+    {
+        $user = Auth::user();
+
+        // Pastikan hanya Guru atau Konselor yang berhak yang bisa menghapus
+        abort_unless(
+            in_array($user->role, [User::ROLE_GURU, User::ROLE_KONSELOR_SEBAYA], true)
+                && $curhat->penerima_id === $user->id,
+            403
+        );
+
+        // Hapus juga semua balasannya agar tidak jadi data yatim (orphan data) di database
+        $curhat->balasans()->delete(); 
+        
+        // Hapus curhat utama
+        $curhat->delete();
+
+        return redirect()->back()->with('success', 'Riwayat curhat berhasil dihapus permanen.');
     }
 }

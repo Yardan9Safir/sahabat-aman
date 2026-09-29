@@ -79,6 +79,9 @@
                     <a href="{{ route('admin.index', ['status' => 'dibalas']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'dibalas' ? 'font-bold bg-secondary-fixed text-on-secondary-fixed' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                         Dibalas ({{ $curhats->where('status', 'dibalas')->count() }})
                     </a>
+                    <a href="{{ route('admin.index', ['status' => 'ditangani']) }}" class="px-3 py-1.5 rounded-lg text-label-md {{ request('status') === 'ditangani' ? 'font-bold bg-surface-container-high text-primary' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
+                        Selesai ({{ $curhats->where('status', 'ditangani')->count() }})
+                    </a>
                 </div>
             </div>
             @forelse($curhats as $curhat)
@@ -124,13 +127,24 @@
 
                 <div class="mt-4 pt-3 border-t border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-2 text-label-sm text-on-surface-variant">
-                        <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Sedang Ditangani') }}</span>
+                        <span>Kondisi: {{ $curhat->status === 'terkirim' ? 'Menunggu Respon' : ($curhat->status === 'dibalas' ? 'Sedang Ditangani' : 'Sudah Ditangani') }}</span>
                     </div>
                     @if ($curhat->status === 'ditangani')
-                    <span class="inline-flex items-center gap-1.5 bg-error text-on-error font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs">
-                        <span class="material-symbols-outlined text-base">task_alt</span>
-                        Sudah Ditangani
-                    </span>
+                    <a href="{{ route('admin.show', $curhat) }}" class="flex items-center gap-1.5 bg-surface-container-high text-on-surface font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs hover:bg-surface-variant transition-all">
+                        <span class="material-symbols-outlined text-base">history</span>
+                        <span>Lihat Riwayat</span>
+                    </a>
+                    {{-- Tombol Hapus Permanen Riwayat chat oleh guru/konselor sebaya --}}
+                    <form method="POST" action="{{ route('dashboard.destroy', $curhat) }}"
+                        data-swal-confirm="Hapus permanen riwayat ini?"
+                        data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."
+                        data-swal-icon="warning" data-swal-confirm-text="Ya, Hapus" data-swal-cancel-text="Batal">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="flex items-center justify-center bg-error-container text-on-error-container hover:bg-error hover:text-on-error w-9 h-9 rounded-xl transition-colors shadow-xs" title="Hapus Permanen">
+                            <span class="material-symbols-outlined text-base">delete</span>
+                        </button>
+                    </form>
                     @else
                     <a href="{{ route('admin.show', $curhat) }}" class="flex items-center gap-1.5 bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
                         <span class="material-symbols-outlined text-base">reply</span>

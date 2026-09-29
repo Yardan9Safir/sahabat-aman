@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{curhat}', [CurhatController::class, 'recipientDetail'])->name('dashboard.show');
     Route::post('/dashboard/curhat/{curhat}/balas', [CurhatController::class, 'reply'])->name('dashboard.reply');
     Route::post('/dashboard/curhat/{curhat}/tangani', [CurhatController::class, 'handle'])->name('dashboard.handle');
+    Route::delete('/curhat/{curhat}/destroy', [App\Http\Controllers\CurhatController::class, 'destroy'])->name('dashboard.destroy');
+    
 
     // Quotes — global, bisa diisi siswa, konselor sebaya, dan guru.
     Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
