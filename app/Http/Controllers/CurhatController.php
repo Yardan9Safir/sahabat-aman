@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curhat;
+use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,54 +12,53 @@ class CurhatController extends Controller
 {
     public function landing()
     {
-        return view('home');
+        $quotes = Quote::untukBeranda();
+
+        return view('home', compact('quotes'));
     }
 
     public function createForm()
     {
-        $gurus = User::where('role', 'guru')->orderBy('name')->get();
-        $siswas = User::where('role', 'siswa')->where('id', '!=', Auth::id())->orderBy('name')->get();
+        abort_unless(Auth::user()->role === User::ROLE_SISWA, 403);
 
-        return view('curhat.create', compact('gurus', 'siswas'));
+        $gurus = User::where('role', User::ROLE_GURU)->orderBy('name')->get();
+        $konselors = User::where('role', User::ROLE_KONSELOR_SEBAYA)->orderBy('name')->get();
+
+        return view('curhat.create', compact('gurus', 'konselors'));
     }
 
     public function store(Request $request)
     {
+        abort_unless($request->user()->role === User::ROLE_SISWA, 403);
+
         $validated = $request->validate([
             'penerima_id' => ['required', 'exists:users,id'],
-            'kategori' => ['required', 'in:pribadi,sosial,belajar,karier'],
+            'kategori' => ['required', 'in:'.implode(',', Curhat::KATEGORI)],
             'pesan' => ['required', 'string', 'min:10'],
         ]);
 
         $penerima = User::findOrFail($validated['penerima_id']);
 
-        $request->user()->curhats()->create([
+        $curhat = $request->user()->curhats()->create([
+            'siswa_id' => $request->user()->id,
+            'nama_pengirim' => $request->user()->name,
             'penerima_id' => $penerima->id,
             'tujuan' => $penerima->role,
             'nama_penerima' => $penerima->name,
             'kategori' => $validated['kategori'],
-            'pesan' => $validated['pesan'],
             'status' => 'terkirim',
         ]);
 
-        return redirect()->route('riwayat')->with('success', 'Curhatmu terkirim.');
+        $curhat->balasans()->create([
+            'pengirim_id' => $request->user()->id,
+            'pengirim_role' => $request->user()->role,
+            'isi' => $validated['pesan'],
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Curhatmu terkirim.');
     }
 
-    public function history()
-    {
-        $curhats = Auth::user()->curhats()->latest()->get();
-
-        return view('riwayat.index', compact('curhats'));
-    }
-
-    public function detail(Curhat $curhat)
-    {
-        abort_unless(Auth::id() === $curhat->siswa_id, 403);
-
-        return view('riwayat.show', compact('curhat'));
-    }
-
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
 
@@ -66,19 +66,44 @@ class CurhatController extends Controller
             return redirect()->route('admin.index');
         }
 
-        $query = Curhat::query()->where('penerima_id', $user->id);
+        $kategori = in_array($request->query('kategori'), Curhat::KATEGORI, true)
+            ? $request->query('kategori')
+            : null;
 
-        if (request('kategori')) {
-            $query->where('kategori', request('kategori'));
+        $status = in_array($request->query('status'), Curhat::STATUS, true)
+            ? $request->query('status')
+            : null;
+
+        $dasar = Curhat::query()
+            ->where(function ($q) use ($user) {
+                $q->where('penerima_id', $user->id)
+                    ->orWhere('siswa_id', $user->id);
+            });
+
+        if ($user->role === User::ROLE_SISWA) {
+            $dasar->where('status', '!=', 'ditangani');
         }
 
-        if (request('status')) {
-            $query->where('status', request('status'));
-        }
+        $jumlahKategori = (clone $dasar)
+            ->status($status)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori');
 
-        $curhats = $query->latest()->get();
+        $jumlahStatus = (clone $dasar)
+            ->kategori($kategori)
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-        return view('dashboard.index', compact('curhats'));
+        $curhats = (clone $dasar)
+            ->kategori($kategori)
+            ->status($status)
+            ->with('balasans')
+            ->latest()
+            ->get();
+
+        return view('dashboard.index', compact('curhats', 'kategori', 'status', 'jumlahKategori', 'jumlahStatus'));
     }
 
     public function recipientDetail(Curhat $curhat)
@@ -87,12 +112,19 @@ class CurhatController extends Controller
 
         if ($user->role === 'guru') {
             abort_unless($curhat->tujuan === 'guru', 403);
+
             return redirect()->route('admin.show', $curhat);
         }
 
-        abort_unless($curhat->penerima_id === $user->id, 403);
+        if ($user->role === User::ROLE_SISWA && $curhat->status === 'ditangani') {
+            return redirect()->route('dashboard')->with('error', 'Riwayat percakapan ini sudah ditutup.');
+        }
 
-        $curhat->setViewed();
+        abort_unless($curhat->penerima_id === $user->id || $curhat->siswa_id === $user->id, 403);
+
+        if ($curhat->penerima_id === $user->id) {
+            $curhat->setViewed();
+        }
 
         return view('dashboard.show', compact('curhat'));
     }
@@ -101,10 +133,13 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        abort_unless(
-            $curhat->penerima_id === $user->id || $curhat->siswa_id === $user->id,
-            403
-        );
+        $isPenerima = in_array($user->role, [User::ROLE_GURU, User::ROLE_KONSELOR_SEBAYA], true)
+            && $curhat->penerima_id === $user->id;
+
+        $isSiswaOwns = $user->role === User::ROLE_SISWA && $curhat->siswa_id === $user->id;
+
+        abort_unless($isPenerima || $isSiswaOwns, 403);
+        abort_if($curhat->status === 'ditangani', 403);
 
         $validated = $request->validate([
             'isi' => ['required', 'string', 'min:3'],
@@ -116,7 +151,9 @@ class CurhatController extends Controller
             'isi' => $validated['isi'],
         ]);
 
-        $curhat->setReplied();
+        if ($isPenerima) {
+            $curhat->setReplied();
+        }
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -126,7 +163,9 @@ class CurhatController extends Controller
                     'isi' => $balasan->isi,
                     'pengirim_name' => $user->name,
                     'pengirim_role' => $user->role,
+                    'pengirim_role_label' => $user->roleLabel(),
                     'created_at' => $balasan->created_at->translatedFormat('d M Y, H:i'),
+                    'created_time' => $balasan->created_at->translatedFormat('H:i'),
                     'is_me' => true,
                 ],
             ]);
@@ -139,14 +178,46 @@ class CurhatController extends Controller
     {
         $user = Auth::user();
 
-        abort_unless($curhat->penerima_id === $user->id, 403);
+        abort_unless(
+            in_array($user->role, [User::ROLE_GURU, User::ROLE_KONSELOR_SEBAYA], true)
+                && $curhat->penerima_id === $user->id,
+            403
+        );
 
-        $curhat->setHandled($user);
+        $curhat->update([
+            'status' => 'ditangani',
+        ]);
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('dashboard')->with('success', 'Curhat telah ditandai selesai.');
+        $target = $user->role === User::ROLE_GURU ? 'admin.index' : 'dashboard';
+
+        return redirect()->route($target)
+            ->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
+    }
+
+    public function destroy(Curhat $curhat)
+    {
+        $user = Auth::user();
+
+        // Pastikan hanya Guru atau Konselor yang berhak yang bisa menghapus
+        abort_unless(
+            in_array($user->role, [User::ROLE_GURU, User::ROLE_KONSELOR_SEBAYA], true)
+                && $curhat->penerima_id === $user->id,
+            403
+        );
+
+        // Hapus juga semua balasannya agar tidak jadi data yatim (orphan data) di database
+        $curhat->balasans()->delete();
+
+        // Hapus curhat utama
+        $curhat->delete();
+
+        $target = $user->role === User::ROLE_GURU ? 'admin.index' : 'dashboard';
+
+        return redirect()->route($target)
+            ->with('success', 'Riwayat curhat berhasil dihapus permanen.');
     }
 }

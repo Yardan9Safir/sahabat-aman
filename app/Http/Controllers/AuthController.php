@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,9 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        return view('auth.login');
+        $loginQuotes = Quote::untukLogin();
+
+        return view('auth.login', compact('loginQuotes'));
     }
 
     public function login(Request $request)
@@ -25,7 +28,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended($this->getDashboardRoute(Auth::user()));
+            return redirect($this->getDashboardRoute(Auth::user()));
         }
 
         throw ValidationException::withMessages([
@@ -45,7 +48,7 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'identifier' => ['required', 'string', 'max:100', 'unique:users,identifier'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'in:siswa,guru'],
+            'role' => ['required', 'in:siswa,guru,konselor sebaya'],
         ]);
 
         $user = User::create([
@@ -68,7 +71,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Terima kasih sudah menggunakan Sahabat Aman.');
     }
 
     public function profile()
@@ -84,7 +87,7 @@ class AuthController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'current_password' => ['nullable', 'string'],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
         ]);
@@ -92,8 +95,8 @@ class AuthController extends Controller
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        if (!empty($validated['password'])) {
-            if (empty($validated['current_password']) || !Hash::check($validated['current_password'], $user->password)) {
+        if (! empty($validated['password'])) {
+            if (empty($validated['current_password']) || ! Hash::check($validated['current_password'], $user->password)) {
                 throw ValidationException::withMessages([
                     'current_password' => ['Password lama salah.'],
                 ]);
@@ -110,6 +113,14 @@ class AuthController extends Controller
     {
         if ($user->role === 'siswa') {
             return '/curhat';
+        }
+
+        if ($user->role === 'konselor sebaya') {
+            return '/dashboard';
+        }
+
+        if ($user->role === 'guru') {
+            return '/dashboard';
         }
 
         return '/dashboard';

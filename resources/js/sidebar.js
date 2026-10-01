@@ -1,50 +1,130 @@
-export function initSidebar({ root, collapsedKey, navQuery }) {
-    if (!document.querySelector(root)) return;
-    const body = document.body;
-    const btnSidebar = document.getElementById('btnSidebar');
-    const btnMenuMobile = document.getElementById('btnMenuMobile');
-    const overlay = document.getElementById('sidebarOverlay');
-    const icon = document.getElementById('btnSidebarIcon');
-    const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches;
+const STORAGE_KEY = 'sahabat-aman.sidebar-collapsed';
+const DESKTOP = '(min-width: 1024px)';
 
-    function syncIcon() {
-        const isOpen = isDesktop() ? !body.classList.contains('sidebar-collapsed') : body.classList.contains('sidebar-open');
-        if (icon) icon.textContent = isOpen ? 'close' : 'menu';
-        if (btnSidebar) btnSidebar.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    }
-
-    function syncLock() {
-        const locked = !isDesktop() && body.classList.contains('sidebar-open');
-        document.documentElement.classList.toggle('drawer-locked', locked);
-    }
-
-    function toggleSidebar() {
-        if (isDesktop()) {
-            body.classList.toggle('sidebar-collapsed');
-            try { localStorage.setItem(collapsedKey, body.classList.contains('sidebar-collapsed') ? '1' : '0'); } catch (e) {}
-        } else {
-            body.classList.toggle('sidebar-open');
-        }
-        syncIcon();
-    }
-
-    function closeMobile() {
-        body.classList.remove('sidebar-open');
-        syncIcon();
-        syncLock();
-    }
-
-    if (btnSidebar) btnSidebar.addEventListener('click', () => { toggleSidebar(); syncLock(); });
-    if (btnMenuMobile) btnMenuMobile.addEventListener('click', () => { body.classList.add('sidebar-open'); syncIcon(); syncLock(); });
-    if (overlay) overlay.addEventListener('click', closeMobile);
-    document.querySelectorAll(navQuery).forEach((el) => el.addEventListener('click', closeMobile));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobile(); });
-    window.addEventListener('resize', () => {
-        if (isDesktop()) body.classList.remove('sidebar-open');
-        syncIcon();
-        syncLock();
-    });
-    try { if (isDesktop() && localStorage.getItem(collapsedKey) === '1') body.classList.add('sidebar-collapsed'); } catch (e) {}
-    syncIcon();
-    syncLock();
+function sidebar() {
+    return document.getElementById('appSidebar') || document.getElementById('adminSidebar');
 }
+
+function toggleButton() {
+    return document.getElementById('btnSidebar');
+}
+
+function menuButton() {
+    return document.getElementById('btnMenuMobile');
+}
+
+function isDesktop() {
+    return window.matchMedia(DESKTOP).matches;
+}
+
+function isDrawerOpen() {
+    return document.body.classList.contains('sidebar-open');
+}
+
+function isCollapsed() {
+    return document.body.classList.contains('sidebar-collapsed');
+}
+
+function refreshButton() {
+    const button = toggleButton();
+    const icon = button?.querySelector('#btnSidebarIcon');
+
+    if (!button || !icon) {
+        return;
+    }
+
+    if (isDesktop()) {
+        icon.textContent = isCollapsed() ? 'menu' : 'chevron_left';
+        button.setAttribute('aria-expanded', String(!isCollapsed()));
+        button.setAttribute('aria-label', isCollapsed() ? 'Buka sidebar' : 'Ciutkan sidebar');
+        return;
+    }
+
+    icon.textContent = isDrawerOpen() ? 'close' : 'menu';
+    button.setAttribute('aria-expanded', String(isDrawerOpen()));
+    button.setAttribute('aria-label', isDrawerOpen() ? 'Tutup sidebar' : 'Buka sidebar');
+}
+
+function setCollapsed(collapsed) {
+    if (!isDesktop()) {
+        return;
+    }
+
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+
+    try {
+        localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0');
+    } catch (error) {
+        void error;
+    }
+
+    refreshButton();
+}
+
+function setDrawer(open) {
+    document.body.classList.toggle('sidebar-open', open);
+    document.documentElement.classList.toggle('drawer-locked', open);
+    refreshButton();
+}
+
+document.addEventListener('click', (event) => {
+    if (event.target.closest('#btnSidebar')) {
+        if (isDesktop()) {
+            setCollapsed(!isCollapsed());
+        } else {
+            setDrawer(!isDrawerOpen());
+        }
+
+        return;
+    }
+
+    if (event.target.closest('#btnMenuMobile')) {
+        setDrawer(!isDrawerOpen());
+        return;
+    }
+
+    if (event.target.closest('#sidebarOverlay')) {
+        setDrawer(false);
+        return;
+    }
+
+    if (event.target.closest('.sidebar-nav-link') && !isDesktop()) {
+        setDrawer(false);
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isDrawerOpen()) {
+        setDrawer(false);
+    }
+});
+
+function restoreState() {
+    let collapsed = false;
+
+    try {
+        collapsed = localStorage.getItem(STORAGE_KEY) === '1';
+    } catch (error) {
+        void error;
+    }
+
+    document.body.classList.toggle('sidebar-collapsed', collapsed && isDesktop());
+    refreshButton();
+}
+
+function syncViewport() {
+    if (isDesktop()) {
+        document.body.classList.remove('sidebar-open');
+        document.documentElement.classList.remove('drawer-locked');
+    }
+
+    restoreState();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncViewport);
+} else {
+    syncViewport();
+}
+
+window.addEventListener('resize', syncViewport);

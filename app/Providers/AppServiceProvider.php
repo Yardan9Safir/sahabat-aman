@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('login', function (Request $request) {
-            return Limit::perMinute(5)->by(
+            return Limit::perHour(100)->by(
                 $request->input('email') . '|' . $request->ip()
             );
         });

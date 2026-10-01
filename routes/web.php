@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminQuoteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CurhatController;
+use App\Http\Controllers\LoginDisplayController;
+use App\Http\Controllers\QuoteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [CurhatController::class, 'landing'])->name('home');
+Route::get('/', [CurhatController::class, 'landing'])->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -22,22 +25,40 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/curhat', [CurhatController::class, 'createForm'])->name('curhat.create');
     Route::post('/curhat', [CurhatController::class, 'store'])->name('curhat.store');
-    Route::get('/riwayat', [CurhatController::class, 'history'])->name('riwayat');
-    Route::get('/riwayat/{curhat}', [CurhatController::class, 'detail'])->name('riwayat.show');
 
     Route::get('/dashboard', [CurhatController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard/{curhat}', [CurhatController::class, 'recipientDetail'])->name('dashboard.show');
     Route::post('/dashboard/curhat/{curhat}/balas', [CurhatController::class, 'reply'])->name('dashboard.reply');
     Route::post('/dashboard/curhat/{curhat}/tangani', [CurhatController::class, 'handle'])->name('dashboard.handle');
+    Route::delete('/curhat/{curhat}/destroy', [CurhatController::class, 'destroy'])->name('dashboard.destroy');
+
+    // Quotes — global, bisa diisi siswa, konselor sebaya, dan guru.
+    Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
+    Route::get('/quotes/data', [QuoteController::class, 'dataTable'])->name('quotes.data');
+    Route::get('/quotes/create', [QuoteController::class, 'create'])->name('quotes.create');
+    Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+    Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');
+    Route::put('/quotes/{quote}', [QuoteController::class, 'update'])->name('quotes.update');
+    Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy'])->name('quotes.destroy');
 
     Route::prefix('admin')->name('admin.')->middleware('guru')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::get('/curhat/{curhat}', [AdminController::class, 'show'])->name('show');
-        Route::get('/siswa', [AdminController::class, 'siswa'])->name('siswa');
-        Route::get('/siswa/{siswa}/edit', [AdminController::class, 'siswaEdit'])->name('siswa.edit');
-        Route::put('/siswa/{siswa}', [AdminController::class, 'siswaUpdate'])->name('siswa.update');
-        Route::delete('/siswa/{siswa}', [AdminController::class, 'siswaDestroy'])->name('siswa.destroy');
         Route::get('/akun', [AdminController::class, 'account'])->name('account');
         Route::put('/akun', [AdminController::class, 'accountUpdate'])->name('account.update');
+
+        // Hanya guru yang boleh mengatur tampilan halaman login.
+        Route::get('/tampilan-login', [LoginDisplayController::class, 'index'])->name('login-display.index');
+        Route::put('/tampilan-login', [LoginDisplayController::class, 'update'])->name('login-display.update');
+
+        // Quotes — CRUD khusus panel admin.
+        Route::get('/quotes', [AdminQuoteController::class, 'index'])->name('quotes.index');
+        Route::get('/quotes/data', [AdminQuoteController::class, 'dataTable'])->name('quotes.data');
+        Route::get('/quotes/create', [AdminQuoteController::class, 'create'])->name('quotes.create');
+        Route::post('/quotes', [AdminQuoteController::class, 'store'])->name('quotes.store');
+        Route::get('/quotes/{quote}/edit', [AdminQuoteController::class, 'edit'])->name('quotes.edit');
+        Route::put('/quotes/{quote}', [AdminQuoteController::class, 'update'])->name('quotes.update');
+        Route::delete('/quotes/{quote}', [AdminQuoteController::class, 'destroy'])->name('quotes.destroy');
+        Route::post('/quotes/{quote}/harian', [AdminQuoteController::class, 'setDaily'])->name('quotes.daily');
     });
 });

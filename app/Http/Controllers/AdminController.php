@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curhat;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,19 +11,38 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Curhat::query()->with(['siswa', 'penerima'])->where('tujuan', 'guru');
+        $kategori = in_array($request->query('kategori'), Curhat::KATEGORI, true)
+            ? $request->query('kategori')
+            : null;
 
-        if ($request->filled('kategori')) {
-            $query->where('kategori', $request->kategori);
-        }
+        $status = in_array($request->query('status'), Curhat::STATUS, true)
+            ? $request->query('status')
+            : null;
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $dasar = Curhat::query()->where('tujuan', 'guru');
 
-        $curhats = $query->latest()->get();
+        $totalMasuk = (clone $dasar)->where('status', 'terkirim')->count();
 
-        return view('admin.index', compact('curhats'));
+        $jumlahKategori = (clone $dasar)
+            ->status($status)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori');
+
+        $jumlahStatus = (clone $dasar)
+            ->kategori($kategori)
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $curhats = (clone $dasar)
+            ->kategori($kategori)
+            ->status($status)
+            ->with(['siswa', 'penerima', 'balasans'])
+            ->latest()
+            ->get();
+
+        return view('admin.index', compact('curhats', 'kategori', 'status', 'jumlahKategori', 'jumlahStatus', 'totalMasuk'));
     }
 
     public function show(Curhat $curhat)
@@ -33,59 +51,11 @@ class AdminController extends Controller
 
         $curhat->load(['siswa', 'penerima', 'balasans.pengirim']);
 
-        return view('admin.show', compact('curhat'));
-    }
-
-    public function siswa()
-    {
-        $siswas = User::where('role', 'siswa')
-            ->with(['curhats' => function ($q) {
-                $q->select('id', 'siswa_id', 'status', 'created_at')->orderBy('created_at', 'desc');
-            }])
-            ->orderBy('name')
-            ->get();
-
-        return view('admin.siswa', compact('siswas'));
-    }
-
-    public function siswaEdit(User $siswa)
-    {
-        abort_unless($siswa->role === 'siswa', 404);
-
-        return view('admin.siswa-edit', compact('siswa'));
-    }
-
-    public function siswaUpdate(Request $request, User $siswa)
-    {
-        abort_unless($siswa->role === 'siswa', 404);
-
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'identifier' => ['nullable', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $siswa->id],
-            'password' => ['nullable', 'string', 'min:8'],
-        ]);
-
-        $siswa->name = $validated['name'];
-        $siswa->identifier = $validated['identifier'] ?? null;
-        $siswa->email = $validated['email'];
-
-        if (!empty($validated['password'])) {
-            $siswa->password = Hash::make($validated['password']);
+        if ($curhat->penerima_id === Auth::id()) {
+            $curhat->setViewed();
         }
 
-        $siswa->save();
-
-        return redirect()->route('admin.siswa')->with('success', 'Data siswa berhasil diperbarui.');
-    }
-
-    public function siswaDestroy(User $siswa)
-    {
-        abort_unless($siswa->role === 'siswa', 404);
-
-        $siswa->delete();
-
-        return redirect()->route('admin.siswa')->with('success', 'Siswa berhasil dihapus.');
+        return view('admin.show', compact('curhat'));
     }
 
     public function account()
@@ -101,14 +71,14 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 

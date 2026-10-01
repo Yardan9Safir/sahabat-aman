@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('role')->default('siswa');
             $table->string('identifier')->nullable()->unique();
+            $table->string('kelas')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

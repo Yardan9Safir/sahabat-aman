@@ -9,6 +9,12 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public const ROLE_SISWA = 'siswa';
+
+    public const ROLE_GURU = 'guru';
+
+    public const ROLE_KONSELOR_SEBAYA = 'konselor sebaya';
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
@@ -18,6 +24,7 @@ class User extends Authenticatable
         'password',
         'role',
         'identifier',
+        'kelas',
     ];
 
     protected $hidden = [
@@ -41,5 +48,29 @@ class User extends Authenticatable
     public function balasans()
     {
         return $this->hasMany(Balasan::class, 'pengirim_id');
+    }
+
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class, 'id_pembuat');
+    }
+
+    public function roleLabel(): string
+    {
+        return match ($this->role) {
+            self::ROLE_GURU => 'Guru BK',
+            self::ROLE_KONSELOR_SEBAYA => 'Konselor Sebaya',
+            default => ucfirst($this->role),
+        };
+    }
+
+    public function isGuru(): bool
+    {
+        return $this->role === self::ROLE_GURU;
+    }
+
+    public function isKonselorSebaya(): bool
+    {
+        return $this->role === self::ROLE_KONSELOR_SEBAYA;
     }
 }

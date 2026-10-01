@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('curhat_id')->constrained('curhats')->cascadeOnDelete();
             $table->foreignId('pengirim_id')->constrained('users')->cascadeOnDelete();
-            $table->enum('pengirim_role', ['siswa', 'guru']);
+            $table->enum('pengirim_role', ['siswa', 'guru', 'konselor sebaya']);
             $table->text('isi');
             $table->timestamps();
         });
