@@ -17,7 +17,7 @@
                                 : $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak Diketahui') }}
                         </h2>
                         <span
-                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold"> Penerima : 
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold"> Penerima :
                             <span class="material-symbols-outlined text-xs"></span>
                             {{ $curhat->tujuanLabel }}
                         </span>
@@ -26,7 +26,7 @@
                         <span class="flex items-center gap-1 text-primary font-medium">
                             <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
                             {{ $curhat->status === 'terkirim' ? 'Menunggu Balasan' : ucfirst($curhat->status) }}
-                        </span> - 
+                        </span> -
                         <span>Topik: {{ ucfirst($curhat->kategori) }}</span>
                     </div>
                 </div>
@@ -48,19 +48,21 @@
                 <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
             </div>
 
-            {{-- Tandai Selesai Button --}}
+            {{-- Tandai Selesai / Hapus Permanen --}}
             <div>
-                @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
-                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
-                        data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
-                        data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
-                        data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai" data-swal-cancel-text="Batal">
-                        @csrf
-                        <button type="submit"
-                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold transition-colors">
-                            <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
-                        </button>
-                    </form>
+                @if ($curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
+                    @if ($curhat->status !== 'ditangani')
+                        <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
+                            data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
+                            data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
+                            data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai" data-swal-cancel-text="Batal">
+                            @csrf
+                            <button type="submit"
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold transition-colors">
+                                <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
+                            </button>
+                        </form>
+                    @endif
                 @endif
             </div>
 

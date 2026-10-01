@@ -100,7 +100,7 @@
         </section>
 
         <div class="flex flex-wrap items-center gap-3">
-            <a href="{{ route('quotes.index') }}"
+            <a href="{{ route('admin.index') }}"
                 class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">Kembali</a>
             <button type="submit"
                 class="px-7 py-3.5 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center gap-2">

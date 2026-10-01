@@ -2,34 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\QuoteDataTable;
+use App\Http\Controllers\Concerns\ManagesQuotes;
 use App\Models\Quote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class QuoteController extends Controller
 {
+    use ManagesQuotes;
+
     public function index(Request $request)
     {
-        $category = $request->string('category')->toString() ?: null;
-        $mine = $request->boolean('mine');
-
-        $quotes = Quote::query()
-            ->with('pembuat')
-            ->kategori($category)
-            ->when($mine, fn ($query) => $query->dibuatOleh($request->user()))
-            ->latest('id_quotes')
-            ->get();
-
         return view('quotes.index', [
-            'quotes' => $quotes,
-            'category' => $category,
-            'mine' => $mine,
+            'dataTable' => app(QuoteDataTable::class)->html(),
+            'category' => $request->string('category')->toString() ?: null,
+            'mine' => $request->boolean('mine'),
             'total' => Quote::count(),
             'counts' => Quote::query()
                 ->selectRaw('category_quotes, COUNT(*) as total')
                 ->groupBy('category_quotes')
                 ->pluck('total', 'category_quotes'),
         ]);
+    }
+
+    public function dataTable()
+    {
+        return app(QuoteDataTable::class)->make()->toJson();
     }
 
     public function create()
@@ -42,19 +40,7 @@ class QuoteController extends Controller
         $validated = $this->validateQuote($request);
         $isDaily = $request->user()->isGuru() && $request->boolean('is_daily');
 
-        DB::transaction(function () use ($validated, $request, $isDaily) {
-            if ($isDaily) {
-                Quote::query()->update(['is_daily' => false]);
-            }
-
-            Quote::create([
-                'id_pembuat' => $request->user()->id,
-                'judul_quotes' => $validated['judul_quotes'],
-                'category_quotes' => $validated['category_quotes'],
-                'isi_quotes' => $validated['isi_quotes'],
-                'is_daily' => $isDaily,
-            ]);
-        });
+        $this->createQuote($request, $validated, $isDaily);
 
         return redirect()->route('quotes.index')
             ->with('success', 'Quotes berhasil ditambahkan.');
@@ -74,18 +60,7 @@ class QuoteController extends Controller
         $validated = $this->validateQuote($request);
         $isDaily = $request->user()->isGuru() && $request->boolean('is_daily');
 
-        DB::transaction(function () use ($quote, $validated, $isDaily) {
-            if ($isDaily) {
-                Quote::where('id_quotes', '!=', $quote->id_quotes)->update(['is_daily' => false]);
-            }
-
-            $quote->update([
-                'judul_quotes' => $validated['judul_quotes'],
-                'category_quotes' => $validated['category_quotes'],
-                'isi_quotes' => $validated['isi_quotes'],
-                'is_daily' => $isDaily,
-            ]);
-        });
+        $this->updateQuote($quote, $validated, $isDaily);
 
         return redirect()->route('quotes.index')
             ->with('success', 'Quotes berhasil diperbarui.');
@@ -105,22 +80,9 @@ class QuoteController extends Controller
     {
         $this->authorize('setDaily', Quote::class);
 
-        DB::transaction(function () use ($quote) {
-            Quote::where('id_quotes', '!=', $quote->id_quotes)->update(['is_daily' => false]);
-            $quote->update(['is_daily' => true]);
-        });
+        $this->makeDaily($quote);
 
         return redirect()->route('quotes.index')
             ->with('success', 'Quotes terpilih sebagai kata-kata hari ini.');
-    }
-
-    protected function validateQuote(Request $request): array
-    {
-        return $request->validate([
-            'judul_quotes' => ['required', 'string', 'max:255'],
-            'category_quotes' => ['required', 'in:'.implode(',', Quote::CATEGORIES)],
-            'isi_quotes' => ['required', 'string', 'min:10', 'max:1000'],
-            'is_daily' => ['sometimes', 'boolean'],
-        ]);
     }
 }

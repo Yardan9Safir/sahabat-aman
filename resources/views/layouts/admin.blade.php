@@ -174,10 +174,10 @@
                         <span class="material-symbols-outlined shrink-0">dashboard</span>
                         <span class="sidebar-label truncate">Dashboard Admin</span>
                     </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('quotes.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
-                        href="{{ route('quotes.index') }}" title="Quotes & Kata-Kata">
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.quotes.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
+                        href="{{ route('admin.quotes.index') }}" title="Kelola Quotes">
                         <span class="material-symbols-outlined shrink-0">format_quote</span>
-                        <span class="sidebar-label truncate">Quotes & Kata-Kata</span>
+                        <span class="sidebar-label truncate">Kelola Quotes</span>
                     </a>
                     <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.login-display.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
                         href="{{ route('admin.login-display.index') }}" title="Tampilan Halaman Login">
@@ -218,31 +218,6 @@
     <div id="adminMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen lg:pl-72">
         <main class="sm:p-6 lg:p-8 min-h-screen bg-background pb-28 lg:pb-12">
             @yield('content')
-
-            {{-- Bottom nav HP dibenahi + tombol Menu (pengganti topbar) --}}
-            {{-- <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-outline-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
-                aria-label="Navigasi bawah admin">
-                <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
-                    <a href="{{ route('admin.index') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.index', 'admin.show') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
-                        <span
-                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
-                    </a>
-                    <a href="{{ route('admin.account') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/70 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container-high' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">settings</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Akun</span>
-                    </a>
-                    <button id="btnMenuMobile" type="button"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors text-on-surface-variant hover:bg-surface-container-high"
-                        aria-label="Buka menu sidebar">
-                        <span class="material-symbols-outlined text-[22px] leading-none">menu</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan Akun</span>
-                    </button>
-                </div>
-            </nav> --}}
-
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah">
                 <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
@@ -254,12 +229,12 @@
                     </a>
                     <a href="{{ route('admin.login-display.index') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.login-display.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
+                        <span class="material-symbols-outlined text-[22px] leading-none">tune</span>
                         <span
                             class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Setting Tampilan</span>
                     </a>
-                    <a href="{{ route('quotes.index') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <a href="{{ route('admin.quotes.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
                         <span
                             class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>

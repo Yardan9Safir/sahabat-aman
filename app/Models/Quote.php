@@ -13,19 +13,12 @@ class Quote extends Model
 
     public const CATEGORIES = ['motivasi', 'pribadi', 'sosial', 'belajar', 'karier'];
 
-    /**
-     * Maksimal quotes yang boleh guru tampilkan di halaman login.
-     */
     public const LOGIN_DISPLAY_LIMIT = 3;
 
     protected $table = 'quotes';
 
     protected $primaryKey = 'id_quotes';
 
-    /**
-     * `tampil_di_login` dan `urutan_login` sengaja tidakfillable karena
-     * hanya guru yang boleh mengaturnya lewat halaman Tampilan Login.
-     */
     protected $fillable = [
         'id_pembuat',
         'judul_quotes',
@@ -87,10 +80,6 @@ class Quote extends Model
         };
     }
 
-    /**
-     * Quotes untuk halaman login: pilihan guru (maksimal 3), atau quote
-     * kata-kata hari ini kalau guru belum memilih apa pun.
-     */
     public static function untukLogin(): Collection
     {
         if (! Setting::enabled(Setting::LOGIN_QUOTE_ENABLED)) {
@@ -106,9 +95,6 @@ class Quote extends Model
         return $terpilih->isNotEmpty() ? $terpilih : static::kataKataHariIni();
     }
 
-    /**
-     * Quotes untuk beranda: sama dengan pilihan guru, diabaikan switch login.
-     */
     public static function untukBeranda(): Collection
     {
         $terpilih = static::query()
@@ -139,9 +125,6 @@ class Quote extends Model
         return $this->pembuat?->roleLabel() ?? 'Guru BK';
     }
 
-    /**
-     * Keterangan singkat di bawah nama pembuat pada kartu quotes.
-     */
     public function displayAuthorContext(): string
     {
         $user = $this->pembuat;
@@ -161,9 +144,6 @@ class Quote extends Model
         return $user->kelas ? 'Siswa Kelas '.$user->kelas : 'Siswa';
     }
 
-    /**
-     * Ikon avatar di halaman login, mengikuti peran pembuatnya.
-     */
     public function displayAuthorIcon(): string
     {
         return match ($this->pembuat?->role) {

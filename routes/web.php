@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminQuoteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CurhatController;
 use App\Http\Controllers\LoginDisplayController;
@@ -29,11 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{curhat}', [CurhatController::class, 'recipientDetail'])->name('dashboard.show');
     Route::post('/dashboard/curhat/{curhat}/balas', [CurhatController::class, 'reply'])->name('dashboard.reply');
     Route::post('/dashboard/curhat/{curhat}/tangani', [CurhatController::class, 'handle'])->name('dashboard.handle');
-    Route::delete('/curhat/{curhat}/destroy', [App\Http\Controllers\CurhatController::class, 'destroy'])->name('dashboard.destroy');
-    
+    Route::delete('/curhat/{curhat}/destroy', [CurhatController::class, 'destroy'])->name('dashboard.destroy');
 
     // Quotes — global, bisa diisi siswa, konselor sebaya, dan guru.
     Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
+    Route::get('/quotes/data', [QuoteController::class, 'dataTable'])->name('quotes.data');
     Route::get('/quotes/create', [QuoteController::class, 'create'])->name('quotes.create');
     Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
     Route::get('/quotes/{quote}/edit', [QuoteController::class, 'edit'])->name('quotes.edit');
@@ -50,6 +51,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/tampilan-login', [LoginDisplayController::class, 'index'])->name('login-display.index');
         Route::put('/tampilan-login', [LoginDisplayController::class, 'update'])->name('login-display.update');
 
-        Route::post('/quotes/{quote}/harian', [QuoteController::class, 'setDaily'])->name('quotes.daily');
+        // Quotes — CRUD khusus panel admin.
+        Route::get('/quotes', [AdminQuoteController::class, 'index'])->name('quotes.index');
+        Route::get('/quotes/data', [AdminQuoteController::class, 'dataTable'])->name('quotes.data');
+        Route::get('/quotes/create', [AdminQuoteController::class, 'create'])->name('quotes.create');
+        Route::post('/quotes', [AdminQuoteController::class, 'store'])->name('quotes.store');
+        Route::get('/quotes/{quote}/edit', [AdminQuoteController::class, 'edit'])->name('quotes.edit');
+        Route::put('/quotes/{quote}', [AdminQuoteController::class, 'update'])->name('quotes.update');
+        Route::delete('/quotes/{quote}', [AdminQuoteController::class, 'destroy'])->name('quotes.destroy');
+        Route::post('/quotes/{quote}/harian', [AdminQuoteController::class, 'setDaily'])->name('quotes.daily');
     });
 });
