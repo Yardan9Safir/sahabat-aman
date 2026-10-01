@@ -232,15 +232,6 @@
                             @enderror
                         </div>
 
-                        <div class="flex items-center pt-1">
-                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                                <input type="checkbox" name="remember" value="1" id="remember"
-                                    class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/30 cursor-pointer transition-colors"
-                                    @checked(old('remember'))>
-                                <span class="text-sm text-on-surface-variant">Ingat akun saya di perangkat ini</span>
-                            </label>
-                        </div>
-
                         <div class="pt-2">
                             <button type="submit"
                                 class="w-full h-12 bg-gradient-to-r from-primary to-primary-container hover:from-primary/90 hover:to-primary text-on-primary text-sm font-semibold rounded-xl btn-sky-shadow flex items-center justify-center gap-2 active:scale-[.99] transition duration-150 cursor-pointer">
