@@ -33,7 +33,7 @@ class CurhatController extends Controller
 
         $validated = $request->validate([
             'penerima_id' => ['required', 'exists:users,id'],
-            'kategori' => ['required', 'in:pribadi,sosial,belajar,karier'],
+            'kategori' => ['required', 'in:'.implode(',', Curhat::KATEGORI)],
             'pesan' => ['required', 'string', 'min:10'],
         ]);
 
@@ -58,7 +58,7 @@ class CurhatController extends Controller
         return redirect()->route('dashboard')->with('success', 'Curhatmu terkirim.');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
 
@@ -66,28 +66,44 @@ class CurhatController extends Controller
             return redirect()->route('admin.index');
         }
 
-        $query = Curhat::query()
-            ->with('balasans')
+        $kategori = in_array($request->query('kategori'), Curhat::KATEGORI, true)
+            ? $request->query('kategori')
+            : null;
+
+        $status = in_array($request->query('status'), Curhat::STATUS, true)
+            ? $request->query('status')
+            : null;
+
+        $dasar = Curhat::query()
             ->where(function ($q) use ($user) {
                 $q->where('penerima_id', $user->id)
                     ->orWhere('siswa_id', $user->id);
             });
 
         if ($user->role === User::ROLE_SISWA) {
-            $query->where('status', '!=', 'ditangani');
+            $dasar->where('status', '!=', 'ditangani');
         }
 
-        if (request('kategori')) {
-            $query->where('kategori', request('kategori'));
-        }
+        $jumlahKategori = (clone $dasar)
+            ->status($status)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori');
 
-        if (request('status')) {
-            $query->where('status', request('status'));
-        }
+        $jumlahStatus = (clone $dasar)
+            ->kategori($kategori)
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
-        $curhats = $query->latest()->get();
+        $curhats = (clone $dasar)
+            ->kategori($kategori)
+            ->status($status)
+            ->with('balasans')
+            ->latest()
+            ->get();
 
-        return view('dashboard.index', compact('curhats'));
+        return view('dashboard.index', compact('curhats', 'kategori', 'status', 'jumlahKategori', 'jumlahStatus'));
     }
 
     public function recipientDetail(Curhat $curhat)
@@ -169,7 +185,7 @@ class CurhatController extends Controller
         );
 
         $curhat->update([
-            'status' => 'ditangani'
+            'status' => 'ditangani',
         ]);
 
         if ($request->expectsJson()) {
@@ -194,11 +210,14 @@ class CurhatController extends Controller
         );
 
         // Hapus juga semua balasannya agar tidak jadi data yatim (orphan data) di database
-        $curhat->balasans()->delete(); 
-        
+        $curhat->balasans()->delete();
+
         // Hapus curhat utama
         $curhat->delete();
 
-        return redirect()->back()->with('success', 'Riwayat curhat berhasil dihapus permanen.');
+        $target = $user->role === User::ROLE_GURU ? 'admin.index' : 'dashboard';
+
+        return redirect()->route($target)
+            ->with('success', 'Riwayat curhat berhasil dihapus permanen.');
     }
 }

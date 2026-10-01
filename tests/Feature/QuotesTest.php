@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\DataTables\QuoteDataTable;
 use App\Models\Quote;
 use App\Models\Setting;
 use App\Models\User;
@@ -224,14 +225,19 @@ class QuotesTest extends TestCase
             $this->actingAs($user)->get('/quotes')
                 ->assertOk()
                 ->assertSee('Quotes & Kata-Kata Hari Ini', false)
-                ->assertSee('Quote Motivasi')
-                ->assertSee('Quote Karier')
-                ->assertSee('Quote Siswa');
+                ->assertSee('quotes-table', false)
+                ->assertSee('data-datatable-config', false);
 
-            $this->actingAs($user)->get('/quotes?category=karier')
-                ->assertOk()
-                ->assertSee('Quote Karier')
-                ->assertDontSee('Quote Motivasi');
+            $this->assertSame(
+                ['Quote Siswa', 'Quote Karier', 'Quote Motivasi'],
+                $this->dataTableRows([], $user),
+                'Datatable harus menampilkan semua quotes, terbaru dulu.'
+            );
+
+            $this->assertSame(
+                ['Quote Karier'],
+                $this->dataTableRows(['category' => 'karier'], $user)
+            );
         }
     }
 
@@ -245,8 +251,177 @@ class QuotesTest extends TestCase
 
         $this->actingAs($siswa)->get('/quotes?mine=1')
             ->assertOk()
-            ->assertSee('Quote Milik Saya')
-            ->assertDontSee('Quote Orang Lain');
+            ->assertSee('data-datatable-config', false);
+
+        $this->assertSame(['Quote Milik Saya'], $this->dataTableRows(['mine' => 1], $siswa));
+    }
+
+    public function test_quotes_datatable_requires_authentication(): void
+    {
+        $this->getJson('/quotes/data')->assertUnauthorized();
+    }
+
+    public function test_quotes_datatable_searches_judul_and_isi(): void
+    {
+        $guru = $this->makeGuru();
+
+        $this->makeQuote($guru, [
+            'judul_quotes' => 'Santai dengan Pecahan',
+            'isi_quotes' => 'Isi pertama untuk pencarian.',
+        ]);
+        $this->makeQuote($guru, [
+            'judul_quotes' => 'Judul Lain',
+            'isi_quotes' => 'Isi kedua dengan kata unik zebra.',
+        ]);
+        $this->makeQuote($guru, [
+            'judul_quotes' => 'Judul Ketiga',
+            'isi_quotes' => 'Isi ketiga tanpa kata kunci.',
+        ]);
+
+        $this->assertSame(['Santai dengan Pecahan'], $this->dataTableRows(['search' => ['value' => 'pecahan']], $guru));
+        $this->assertSame(['Judul Lain'], $this->dataTableRows(['search' => ['value' => 'zebra']], $guru));
+        $this->assertSame([], $this->dataTableRows(['search' => ['value' => 'tidak-ada-ini']], $guru));
+    }
+
+    public function test_quotes_datatable_paginates_and_reports_counts(): void
+    {
+        $guru = $this->makeGuru();
+
+        foreach (range(1, 5) as $index) {
+            $this->makeQuote($guru, ['judul_quotes' => 'Quote '.$index]);
+        }
+
+        $params = $this->dataTableParams(['length' => 2, 'start' => 0]);
+        $response = $this->actingAs($guru)->getJson('/quotes/data?'.http_build_query($params));
+        $response->assertOk();
+
+        $this->assertSame(5, $response->json('recordsTotal'));
+        $this->assertSame(5, $response->json('recordsFiltered'));
+        $this->assertCount(2, $response->json('data'));
+        $this->assertSame('Quote 5', $response->json('data.0.judul_quotes'));
+
+        $params = $this->dataTableParams(['length' => 2, 'start' => 2]);
+        $second = $this->actingAs($guru)->getJson('/quotes/data?'.http_build_query($params));
+
+        $this->assertSame('Quote 3', $second->json('data.0.judul_quotes'));
+    }
+
+    public function test_quotes_datatable_sorts_by_column(): void
+    {
+        $guru = $this->makeGuru();
+
+        $this->makeQuote($guru, ['judul_quotes' => 'Charlie']);
+        $this->makeQuote($guru, ['judul_quotes' => 'Alpha']);
+        $this->makeQuote($guru, ['judul_quotes' => 'Bravo']);
+
+        $ascending = $this->dataTableRows(['order' => [['column' => 1, 'dir' => 'asc']]], $guru);
+        $this->assertSame(['Alpha', 'Bravo', 'Charlie'], $ascending);
+
+        $descending = $this->dataTableRows(['order' => [['column' => 1, 'dir' => 'desc']]], $guru);
+        $this->assertSame(['Charlie', 'Bravo', 'Alpha'], $descending);
+    }
+
+    public function test_quotes_datatable_filters_by_category(): void
+    {
+        $guru = $this->makeGuru();
+
+        $this->makeQuote($guru, ['judul_quotes' => 'Motivasi Satu', 'category_quotes' => 'motivasi']);
+        $this->makeQuote($guru, ['judul_quotes' => 'Belajar Satu', 'category_quotes' => 'belajar']);
+
+        $params = $this->dataTableParams(['category' => 'motivasi']);
+        $response = $this->actingAs($guru)->getJson('/quotes/data?'.http_build_query($params));
+        $response->assertOk();
+
+        $this->assertSame(2, $response->json('recordsTotal'));
+        $this->assertSame(1, $response->json('recordsFiltered'));
+
+        $this->assertSame(['Motivasi Satu'], $this->dataTableRows(['category' => 'motivasi'], $guru));
+        $this->assertSame(['Belajar Satu'], $this->dataTableRows(['category' => 'belajar'], $guru));
+        $this->assertSame([], $this->dataTableRows(['category' => 'karier'], $guru));
+    }
+
+    public function test_quotes_datatable_ignores_unknown_category(): void
+    {
+        $guru = $this->makeGuru();
+
+        $this->makeQuote($guru, ['judul_quotes' => 'Motivasi Satu', 'category_quotes' => 'motivasi']);
+
+        $this->assertSame(['Motivasi Satu'], $this->dataTableRows(['category' => 'tekad'], $guru));
+    }
+
+    public function test_quotes_datatable_combines_category_search_and_mine_filters(): void
+    {
+        $guru = $this->makeGuru();
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2023777']);
+
+        $this->makeQuote($guru, ['judul_quotes' => 'Guru Motivasi', 'category_quotes' => 'motivasi']);
+        $this->makeQuote($guru, ['judul_quotes' => 'Guru Belajar', 'category_quotes' => 'belajar']);
+        $this->makeQuote($siswa, ['judul_quotes' => 'Siswa Motivasi', 'category_quotes' => 'motivasi']);
+
+        $this->assertSame(
+            ['Guru Motivasi'],
+            $this->dataTableRows(['category' => 'motivasi', 'mine' => 1, 'search' => ['value' => 'Motivasi']], $guru)
+        );
+
+        $this->assertSame(
+            ['Siswa Motivasi'],
+            $this->dataTableRows(['mine' => 1], $siswa)
+        );
+    }
+
+    public function test_quotes_datatable_dibuat_maps_to_newest_first(): void
+    {
+        $guru = $this->makeGuru();
+
+        $lama = $this->makeQuote($guru, ['judul_quotes' => 'Lama']);
+        $baru = $this->makeQuote($guru, ['judul_quotes' => 'Baru']);
+
+        $lama->forceFill(['created_at' => now()->subDays(5)])->save();
+        $baru->forceFill(['created_at' => now()->subDay()])->save();
+
+        $rows = $this->dataTableRows(['order' => [['column' => 6, 'dir' => 'desc']]], $guru);
+
+        $this->assertSame(['Baru', 'Lama'], $rows);
+    }
+
+    public function test_quotes_datatable_exposes_action_buttons_by_role(): void
+    {
+        $guru = $this->makeGuru();
+        $siswa = User::factory()->create(['role' => 'siswa', 'identifier' => '2023777']);
+        $lain = User::factory()->create(['role' => 'siswa', 'identifier' => '2023666']);
+
+        $this->makeQuote($siswa, ['judul_quotes' => 'Milik Siswa']);
+
+        $cari = ['search' => ['value' => 'Milik Siswa']];
+
+        $guruActions = $this->dataTableAction($cari, $guru);
+        $this->assertStringContainsString('Jadikan Hari Ini', $guruActions);
+        $this->assertStringContainsString('Edit', $guruActions);
+        $this->assertStringContainsString('Hapus', $guruActions);
+
+        $siswaActions = $this->dataTableAction($cari, $siswa);
+        $this->assertStringNotContainsString('Jadikan Hari Ini', $siswaActions);
+        $this->assertStringContainsString('Edit', $siswaActions);
+        $this->assertStringContainsString('Hapus', $siswaActions);
+
+        $orangLainActions = $this->dataTableAction($cari, $lain);
+        $this->assertStringNotContainsString('Jadikan Hari Ini', $orangLainActions);
+        $this->assertStringNotContainsString('Edit', $orangLainActions);
+        $this->assertStringNotContainsString('Hapus', $orangLainActions);
+    }
+
+    public function test_quotes_datatable_escapes_quote_content(): void
+    {
+        $guru = $this->makeGuru();
+        $this->makeQuote($guru, [
+            'judul_quotes' => 'Judul <script>alert(1)</script>',
+            'isi_quotes' => 'Isi dengan <b>tag</b> berbahaya.',
+        ]);
+
+        $row = $this->dataTableRow([], $guru);
+
+        $this->assertStringNotContainsString('<script>', (string) $row['judul_quotes']);
+        $this->assertStringNotContainsString('<b>', (string) $row['isi_quotes']);
     }
 
     public function test_only_guru_can_manage_login_display(): void
@@ -336,6 +511,80 @@ class QuotesTest extends TestCase
         $this->get('/login')
             ->assertOk()
             ->assertDontSee('Quote yang harusnya disembunyikan.', false);
+    }
+
+    /**
+     * Parameter server-side yang benar-benar dikirim DataTables ke /quotes/data.
+     */
+    protected function dataTableParams(array $overrides = []): array
+    {
+        $columns = [];
+
+        foreach (app(QuoteDataTable::class)->columns() as $index => $column) {
+            $columns[$index] = [
+                'data' => $column->data,
+                'name' => $column->name,
+                'searchable' => $column->searchable ? 'true' : 'false',
+                'orderable' => $column->orderable ? 'true' : 'false',
+                'search' => ['value' => '', 'regex' => 'false'],
+            ];
+        }
+
+        return array_replace_recursive([
+            'draw' => 1,
+            'start' => 0,
+            'length' => 50,
+            'search' => ['value' => '', 'regex' => 'false'],
+            'columns' => $columns,
+            'order' => [['column' => 0, 'dir' => 'desc']],
+        ], $overrides);
+    }
+
+    /**
+     * Panggil endpoint DataTable dan kembalikan daftar judul yang dirender.
+     */
+    protected function dataTableRows(array $params = [], ?User $as = null): array
+    {
+        return collect($this->dataTableData($params, $as))
+            ->pluck('judul_quotes')
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Baris pertama yang dikembalikan endpoint DataTable.
+     */
+    protected function dataTableRow(array $params = [], ?User $as = null): array
+    {
+        $rows = $this->dataTableData($params, $as);
+
+        $this->assertNotEmpty($rows, 'Endpoint DataTable harus mengembalikan minimal satu baris.');
+
+        return $rows[0];
+    }
+
+    /**
+     * HTML kolom aksi pada baris pertama.
+     */
+    protected function dataTableAction(array $params = [], ?User $as = null): string
+    {
+        return (string) ($this->dataTableRow($params, $as)['action'] ?? '');
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    protected function dataTableData(array $params = [], ?User $as = null): array
+    {
+        $url = '/quotes/data?'.http_build_query($this->dataTableParams($params));
+
+        $response = $as
+            ? $this->actingAs($as)->getJson($url)
+            : $this->getJson($url);
+
+        $response->assertOk();
+
+        return $response->json('data') ?? [];
     }
 
     /**

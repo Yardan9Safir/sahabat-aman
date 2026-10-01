@@ -11,19 +11,38 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Curhat::query()->with(['siswa', 'penerima', 'balasans'])->where('tujuan', 'guru');
+        $kategori = in_array($request->query('kategori'), Curhat::KATEGORI, true)
+            ? $request->query('kategori')
+            : null;
 
-        if ($request->filled('kategori')) {
-            $query->where('kategori', $request->kategori);
-        }
+        $status = in_array($request->query('status'), Curhat::STATUS, true)
+            ? $request->query('status')
+            : null;
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $dasar = Curhat::query()->where('tujuan', 'guru');
 
-        $curhats = $query->latest()->get();
+        $totalMasuk = (clone $dasar)->where('status', 'terkirim')->count();
 
-        return view('admin.index', compact('curhats'));
+        $jumlahKategori = (clone $dasar)
+            ->status($status)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori');
+
+        $jumlahStatus = (clone $dasar)
+            ->kategori($kategori)
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $curhats = (clone $dasar)
+            ->kategori($kategori)
+            ->status($status)
+            ->with(['siswa', 'penerima', 'balasans'])
+            ->latest()
+            ->get();
+
+        return view('admin.index', compact('curhats', 'kategori', 'status', 'jumlahKategori', 'jumlahStatus', 'totalMasuk'));
     }
 
     public function show(Curhat $curhat)

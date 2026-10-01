@@ -60,3 +60,69 @@
     --color-outline: #76776f;
     --color-outline-variant: #c6c7bf;
 }
+
+/* DataTables -> Material Design 3 tokens */
+.dt-quotes {
+    @apply w-full text-sm text-on-surface;
+    border-collapse: collapse;
+}
+
+.dt-quotes thead th {
+    @apply bg-surface-container text-sm font-bold text-on-surface text-left;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--color-outline-variant);
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.dt-quotes thead th.dt-actions,
+.dt-quotes tbody td.dt-actions {
+    @apply text-right;
+}
+
+.dt-quotes tbody td {
+    @apply text-sm text-on-surface;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-outline-variant) 45%, transparent);
+    vertical-align: middle;
+}
+
+.dt-quotes tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.dt-quotes tbody tr:hover {
+    background-color: var(--color-surface-container-low);
+}
+
+.dt-quotes .dt-actions form {
+    display: inline;
+}
+
+.dt-footer {
+    @apply text-sm text-on-surface-variant;
+}
+
+.dataTables_wrapper .dt-search input {
+    @apply bg-surface-container-lowest text-sm text-on-surface;
+    border: 1.5px solid var(--color-outline-variant);
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    min-width: 16rem;
+    outline: none;
+    transition: border-color 150ms, box-shadow 150ms;
+}
+
+.dataTables_wrapper .dt-search input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.dataTables_wrapper .dt-paging button.current {
+    @apply bg-primary text-on-primary;
+}
+
+.dataTables_wrapper .dt-paging button {
+    @apply rounded-lg text-sm;
+}
+

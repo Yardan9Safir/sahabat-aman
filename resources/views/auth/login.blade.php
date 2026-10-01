@@ -88,18 +88,12 @@
                     <div class="relative z-10 my-8 md:my-10 max-w-[480px] w-full" id="quoteCarousel">
                         <div
                             class="bg-surface-container-lowest/95 rounded-2xl p-6 md:p-8 soft-shadow-ambient border border-outline-variant/60 relative backdrop-blur-md transition-all duration-300 min-h-[300px] flex flex-col justify-between">
-                            <div
-                                class="absolute -top-5 left-6 w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 flex items-center justify-center text-amber-950 shadow-md shadow-amber-400/25 ring-4 ring-surface-container-lowest">
-                                <span class="material-symbols-outlined text-2xl"
-                                    style="font-variation-settings: 'FILL' 1;">format_quote</span>
-                            </div>
 
                             @foreach ($loginQuotes as $index => $quote)
                                 <div data-quote-slide="{{ $index }}"
                                     class="pt-2 {{ $index === 0 ? 'block' : 'hidden' }}">
                                     <div
                                         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/70 border border-amber-200/60 text-amber-900 text-xs font-medium mb-4">
-                                        <span class="material-symbols-outlined text-base text-amber-700">{{ $quote->category_icon }}</span>
                                         <span>{{ $quote->category_label }}</span>
                                     </div>
                                     <blockquote

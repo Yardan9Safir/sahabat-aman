@@ -69,26 +69,7 @@
                 <span class="text-lg font-bold text-primary tracking-tight">Sahabat Aman</span>
             </a>
 
-            <nav class="hidden md:flex items-center gap-8">
-                <a class="text-lg font-bold text-primary border-b-2 border-primary pb-1" href="#beranda">Beranda</a>
-                <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
-                    href="#quotes">Quotes Hari Ini</a>
-                <a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
-                    href="#kerahasiaan">Kerahasiaan</a>
-            </nav>
-
             <div class="flex items-center gap-3">
-                @auth
-                    <a href="{{ route('profile') }}"
-                        class="text-sm text-primary hover:bg-surface-container-high px-4 py-2.5 rounded-xl transition-colors duration-150 active:scale-95">
-                        {{ auth()->user()->name }}
-                    </a>
-                @else
-                    <a href="{{ route('login') }}"
-                        class="text-sm text-primary hover:bg-surface-container-high px-4 py-2.5 rounded-xl transition-colors duration-150 active:scale-95">
-                        Masuk
-                    </a>
-                @endauth
                 <a href="{{ $primaryAction }}"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary text-sm shadow-sm transition-all duration-150 active:scale-95">
                     <span class="material-symbols-outlined text-lg">edit_note</span>
@@ -171,7 +152,7 @@
                 </div>
 
                 @if ($quotes->isNotEmpty())
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-6 lg:gap-8">
                         @foreach ($quotes as $index => $quote)
                             @php $warna = $accent[$index % count($accent)]; @endphp
                             <article
@@ -180,10 +161,6 @@
 
                                 <div>
                                     <div class="flex items-center justify-between mb-5 gap-3">
-                                        <span
-                                            class="w-10 h-10 rounded-xl {{ $warna['tile'] }} flex items-center justify-center shrink-0">
-                                            <span class="material-symbols-outlined text-2xl">format_quote</span>
-                                        </span>
                                         <span
                                             class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-medium truncate">
                                             {{ $quote->displayAuthorContext() }}
@@ -251,29 +228,6 @@
                                 sebaya tidak akan membagikan ceritamu ke pihak lain tanpa persetujuanmu. Ruang ini adalah
                                 rumah amanmu.
                             </p>
-                        </div>
-
-                        <div
-                            class="lg:col-span-4 bg-surface-container p-6 rounded-2xl border border-outline-variant/30 flex flex-col gap-3">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="w-10 h-10 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0">
-                                    <span class="material-symbols-outlined text-xl">support_agent</span>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-bold text-on-surface">Hotline Siaga BK</h4>
-                                    <p class="text-xs text-on-surface-variant">Bantuan mendesak siswa sekolah</p>
-                                </div>
-                            </div>
-                            <p class="text-sm text-on-surface-variant">
-                                Butuh bantuan segera di lingkungan sekolah? Hubungi saluran darurat Guru BK atau
-                                kunjungi langsung Ruang BK di jam sekolah.
-                            </p>
-                            <a href="{{ $hotline ? 'tel:'.$hotline : route('login') }}"
-                                class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-on-primary text-sm font-semibold hover:bg-primary-container transition-colors">
-                                <span class="material-symbols-outlined text-lg">phone_in_talk</span>
-                                <span>{{ $hotline ? 'Hubungi Hotline BK' : 'Masuk untuk Konseling' }}</span>
-                            </a>
                         </div>
                     </div>
                 </div>

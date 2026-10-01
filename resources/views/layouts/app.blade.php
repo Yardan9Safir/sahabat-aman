@@ -233,8 +233,8 @@
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah">
                 @php $isSiswa = Auth::user()->role === 'siswa'; @endphp
-                @php $isAdmin = Auth::user()->role === 'guru'; @endphp
-                <div class="grid grid-cols-{{ $isSiswa ? '4' : '3' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                @php $isKonselor = Auth::user()->role === 'konselor sebaya'; @endphp
+                <div class="grid grid-cols-{{ $isSiswa ? '4' : '4' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
                     @if ($isSiswa)
                         <a href="{{ route('curhat.create') }}"
                             class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
@@ -244,11 +244,19 @@
                         </a>
                     @endif
                     <a href="{{ route('dashboard') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard', 'dashboard.show', 'dashboard.reply', 'dashboard.handle') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard', 'dashboard.reply') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
 
                         <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
                         <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>
                     </a>
+                    @if ($isKonselor)
+                    <a href="{{ route('dashboard') }}"
+                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard.show') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                            <span class="material-symbols-outlined text-[22px] leading-none">priority_high</span>
+                            <span
+                                class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Handle Curhat</span>
+                        </a>
+                    @endif
                     <a href="{{ route('quotes.index') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
