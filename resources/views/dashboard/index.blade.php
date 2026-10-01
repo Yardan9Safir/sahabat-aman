@@ -138,19 +138,22 @@
                                     {{ Str::limit($curhat->pesan, 160) }}
                                 </p>
                             </div>
-                            <form method="POST" action="{{ route('dashboard.destroy', $curhat) }}"
-                                data-swal-confirm="Hapus permanen riwayat ini?"
-                                data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."
-                                data-swal-icon="warning" data-swal-confirm-text="Ya, Hapus" data-swal-cancel-text="Batal"
-                                class="shrink-0">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="flex items-center justify-center bg-error-container text-on-error-container hover:bg-error hover:text-on-error w-9 h-9 rounded-xl transition-colors shadow-xs"
-                                    title="Hapus Permanen">
-                                    <span class="material-symbols-outlined text-base">delete</span>
-                                </button>
-                            </form>
+                            @php $isKonselor = Auth::user()->role === 'konselor sebaya'; @endphp
+                            @if ($isKonselor)
+                                <form method="POST" action="{{ route('dashboard.destroy', $curhat) }}"
+                                    data-swal-confirm="Hapus permanen riwayat ini?"
+                                    data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."
+                                    data-swal-icon="warning" data-swal-confirm-text="Ya, Hapus"
+                                    data-swal-cancel-text="Batal" class="shrink-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="flex items-center justify-center bg-error-container text-on-error-container hover:bg-error hover:text-on-error w-9 h-9 rounded-xl transition-colors shadow-xs"
+                                        title="Hapus Permanen">
+                                        <span class="material-symbols-outlined text-base">delete</span>
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </a>
                 @empty
