@@ -1,153 +1,85 @@
 # Sahabat Aman
 
-Sahabat Aman adalah aplikasi web berbasis Laravel untuk sistem curhat digital yang memungkinkan siswa mengirimkan cerita/keluhan kepada **guru** atau **siswa lain** dengan pendekatan yang aman, nyaman, dan terarah. Siswa berperan sebagai pengguna, sedangkan guru berperan sebagai admin yang mengelola data siswa dan data curhat.
+Aplikasi web layanan bimbingan & konseling sekolah (curhat digital) yang aman dan bebas stigma. Siswa dapat mengirim cerita kepada **guru**, **konselor sebaya**, atau **siswa lain**, sementara guru berfungsi sebagai admin yang mengelola data siswa dan data curhat.
 
-## 1. Ringkasan Proyek
+---
 
-- Nama aplikasi: Sahabat Aman
-- Platform: Web App
-- Stack utama: Laravel + MySQL + Vite
-- Bahasa: PHP, Blade, JavaScript
-- Target pengguna: Siswa dan Guru
+## 1. Teknologi yang Digunakan
 
-## 2. Stack Teknologi
+| Lapisan | Teknologi |
+| --- | --- |
+| Backend | PHP 8.2, Laravel 12 |
+| Database | MySQL 8.0 |
+| Autentikasi | Laravel Auth native (session, driver `database`) |
+| View | Blade Template |
+| Frontend | Vite 7, Tailwind CSS 4, JavaScript |
+| Library Pendukung | Yajra DataTables (server-side), SweetAlert2, DataTables.net |
+| Testing | PHPUnit 11 |
+| Deployment | Railway |
+| Server Web | Apache / Nginx / `php artisan serve` |
 
-- PHP: 8.2
-- Laravel: 12
-- Database: MySQL
-- Server web: Laravel built-in server / Apache / Nginx
-- Frontend asset: Vite + Tailwind CSS
-- Session/Auth: Laravel Auth native
+### Konfigurasi bawaan project
 
-### Konfigurasi default yang dipakai project
+- `DB_CONNECTION` = `mysql`, port `3306`
+- `SESSION_DRIVER` = `database`
+- `CACHE_STORE` = `database`
+- `QUEUE_CONNECTION` = `database`
+- Rate limit: login 100x/jam per email+IP, register 3x/menit per IP
+- Auto logout setelah idle
 
-- DB connection: MySQL
-- Port default MySQL: 3306
-- Session driver: database
-- Queue: database
-- Cache: database
+### Fitur utama
 
-## 3. Login Pakai Apa?
+- **Siswa** — register/login, kirim curhat (pilih penerima & kategori), riwayat curhat, inbox & balas pesan.
+- **Guru** — Panel Admin dengan DataTables: monitoring seluruh curhat (pengirim, penerima, kategori, status, waktu) **tanpa isi pesan**, plus filter kategori & status.
+- **Konselor Sebaya** — menerima dan membalas curhat yang ditujukan kepadanya.
 
-Sistem login pada aplikasi memakai autentikasi Laravel standard dengan:
+Status curhat: `terkirim` → `dilihat` → `dibalas` → `ditangani`.
 
-- Email
-- Password
+---
 
-Proses login ada di route `/login` dan menggunakan `AuthController` dengan validasi:
+## 2. Cara Instalasi
 
-- `email` wajib diisi dan valid format email
-- `password` wajib diisi
-
-Untuk testing, tester dapat menggunakan data dummy berikut (disiapkan via seeder):
-
-- `Siswa:`
-  Adit
-  email: `adit@gmail.com`
-  password: `password`
-
-  Udin
-  email: `udin@gmail.com`
-  password: `password`
-
-- `Guru:`
-  email: `guru@gmail.com`
-  password: `password`
-
-> Catatan: akun-akun ini dibuat melalui `DatabaseSeeder` (lihat bagian seeder di bawah).
-
-Setelah login:
-
-- `siswa` diarahkan ke halaman `/curhat` (menu: Curhat, Riwayat, Inbox)
-- `guru` diarahkan ke `/dashboard` dan otomatis dibawa ke Panel Admin (`/admin`)
-
-### Data yang dibutuhkan saat register
-
-- `name`
-- `email`
-- `identifier` (contoh: NIS atau ID unik)
-- `password`
-- `role`
-
-## 4. Fitur Utama
-
-### Siswa (user)
-
-- Login dan register akun
-- Mengirim curhat
-- Pilihan tujuan curhat: **guru** atau **siswa lain** (penerima dipilih dari daftar user terdaftar)
-- Pilihan kategori: pribadi, sosial, belajar, karier
-- Riwayat curhat per siswa (dengan nama penerima yang dipilih)
-- **Inbox**: menerima curhat yang ditujukan ke dirinya dari siswa lain, serta membalas curhat yang masuk
-
-### Guru (admin) — Panel Admin dengan sidebar
-
-- **Data Curhat** (`/admin`): melihat seluruh curhat di semua siswa. Kolom yang ditampilkan: **pengirim, penerima, kategori, status, waktu**. Isi pesan **tidak** ditampilkan demi kerahasiaan.
-- **Detail Curhat** (`/admin/curhat/{id}`): hanya menampilkan pengirim, penerima, kategori, status, dan waktu. **Isi pesan dan balasan tidak ditampilkan.**
-- Filter curhat berdasarkan kategori dan status.
-
-Status curhat: `terkirim`, `dilihat`, `dibalas`, `ditangani`.
-
-## 5. Persyaratan Sistem
-
-Sebelum install, pastikan perangkat sudah memiliki:
+### Persyaratan
 
 - PHP 8.2+
-- Composer
+- Composer 2
 - Node.js 18+
-- MySQL 8.0 (direkomendasikan) atau 5.7+
+- MySQL 8.0
 - Git
-- Browser modern
 
-## 6. Cara Instalasi Lokal
-
-### Kalau Sudah Pernah Instalasi Lokal Ikutin Cara Ini : 
-untuk mengambil sc yang sudah dipush dari branch yg diingnikan 
-```bash
-git pull
-```
-untuk refresh migration dan mengisi data dengan data baru
-```bash
-php artisan migrate:fresh --seed
-```
-
-### Kalau Belum Pernah Instalasi Lokal Ikutin Cara Ini : 
-### 6.a.1 Clone project
+### 2.1 Clone repository
 
 ```bash
 git clone <url-repository>
-cd sahabat-aman
+cd Sahabat-Aman
 ```
 
-### 6.a.2 Install dependency PHP
+### 2.2 Install dependency
 
 ```bash
 composer install
-```
-
-### 6.a.3 Install dependency frontend
-
-```bash
 npm install
 ```
 
-### 6.a.4 Siapkan file environment
-
-Salin file `.env.example` menjadi `.env`:
+### 2.3 Siapkan file environment
 
 ```bash
+# Windows
 copy .env.example .env
-```
 
-Jika Linux/macOS:
-
-```bash
+# Linux / macOS
 cp .env.example .env
 ```
 
-### 6.a.5 Konfigurasi database MySQL
+### 2.4 Konfigurasi database
 
-Edit file `.env` dan atur konfigurasi database seperti berikut:
+Buat database di MySQL:
+
+```sql
+CREATE DATABASE db_sahabat_aman;
+```
+
+Lalu atur `.env`:
 
 ```env
 DB_CONNECTION=mysql
@@ -158,66 +90,104 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Pastikan database sudah dibuat di MySQL:
-
-```sql
-CREATE DATABASE db_sahabat_aman;
-```
-
-### 6.a.6 Generate key aplikasi
+Generate key aplikasi:
 
 ```bash
 php artisan key:generate
 ```
 
-### 6.a.7 Jalankan migrasi database
-
-```bash
-php artisan migrate
-```
-
-Jika ingin langsung membuat struktur tabel dan data awal, bisa jalankan:
+Jalankan migrasi + seeder:
 
 ```bash
 php artisan migrate --seed
 ```
 
-Seeder (`DatabaseSeeder`) membuat:
+Seeder membuat akun demo:
 
-- `Udin` (siswa) — `udin@gmail.com` / `password`
-- `Adit` (siswa) — `adit@gmail.com` / `password`
-- `Guru Demo` (guru) — `guru@gmail.com` / `password`
+| Nama | Email | Password | Role |
+| --- | --- | --- | --- |
+| Udin | `udin@gmail.com` | `password` | siswa |
+| Adit | `adit@gmail.com` | `password` | siswa |
+| Guru BK | `guru@gmail.com` | `password` | guru |
+| Konselor Sebaya A | `konselorA@gmail.com` | `password` | konselor sebaya |
+| Konselor Sebaya B | `konselorB@gmail.com` | `password` | konselor sebaya |
 
-### Kalau SUDAH Pernah Instalasi Lokal Ikutin Cara Ini : 
-### 6.b.1 Install Ulang migrasi database
+### 2.5 Kalau sudah pernah instalasi
+
+Ambil perubahan terbaru dari remote:
 
 ```bash
-php artisan migrate:fresh
+git pull
 ```
 
-### 6.b.2 Isi Data Menggunakan Seeder 
+Reset database beserta data demo:
 
 ```bash
-php artisan db:seed
+php artisan migrate:fresh --seed
 ```
 
-## 7. Menjalankan Aplikasi
+---
+
+## 3. Pembuatan Branch & Konvensi Commit
+
+### Alur kerja
+
+```bash
+# Ambil perubahan terbaru
+git pull
+
+# Buat branch baru dari branch terbaru
+git checkout -b feat/nama-fitur
+
+# Kerjakan perubahan, lalu commit
+git add .
+git commit -m "feat: tambah login multi-role"
+
+# Push branch
+git push -u origin feat/nama-fitur
+```
+
+Setelah branch selesai dan dicek, buat **Pull Request** ke branch utama untuk di-review.
+
+Format nama branch: `<tipe>/<deskripsi-kecil>` dengan huruf kecil dan pemisah `-`, contoh `feat/login-multi-role`, `fix/hapus-tidak-sejajar`, `chore/update-composer`.
+
+### Tipe commit
+
+| Tipe | Dipakai untuk | Contoh |
+| --- | --- | --- |
+| `feat` | Nambah fitur baru | `feat: tambah login multi-role` |
+| `fix` | Perbaikan bug | `fix: tombol hapus tidak sejajar dengan teks` |
+| `refactor` | Rapihin/ubah struktur kode tanpa ubah fungsi | `refactor: pisah controller per role` |
+| `style` | Perubahan tampilan/format kode (bukan logic) | `style: rapihin indentasi blade` |
+| `docs` | Perubahan dokumentasi | `docs: update cara deploy ke VPS` |
+| `chore` | Kerjaan beres-beres, config, dependency | `chore: update composer.json` |
+| `test` | Nambah/ubah testing | `test: tambah test untuk curhat controller` |
+| `perf` | Optimasi performa | `perf: tambah index tabel curhats` |
+| `build` | Perubahan build tools/CI | `build: setup github actions` |
+| `revert` | Membatalkan commit sebelumnya | `revert: revert fitur kotak masuk teman` |
+
+Format commit message: `<tipe>: <deskripsi singkat>` (huruf kecil, tanpa titik di akhir).
+
+---
+
+## 4. Cara Menjalankan Program
 
 ### Mode development
 
-Jalankan server Laravel:
+Jalankan Laravel, queue, log, dan Vite sekaligus:
 
 ```bash
-php artisan serve
+composer run dev
 ```
 
-Lalu jalankan Vite untuk frontend:
+Jika ingin manual, jalankan terpisah di terminal berbeda:
 
 ```bash
-npm run dev
+php artisan serve      # server Laravel
+npm run dev            # Vite (hot reload)
 ```
 
-Akses aplikasi di:
+Akses di:
 
 ```text
 http://127.0.0.1:8000/
@@ -231,57 +201,15 @@ php artisan optimize
 php artisan serve
 ```
 
-## 8. Cara Pakai Aplikasi
-
-### Login
-
-1. Buka halaman `/login`
-2. Masukkan email dan password
-3. Sistem akan redirect sesuai role
-
-### Untuk siswa
-
-- Klik menu `Curhat`
-- Pilih tujuan curhat (guru atau siswa lain), lalu pilih penerima dari daftar
-- Pilih kategori masalah
-- Tulis pesan
-- Kirim curhat
-- Cek curhat yang masuk ke dirinya di menu `Pesan` dan balas bila perlu
-
-### Untuk guru
-
-- Login dengan akun role guru
-- Akan diarahkan ke Panel Admin (sidebar)
-- Menu **Data Curhat**: lihat seluruh curhat (pengirim, penerima, kategori, status, waktu) tanpa isi pesan, dan filter berdasarkan kategori/status
-
-## 9. Troubleshooting
-
-### Error database connection
-
-Pastikan:
-
-- MySQL aktif
-- DB sudah dibuat
-- `.env` sudah benar
-- user MySQL punya akses ke database tersebut
-
-### Error `Class "Illuminate\..." not found`
-
-Jalankan:
+### Menjalankan test
 
 ```bash
-composer dump-autoload
+composer test
 ```
 
-### Error saat menjalankan Vite
+### Troubleshooting
 
-```bash
-npm install
-npm run dev
-```
-
-### Error key application
-
-```bash
-php artisan key:generate
-```
+- **Error koneksi database** — pastikan MySQL aktif, database sudah dibuat, dan kredensial `.env` benar.
+- **`Class "Illuminate\..." not found`** — jalankan `composer dump-autoload`.
+- **CSS/JS tidak termuat** — jalankan `npm install` lalu `npm run dev` (dev) atau `npm run build` (production).
+- **Error application key** — jalankan `php artisan key:generate`.
