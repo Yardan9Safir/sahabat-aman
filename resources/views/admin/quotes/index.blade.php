@@ -12,13 +12,11 @@
             <h1 class="text-headline-lg font-bold text-on-surface">Kelola Quotes</h1>
             <p class="text-body-md text-on-surface-variant mt-1">
                 Tambah, ubah, dan hapus quotes dari siswa, konselor sebaya, maupun guru.
-                Penempatan di halaman login diatur terpisah di menu
-                <a href="{{ route('admin.login-display.index') }}" class="font-semibold text-primary hover:underline">Tampilan Login</a>.
             </p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
             <a href="{{ route('admin.quotes.create') }}"
-                class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-primary text-on-primary text-label-lg font-semibold shadow-md hover:bg-primary-container hover:text-on-primary-container hover:-translate-y-0.5 transition-all">
+                class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary text-label-lg font-semibold shadow-md hover:bg-primary-container hover:text-on-primary-container hover:-translate-y-0.5 transition-all">
                 <span class="material-symbols-outlined text-lg">add_notes</span>
                 Tambah Quotes
             </a>
@@ -28,6 +26,7 @@
     {{-- Filter kategori --}}
     <section class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/60 soft-shadow">
         <div class="flex flex-wrap items-center gap-1.5 p-1">
+            Kategori Quotes :
             <a href="{{ route('admin.quotes.index') }}"
                 class="px-3 py-1.5 rounded-lg text-label-md {{ !$category ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                 Semua ({{ $total }})

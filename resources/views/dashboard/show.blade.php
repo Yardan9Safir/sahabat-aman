@@ -3,7 +3,7 @@
 @section('title', 'Dialog Curhat - Sahabat Aman')
 
 @section('content')
-    <div class="flex flex-col gap-6 max-w-4xl mx-auto">
+    <div class="flex flex-col gap-2 max-w-4xl mx-auto">
 
         {{-- Tampilan Header Percakapan --}}
         <div
@@ -11,23 +11,21 @@
             <div class="flex items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2">
-                        <h2 class="text-title-md font-bold text-on-surface">
-                            {{ $curhat->siswa_id === auth()->id()
-                                ? $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa')
-                                : $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak Diketahui') }}
-                        </h2>
-                        <span
-                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold"> Penerima :
-                            <span class="material-symbols-outlined text-xs"></span>
-                            {{ $curhat->tujuanLabel }}
-                        </span>
+                        <div class="flex flex-col items-start">
+                            <div class="flex flex-col items-start gap-1.5">
+                                <h2 class="text-title-md font-bold text-on-surface">
+                                    <span class="text-on-secondary-container font-bold text-md">Dari: {{ $curhat->nama_pengirim }}</span>
+                                </h2>
+                                <span
+                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold">
+                                    <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                                    Kepada: {{ $curhat->tujuanLabel }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 text-label-sm text-outline mt-0.5">
-                        <span class="flex items-center gap-1 text-primary font-medium">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            {{ $curhat->status === 'terkirim' ? 'Menunggu Balasan' : ucfirst($curhat->status) }}
-                        </span> -
-                        <span>Topik: {{ ucfirst($curhat->kategori) }}</span>
+                    <div class="flex items-center gap-2 text-label-sm text-primary mt-0.5">
+                        <span>Curhat Tentang : {{ ucfirst($curhat->kategori) }}</span>
                     </div>
                 </div>
             </div>
@@ -55,7 +53,8 @@
                         <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
                             data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
                             data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
-                            data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai" data-swal-cancel-text="Batal">
+                            data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai"
+                            data-swal-cancel-text="Batal">
                             @csrf
                             <button type="submit"
                                 class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold transition-colors">

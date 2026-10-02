@@ -3,7 +3,7 @@
 @section('title', 'Dialog Curhat - Sahabat Aman')
 
 @section('content')
-    <div class="flex flex-col max-w-4xl mx-auto">
+    <div class="flex flex-col gap-2 max-w-4xl mx-auto">
 
         {{-- Tampilan Header Percakapan --}}
         <div
@@ -11,25 +11,16 @@
             <div class="flex items-center gap-4">
                 <div>
                     <div class="flex items-center gap-2">
-                        <h2 class="text-title-md font-bold text-on-surface"> Nama Pengirim : 
+                        <h2 class="text-title-md font-bold text-on-surface">Pengirim :
                             {{ $curhat->siswa_id === auth()->id()
                                 ? $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui')
                                 : $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}
                         </h2>
-                        <span
-                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold">
-                            Penerima : 
-                            <span class="material-symbols-outlined text-xs">{{ $curhat->tujuanIcon }}</span>
-                            {{ $curhat->tujuanLabel }}
-                        </span>
                     </div>
                     <div class="flex items-center gap-2 text-label-sm text-outline mt-0.5">
                         <span class="flex items-center gap-1 text-primary font-medium">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            {{ $curhat->status === 'terkirim' ? 'Menunggu Balasan' : ucfirst($curhat->status) }}
+                            Curhat Tentang : {{ ($curhat->kategori) }}
                         </span>
-                        <span>&bull;</span>
-                        <span>Topik: {{ ucfirst($curhat->kategori) }}</span>
                     </div>
                 </div>
             </div>
