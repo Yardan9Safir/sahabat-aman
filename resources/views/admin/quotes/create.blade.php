@@ -6,7 +6,7 @@
 <div class="max-w-2xl mx-auto space-y-6">
     <div>
         <h1 class="text-headline-lg font-bold text-on-surface">Tambah Quotes</h1>
-        <p class="text-body-md text-on-surface-variant mt-1">Buat kata-kata bijak untuk koleksi bersama. Penempatan di halaman login diatur terpisah di menu Tampilan Login.</p>
+        <p class="text-body-md text-on-surface-variant mt-1">Buat kata-kata bijak untuk koleksi bersama.</p>
     </div>
 
     @include('quotes._form', [

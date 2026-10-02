@@ -15,7 +15,6 @@
         <h1 class="text-headline-lg font-bold text-on-surface">Tampilan Halaman Login</h1>
         <p class="text-body-md text-on-surface-variant mt-1">
             Pilih maksimal {{ \App\Models\Quote::LOGIN_DISPLAY_LIMIT }} quotes yang diputar di halaman login.
-            Hanya Guru BK yang bisa mengatur bagian ini.
         </p>
     </section>
 
@@ -61,7 +60,7 @@
                         <span class="flex flex-wrap items-center gap-2">
                             <span class="text-label-lg font-semibold text-on-surface truncate">{{ $quote->judul_quotes }}</span>
                             <span
-                                class="bg-surface-container-high text-primary px-2.5 py-0.5 rounded-full text-label-sm font-semibold">{{ $quote->category_label }}</span>
+                                class="bg-surface-container-high text-primary px-2.5 py-0.5 rounded-md text-label-sm font-semibold">{{ $quote->category_label }}</span>
                             @if ($quote->is_daily)
                                 <span
                                     class="bg-primary text-on-primary px-2.5 py-0.5 rounded-full text-label-sm font-semibold">Hari Ini</span>
@@ -69,7 +68,7 @@
                         </span>
                         <span class="block text-body-sm text-on-surface-variant mt-1 italic line-clamp-2">{{ $quote->isi_quotes }}</span>
                         <span class="block text-label-sm text-outline mt-1">
-                            {{ $quote->displayAuthor() }} &bull; {{ $quote->displayAuthorRole() }}
+                            {{ $quote->displayAuthor() }}
                         </span>
                     </span>
                     <span class="shrink-0">

@@ -51,10 +51,18 @@
 
                 {{-- Filter status --}}
                 <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
-                    <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Status :</span>
+                    <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Status Curhat :</span>
                     <a href="{{ route('dashboard', array_filter(['kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Semua ({{ $jumlahStatus->sum() }})
+                    </a>
+                    <a href="{{ route('dashboard', array_filter(['status' => 'terkirim', 'kategori' => $kategori])) }}"
+                        class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        Terkirim
+                    </a>
+                    <a href="{{ route('dashboard', array_filter(['status' => 'dilihat', 'kategori' => $kategori])) }}"
+                        class="px-3 py-1.5 rounded-lg {{ request('status') === 'dilihat' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        Dilihat
                     </a>
                     <a href="{{ route('dashboard', array_filter(['status' => 'dibalas', 'kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
@@ -62,14 +70,13 @@
                     </a>
                     <a href="{{ route('dashboard', array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
-                        Selesai
+                        Sudah Ditangani
                     </a>
                 </div>
 
                 {{-- Filter kategori --}}
-                <div
-                    class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1 border-t border-outline-variant/30 pt-3">
-                    <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Topik:</span>
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
+                    <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Kategori Curhat:</span>
                     <a href="{{ route('dashboard', array_filter(['status' => $status])) }}"
                         class="px-3 py-1.5 rounded-lg {{ !$kategori ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Semua ({{ $total }})
@@ -85,55 +92,48 @@
                 </div>
             </div>
 
+            {{-- isi Dashboard --}}
             <div class="space-y-3">
                 @forelse ($curhats as $curhat)
                     <a href="{{ route('dashboard.show', $curhat) }}"
                         class="block p-4 rounded-2xl {{ $curhat->status === 'terkirim' ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
-                        <div class="flex items-start justify-between gap-2 mb-1.5">
-                            <div class="flex items-center gap-1.5">
+
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <div class="flex flex-col items-start gap-0.5">
                                 <span
-                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm">
-                                    <span class="material-symbols-outlined text-xs">{{ $curhat->tujuanIcon }}</span>
+                                    class="inline-flex items-center text-md font-bold {{ $curhat->tujuan === 'guru' ? 'text-secondary' : 'text-tertiary' }}">
                                     {{ $curhat->tujuanLabel }}
                                 </span>
-                                @if ($curhat->status === 'dibalas')
+                                <span class="text-md text-outline">
+                                    {{ $curhat->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+                            <div>
+                                @if ($curhat->status === 'terkirim')
                                     <span
-                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container text-label-sm font-semibold">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
-                                        Dibalas
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary-container text-on-primary-container text-label-sm">
+                                        Pesan Sudah Terkirim
                                     </span>
-                                @elseif($curhat->status === 'terkirim')
+                                @elseif ($curhat->status === 'dibalas')
                                     <span
-                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-label-sm">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
-                                        Menunggu Balasan
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-label-sm font-semibold">
+                                        Pesan Sudah Dibalas
                                     </span>
-                                @elseif($curhat->status === 'ditangani')
+                                @elseif ($curhat->status === 'ditangani')
                                     <span
-                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-label-sm">
-                                        <span class="material-symbols-outlined text-xs text-primary">check_circle</span>
-                                        Selesai
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary-container text-on-primary-container text-label-sm">
+                                        Pesan Sudah Ditangani
                                     </span>
-                                @else
+                                @elseif($curhat->status === 'dilihat')
                                     <span
-                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-outline text-label-sm">
-                                        {{ ucfirst($curhat->status) }}
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary-fixed font-bold text-label-md">
+                                        Pesan Sudah Dilihat, Namun Belum Dibalas
                                     </span>
                                 @endif
                             </div>
-                            <span class="text-label-sm text-outline">{{ $curhat->created_at->diffForHumans() }}</span>
                         </div>
                         <div class="pl-0 flex items-start justify-between gap-3">
                             <div class="min-w-0 flex-1">
-                                <h3
-                                    class="text-title-md text-on-surface text-[15px] leading-snug line-clamp-1 mb-0.5 font-bold">
-                                    {{ $curhat->kategoriLabel }}
-                                </h3>
-                                <p class="text-label-sm text-primary font-semibold mb-1">
-                                    {{ $curhat->siswa_id === Auth::id()
-                                        ? $curhat->nama_penerima ?? ($curhat->penerima->name ?? 'Tidak diketahui')
-                                        : $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}
-                                </p>
                                 <p class="text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
                                     {{ Str::limit($curhat->pesan, 160) }}
                                 </p>
