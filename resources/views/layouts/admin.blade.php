@@ -216,7 +216,7 @@
 
     {{-- Main --}}
     <div id="adminMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen lg:pl-72">
-        <main class="sm:p-6 lg:p-8 min-h-screen bg-background pb-28 lg:pb-12">
+        <main class="sm:p-6 lg:p-8 min-h-screen bg-background mx-auto flex flex-col pb-28 lg:pb-12">
             @yield('content')
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah">
