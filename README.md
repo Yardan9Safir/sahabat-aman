@@ -111,6 +111,7 @@ Seeder membuat akun demo:
 | Guru BK | `guru@gmail.com` | `password` | guru |
 | Konselor Sebaya A (contoh per kelas) | `konselorA<KELAS>@gmail.com` (contoh: `konselorA7A@gmail.com`) | `password` | konselor sebaya |
 | Konselor Sebaya B (contoh per kelas) | `konselorB<KELAS>@gmail.com` (contoh: `konselorB7A@gmail.com`) | `password` | konselor sebaya |
+| Admin | `admin@gmail.com` | `password` | admin |
 
 ### 2.5 Kalau sudah pernah instalasi
 
