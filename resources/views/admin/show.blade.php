@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Dialog Curhat - Sahabat Aman')
 
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('dashboard') }}"
+            <a href="{{ route('guru.curhat.index') }}"
                 class="px-4 py-2 rounded-xl bg-surface-container text-primary text-label-md font-semibold hover:bg-surface-variant transition-colors flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-lg">arrow_back</span> Kembali
             </a>
@@ -44,7 +44,7 @@
             {{-- Tandai Selesai Button --}}
             <div>
                 @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id() && Auth::user()->isGuru())
-                    <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
+                    <form method="POST" action="{{ route('guru.curhat.handle', $curhat) }}"
                         data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
                         data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
                         data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai" data-swal-cancel-text="Batal">
@@ -95,7 +95,7 @@
             {{-- Form Reply --}}
             <div class="p-4 bg-surface-container-low border-t border-surface-variant/40">
                 @if ($curhat->status !== 'ditangani' && ($curhat->penerima_id === auth()->id() || $curhat->siswa_id === auth()->id()))
-                    <form method="POST" action="{{ route('dashboard.reply', $curhat) }}" data-mode="chat"
+                    <form method="POST" action="{{ route('guru.curhat.reply', $curhat) }}" data-mode="chat"
                         data-target="#chatList" data-empty="#chatEmpty"
                         class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
                         @csrf

@@ -176,7 +176,7 @@
                 <div class="w-full max-w-[420px] flex flex-col">
                     <div class="mb-8">
                         <h1 class="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-bold tracking-tight text-on-surface">
-                            Selamat Datang Kembali
+                            Selamat Datang !!!
                         </h1>
                         <p class="text-sm text-on-surface-variant mt-2">
                             Tolong masukkan akun Sahabat Aman Anda untuk melanjutkan konseling.
@@ -194,7 +194,7 @@
 
                         <div>
                             <label for="email" class="block text-sm font-semibold text-on-surface mb-2">
-                                Alamat Email Siswa / Guru
+                                Email
                             </label>
                             <div class="relative">
                                 <div
@@ -240,12 +240,6 @@
                             </button>
                         </div>
                     </form>
-
-                    <div class="relative my-7">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-outline-variant"></div>
-                        </div>
-                    </div>
                 </div>
             </section>
 

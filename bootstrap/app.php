@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsGuru;
 use App\Http\Middleware\LogoutAfterIdle;
 use App\Models\Curhat;
@@ -26,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
             | Request::HEADER_X_FORWARDED_AWS_ELB);
         $middleware->alias([
             'guru' => EnsureUserIsGuru::class,
+            'admin' => EnsureUserIsAdmin::class,
         ]);
 
         $middleware->web(append: [

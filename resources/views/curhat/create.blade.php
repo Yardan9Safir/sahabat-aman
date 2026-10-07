@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('curhat.store') }}" class="flex flex-col gap-6" id="venting-form">
+        <form method="POST" action="{{ route('siswa.curhat.store') }}" class="flex flex-col gap-6" id="venting-form">
             @csrf
             <div>
                 @error('penerima_id')
@@ -79,19 +79,24 @@
                 <select id="penerima_id" name="penerima_id" required
                     class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
                     <option value="">-- Pilih penerima --</option>
-                    <optgroup label="Guru" id="optgroup-guru">
-                        @foreach ($gurus as $guru)
+                    <optgroup label="Guru BK" id="optgroup-guru">
+                        @forelse ($gurus as $guru)
                             <option value="{{ $guru->id }}" data-tujuan="guru"
                                 {{ old('tujuan_tipe', 'guru') === 'guru' && old('penerima_id') == $guru->id ? 'selected' : '' }}>
                                 {{ $guru->name }}</option>
-                        @endforeach
+                        @empty
+                            <option value="" disabled data-tujuan="guru">Belum ada guru BK untuk kelasmu</option>
+                        @endforelse
                     </optgroup>
                     <optgroup label="Konselor Sebaya" id="optgroup-konselor">
-                        @foreach ($konselors as $konselor)
+                        @forelse ($konselors as $konselor)
                             <option value="{{ $konselor->id }}" data-tujuan="konselor sebaya"
                                 {{ old('tujuan_tipe') === 'konselor sebaya' && old('penerima_id') == $konselor->id ? 'selected' : '' }}>
                                 {{ $konselor->name }}</option>
-                        @endforeach
+                        @empty
+                            <option value="" disabled data-tujuan="konselor sebaya">Belum ada konselor sebaya untuk
+                                kelasmu</option>
+                        @endforelse
                     </optgroup>
                 </select>
             </div>

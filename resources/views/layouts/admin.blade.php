@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Panel Guru BK - Sahabat Aman')</title>
+    <title>@yield('title', 'Panel - Sahabat Aman')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -137,7 +137,8 @@
 </head>
 
 <body class="bg-background text-on-surface font-sans antialiased min-h-screen flex"
-    data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
+    data-swal-flash-success="{{ session('success') }}" data-swal-flash-error="{{ session('error') }}"
+    data-swal-flash-warning="{{ session('warning') }}" data-swal-flash-info="{{ session('info') }}">
 
     {{-- Overlay drawer HP --}}
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 lg:hidden"></div>
@@ -169,20 +170,20 @@
 
                 <nav aria-label="Menu Utama Konseling"
                     class="flex flex-col gap-1.5 overflow-y-auto custom-scrollbar min-h-0">
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.index', 'admin.show') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
-                        href="{{ route('admin.index') }}" title="Dashboard Admin">
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.dashboard') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
+                        href="{{ route('admin.dashboard') }}" title="Dashboard Admin">
                         <span class="material-symbols-outlined shrink-0">dashboard</span>
                         <span class="sidebar-label truncate">Dashboard Admin</span>
                     </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.quotes.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
-                        href="{{ route('admin.quotes.index') }}" title="Kelola Quotes">
-                        <span class="material-symbols-outlined shrink-0">format_quote</span>
-                        <span class="sidebar-label truncate">Kelola Quotes</span>
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.users.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
+                        href="{{ route('admin.users.index') }}" title="Kelola Pengguna">
+                        <span class="material-symbols-outlined shrink-0">group</span>
+                        <span class="sidebar-label truncate">Kelola Pengguna</span>
                     </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.login-display.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
-                        href="{{ route('admin.login-display.index') }}" title="Tampilan Halaman Login">
-                        <span class="material-symbols-outlined shrink-0">tune</span>
-                        <span class="sidebar-label truncate">Tampilan Halaman Login</span>
+                    <a class="sidebar-nav-link flex items-center gap-3 px-4 py-3 rounded-xl {{ request()->routeIs('admin.kelas.*') ? 'bg-primary-container text-on-primary-container font-bold shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface' }} transition-colors"
+                        href="{{ route('admin.kelas.index') }}" title="Kelola Kelas Guru">
+                        <span class="material-symbols-outlined shrink-0">class</span>
+                        <span class="sidebar-label truncate">Kelola Kelas Guru</span>
                     </a>
                 </nav>
             </div>
@@ -195,7 +196,7 @@
                         <span
                             class="block text-label-lg font-bold truncate text-on-surface group-hover:text-primary transition-colors">{{ Auth::user()->name }}</span>
                         <span class="flex items-center gap-1 text-label-sm text-outline">
-                            Guru BK
+                            {{ Auth::user()->roleLabel() }}
                         </span>
                     </span>
                     <span
@@ -221,29 +222,28 @@
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah">
                 <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
-                    <a href="{{ route('admin.index') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.index', 'admin.show') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
                         <span
                             class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
                     </a>
-                    <a href="{{ route('admin.login-display.index') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.login-display.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">tune</span>
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">group</span>
                         <span
-                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Setting Tampilan</span>
+                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengguna</span>
                     </a>
-                    <a href="{{ route('admin.quotes.index') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
+                    <a href="{{ route('admin.kelas.index') }}"
+                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.kelas.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[22px] leading-none">class</span>
                         <span
-                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>
+                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Kelola Kelas Guru</span>
                     </a>
                     <a href="{{ route('admin.account') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">person</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pengaturan
-                            Akun</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Akun</span>
                     </a>
                 </div>
             </nav>

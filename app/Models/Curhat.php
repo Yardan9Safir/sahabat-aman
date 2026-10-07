@@ -19,7 +19,27 @@ class Curhat extends Model
         'karier' => 'self_improvement',
     ];
 
-    public const STATUS = ['terkirim', 'dilihat', 'dibalas', 'ditangani'];
+    public const STATUS_TERKIRIM = 'terkirim';
+
+    public const STATUS_DILIHAT = 'dilihat';
+
+    public const STATUS_DIBALAS = 'dibalas';
+
+    public const STATUS_DITANGANI = 'ditangani';
+
+    public const STATUS = [
+        self::STATUS_TERKIRIM,
+        self::STATUS_DILIHAT,
+        self::STATUS_DIBALAS,
+        self::STATUS_DITANGANI,
+    ];
+
+    public const STATUS_LABEL = [
+        self::STATUS_TERKIRIM => 'Belum Dibalas',
+        self::STATUS_DILIHAT => 'Dilihat',
+        self::STATUS_DIBALAS => 'Dibalas',
+        self::STATUS_DITANGANI => 'Ditangani',
+    ];
 
     protected $table = 'curhats';
 
@@ -70,6 +90,16 @@ class Curhat extends Model
             : $query;
     }
 
+    /**
+     * Hanya curhat dari siswa dengan kelas tertentu (kotak masuk guru per kelas).
+     *
+     * @param  array<int, string>  $kelas
+     */
+    public function scopeDariKelas(Builder $query, array $kelas): Builder
+    {
+        return $query->whereHas('siswa', fn (Builder $q) => $q->whereIn('kelas', $kelas));
+    }
+
     public function getKategoriLabelAttribute(): string
     {
         return ucfirst((string) $this->kategori);
@@ -101,10 +131,20 @@ class Curhat extends Model
         };
     }
 
+    public function isDitangani(): bool
+    {
+        return $this->status === self::STATUS_DITANGANI;
+    }
+
+    public static function statusLabel(string $status): string
+    {
+        return self::STATUS_LABEL[$status] ?? ucfirst($status);
+    }
+
     public function setViewed(): void
     {
-        if ($this->status === 'terkirim') {
-            $this->status = 'dilihat';
+        if ($this->status === self::STATUS_TERKIRIM) {
+            $this->status = self::STATUS_DILIHAT;
             $this->dilihat_at = now();
             $this->save();
         }
@@ -112,8 +152,8 @@ class Curhat extends Model
 
     public function setReplied(): void
     {
-        if (in_array($this->status, ['terkirim', 'dilihat'], true)) {
-            $this->status = 'dibalas';
+        if (in_array($this->status, [self::STATUS_TERKIRIM, self::STATUS_DILIHAT], true)) {
+            $this->status = self::STATUS_DIBALAS;
             $this->save();
         }
     }

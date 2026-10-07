@@ -17,14 +17,14 @@
                     Koleksi quotes dari siswa, konselor sebaya, dan guru.
                     @if ($isGuru)
                         Quote yang tampil di halaman login diatur di menu
-                        <a href="{{ route('admin.login-display.index') }}"
+                        <a href="{{ route('guru.login-display.index') }}"
                             class="font-semibold text-primary hover:underline">Tampilan Login</a>.
                     @endif
                 </p>
             </div>
             <div class="flex flex-wrap items-center gap-2 self-start">
                 @if ($isGuru)
-                    <a href="{{ route('admin.login-display.index') }}"
+                    <a href="{{ route('guru.login-display.index') }}"
                         class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-semibold hover:bg-surface-container-high transition-colors">
                         <span class="material-symbols-outlined text-lg">tune</span>
                         Atur Tampilan Login

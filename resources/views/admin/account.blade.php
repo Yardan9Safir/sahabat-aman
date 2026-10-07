@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Profil Saya - BK')
+@section('title', 'Profil Saya - Admin')
 
 @section('content')
     <section
@@ -67,7 +67,7 @@
             </div>
 
             <div class="flex items-center gap-3 pt-2">
-                <a href="{{ route('admin.index') }}"
+                <a href="{{ route('admin.dashboard') }}"
                     class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">
                     Batal
                 </a>

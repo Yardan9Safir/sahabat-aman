@@ -11,7 +11,7 @@
         <p class="text-body-md text-on-surface-variant mt-2">
             Terlalu banyak permintaan masuk dalam waktu singkat. Silakan tunggu beberapa saat lalu coba lagi.
         </p>
-        <a href="{{ route('home') }}"
+        <a href="{{ route('welcome') }}"
             class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-on-primary font-label-lg font-bold shadow-md hover:bg-primary-container transition-all">
             <span class="material-symbols-outlined text-lg">home</span> Kembali ke Beranda
         </a>

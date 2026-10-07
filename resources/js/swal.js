@@ -145,6 +145,14 @@ function flashToasts() {
         notify(body.dataset.swalFlashSuccess, 'success');
     }
 
+    if (body.dataset.swalFlashError) {
+        notify(body.dataset.swalFlashError, 'error');
+    }
+
+    if (body.dataset.swalFlashWarning) {
+        notify(body.dataset.swalFlashWarning, 'warning');
+    }
+
     if (body.dataset.swalFlashInfo) {
         notify(body.dataset.swalFlashInfo, 'info');
     }

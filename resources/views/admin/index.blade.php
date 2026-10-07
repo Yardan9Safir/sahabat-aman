@@ -1,4 +1,4 @@
-﻿@extends('layouts.admin')
+﻿@extends('layouts.app')
 
 @section('title', 'Ikhtisar Konseling - BK')
 
@@ -16,7 +16,7 @@
                             <h3 class="text-title-md font-bold text-on-surface">Kotak Masuk Curhat Siswa</h3>
                         </div>
                         @if ($kategori || $status)
-                            <a href="{{ route('admin.index') }}"
+                            <a href="{{ route('guru.curhat.index') }}"
                                 class="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-label-sm font-semibold hover:bg-surface-container-high transition-colors">
                                 <span class="material-symbols-outlined text-base leading-none">filter_alt_off</span>
                                 Reset filter
@@ -28,23 +28,23 @@
                     <div
                         class="flex flex-wrap items-center gap-1.5 p-1 bg-surface-container-low rounded-xl border border-outline-variant/40 self-start">
                         <span class="text-label-sm text-on-surface-variant font-semibold px-2">Status Curhat :</span>
-                        <a href="{{ route('admin.index', array_filter(['kategori' => $kategori])) }}"
+                        <a href="{{ route('guru.curhat.index', array_filter(['kategori' => $kategori])) }}"
                             class="px-3 py-1.5 rounded-lg text-label-md {{ !$status ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                             Semua ({{ $jumlahStatus->sum() }})
                         </a>
-                        <a href="{{ route('admin.index', array_filter(['status' => 'terkirim', 'kategori' => $kategori])) }}"
+                        <a href="{{ route('guru.curhat.index', array_filter(['status' => 'terkirim', 'kategori' => $kategori])) }}"
                             class="px-3 py-1.5 rounded-lg text-label-md {{ $status === 'terkirim' ? 'font-bold bg-error-container text-on-error-container' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                             Belum Dibalas ({{ $jumlahStatus['terkirim'] ?? 0 }})
                         </a>
-                        <a href="{{ route('admin.index', array_filter(['status' => 'dilihat', 'kategori' => $kategori])) }}"
+                        <a href="{{ route('guru.curhat.index', array_filter(['status' => 'dilihat', 'kategori' => $kategori])) }}"
                             class="px-3 py-1.5 rounded-lg text-label-md {{ $status === 'dilihat' ? 'font-bold bg-error-container text-on-error-container' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                             Dilihat ({{ $jumlahStatus['dilihat'] ?? 0 }})
                         </a>
-                        <a href="{{ route('admin.index', array_filter(['status' => 'dibalas', 'kategori' => $kategori])) }}"
+                        <a href="{{ route('guru.curhat.index', array_filter(['status' => 'dibalas', 'kategori' => $kategori])) }}"
                             class="px-3 py-1.5 rounded-lg text-label-md {{ $status === 'dibalas' ? 'font-bold bg-secondary-fixed text-on-secondary-fixed' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                             Dibalas ({{ $jumlahStatus['dibalas'] ?? 0 }})
                         </a>
-                        <a href="{{ route('admin.index', array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
+                        <a href="{{ route('guru.curhat.index', array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
                             class="px-3 py-1.5 rounded-lg text-label-md {{ $status === 'ditangani' ? 'font-bold bg-surface-container-high text-primary' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                             Ditangani ({{ $jumlahStatus['ditangani'] ?? 0 }})
                         </a>
@@ -54,12 +54,12 @@
                     <div
                         class="flex flex-wrap items-center gap-1.5 p-1 bg-surface-container-low rounded-xl border border-outline-variant/40 self-start">
                         <span class="text-label-sm text-on-surface-variant font-semibold px-2">Kategori Curhat :</span>
-                        <a href="{{ route('admin.index', array_filter(['status' => $status])) }}"
+                        <a href="{{ route('guru.curhat.index', array_filter(['status' => $status])) }}"
                             class="px-3 py-1.5 rounded-lg text-label-md {{ !$kategori ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                             Semua ({{ $jumlahKategori->sum() }})
                         </a>
                         @foreach (\App\Models\Curhat::KATEGORI as $item)
-                            <a href="{{ route('admin.index', array_filter(['kategori' => $item, 'status' => $status])) }}"
+                            <a href="{{ route('guru.curhat.index', array_filter(['kategori' => $item, 'status' => $status])) }}"
                                 class="px-3 py-1.5 rounded-lg text-label-md {{ $kategori === $item ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                                 {{ ucfirst($item) }} ({{ $jumlahKategori[$item] ?? 0 }})
                             </a>
@@ -95,7 +95,7 @@
                                 @elseif($curhat->status === 'ditangani')
                                     <span
                                         class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded-md text-label-sm font-bold">
-                                        Pesan Sudah Ditangani</span>
+                                        Pesan Ditangani oleh : {{ $curhat->nama_penerima }}</span>
                                 @elseif($curhat->status === 'dibalas')
                                     <span
                                         class="bg-tertiary-container text-on-tertiary-container px-2.5 py-1 rounded-md text-label-sm font-bold">
@@ -114,13 +114,13 @@
 
                         <div class="mt-4 pt-3 flex flex-wrap items-center justify-between gap-3">
                             @if ($curhat->status === 'ditangani')
-                                <a href="{{ route('admin.show', $curhat) }}"
+                                <a href="{{ route('guru.curhat.show', $curhat) }}"
                                     class="flex items-center gap-1.5 bg-surface-container-high text-on-surface font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs hover:bg-surface-variant transition-all">
                                     <span class="material-symbols-outlined text-base">history</span>
                                     <span>Lihat Riwayat</span>
                                 </a>
                                 {{-- Tombol Hapus Permanen Riwayat chat oleh guru/konselor sebaya --}}
-                                <form method="POST" action="{{ route('dashboard.destroy', $curhat) }}"
+                                <form method="POST" action="{{ route('guru.curhat.destroy', $curhat) }}"
                                     data-swal-confirm="Hapus permanen riwayat ini?"
                                     data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."
                                     data-swal-icon="warning" data-swal-confirm-text="Ya, Hapus"
@@ -134,7 +134,7 @@
                                     </button>
                                 </form>
                             @else
-                                <a href="{{ route('admin.show', $curhat) }}"
+                                <a href="{{ route('guru.curhat.show', $curhat) }}"
                                     class="flex items-center gap-1.5 bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
                                     <span class="material-symbols-outlined text-base">reply</span>
                                     <span>Balas Curhat</span>

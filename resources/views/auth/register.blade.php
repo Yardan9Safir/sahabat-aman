@@ -69,7 +69,25 @@
                 <option value="siswa">Siswa</option>
                 <option value="guru">Guru</option>
                 <option value="konselor sebaya">Konselor Sebaya</option>
+                <option value="admin">Admin</option>
             </select>
+        </div>
+
+        <div id="kelas-field">
+            <label for="kelas" class="text-label-lg font-bold text-on-surface mb-2 block">Kelas <span
+                    class="font-normal text-outline">(khusus siswa &amp; konselor sebaya)</span></label>
+            <select id="kelas" name="kelas"
+                class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                <option value="">-- Pilih kelas --</option>
+                @foreach (\App\Models\User::ALL_KELAS as $kelas)
+                    <option value="{{ $kelas }}" {{ old('kelas') === $kelas ? 'selected' : '' }}>{{ $kelas }}</option>
+                @endforeach
+            </select>
+            @error('kelas')
+                <p class="mt-2 text-xs text-error">{{ $message }}</p>
+            @enderror
+            <p class="mt-2 text-body-sm text-on-surface-variant">Kelas menentukan guru BK dan konselor sebaya yang
+                akan melayanimu. Tiap kelas hanya memiliki 2 konselor sebaya.</p>
         </div>
 
         @error('password')
@@ -78,6 +96,20 @@
 
         <button type="submit" class="w-full rounded-2xl bg-primary px-5 py-3.5 text-label-lg font-bold text-on-primary shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all">Daftar</button>
     </form>
+
+    <script>
+        const roleSelect = document.getElementById('role');
+        const kelasField = document.getElementById('kelas-field');
+        const kelasSelect = document.getElementById('kelas');
+        const toggleKelas = () => {
+            const role = roleSelect.value;
+            const butuhKelas = role === 'siswa' || role === 'konselor sebaya';
+            kelasField.classList.toggle('hidden', !butuhKelas);
+            kelasSelect.required = butuhKelas;
+        };
+        roleSelect.addEventListener('change', toggleKelas);
+        toggleKelas();
+    </script>
 
     <p class="mt-5 text-center text-body-sm text-on-surface-variant">
         Sudah punya akun?
