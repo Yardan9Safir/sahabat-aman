@@ -58,21 +58,15 @@
     @endphp
 
     {{-- Top nav --}}
-    <header
-        class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
+    <header class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
         <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20 w-full">
             <a class="flex items-center gap-2.5 shrink-0" href="{{ route('welcome') }}">
-                <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shadow-sm">
-                    <span class="material-symbols-outlined text-2xl"
-                        style="font-variation-settings: 'FILL' 1;">spa</span>
-                </div>
                 <span class="text-lg font-bold text-primary tracking-tight">Sahabat Aman</span>
             </a>
 
             <div class="flex items-center gap-3">
                 <a href="{{ $primaryAction }}"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary text-sm shadow-sm transition-all duration-150 active:scale-95">
-                    <span class="material-symbols-outlined text-lg">edit_note</span>
                     <span>{{ $primaryLabel }}</span>
                 </a>
             </div>
@@ -84,7 +78,8 @@
         {{-- 1. Hero --}}
         <section id="beranda" class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden">
             <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-secondary-fixed/40 rounded-full blur-3xl pointer-events-none"></div>
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-secondary-fixed/40 rounded-full blur-3xl pointer-events-none">
+            </div>
 
             <div class="max-w-4xl mx-auto px-6 text-center relative">
                 <div
@@ -98,10 +93,12 @@
                     class="text-[34px] md:text-[48px] leading-[44px] md:leading-[56px] font-extrabold text-on-surface tracking-tight mb-6 text-balance">
                     Setiap Cerita Berhak Didengar oleh
                     <span
-                        class="text-primary underline decoration-secondary-container decoration-wavy underline-offset-8">Sahabat Aman</span>
+                        class="text-primary underline decoration-secondary-container decoration-wavy underline-offset-8">Sahabat
+                        Aman</span>
                 </h1>
 
-                <p class="text-base md:text-lg text-on-surface-variant max-w-2xl mx-auto mb-10 text-balance leading-relaxed">
+                <p
+                    class="text-base md:text-lg text-on-surface-variant max-w-2xl mx-auto mb-10 text-balance leading-relaxed">
                     Bimbingan konseling sekolah yang hangat dan aman tanpa rasa takut atau dihakimi. Suarakan isi
                     hatimu, bersama kita temukan ketenangan.
                 </p>
@@ -113,28 +110,12 @@
                         <span>{{ $primaryLabel }}</span>
                     </a>
                 </div>
-
-                <div
-                    class="mt-12 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-semibold text-on-surface-variant">
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary text-lg">verified_user</span>
-                        <span>Konselor Berpengalaman</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-secondary text-lg"
-                            style="font-variation-settings: 'FILL' 1;">favorite</span>
-                        <span>Ruang Tanpa Penghakiman</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary text-lg">visibility_off</span>
-                        <span>Privasi Siswa 100% Aman</span>
-                    </div>
-                </div>
             </div>
         </section>
 
         {{-- 2. Quotes --}}
-        <section id="quotes" class="py-12 md:py-20 bg-surface-container-low border-t border-b border-surface-container">
+        <section id="quotes"
+            class="py-12 md:py-20 bg-surface-container-low border-t border-b border-surface-container">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center max-w-2xl mx-auto mb-14">
                     <span
@@ -167,13 +148,13 @@
                                         </span>
                                     </div>
 
-                                    <blockquote
-                                        class="text-lg font-semibold text-on-surface leading-relaxed mb-6">
+                                    <blockquote class="text-lg font-semibold text-on-surface leading-relaxed mb-6">
                                         &ldquo;{{ $quote->isi_quotes }}&rdquo;
                                     </blockquote>
                                 </div>
 
-                                <div class="pt-4 border-t border-surface-container flex items-center justify-between gap-3">
+                                <div
+                                    class="pt-4 border-t border-surface-container flex items-center justify-between gap-3">
                                     <div class="min-w-0">
                                         <p class="text-xs font-bold {{ $warna['name'] }} truncate">
                                             {{ $quote->displayAuthor() }}
@@ -185,8 +166,7 @@
                                             class="p-2 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors">
                                             <span class="material-symbols-outlined text-xl">favorite_border</span>
                                         </button>
-                                        <button type="button" data-copy-quote
-                                            title="Salin Kutipan"
+                                        <button type="button" data-copy-quote title="Salin Kutipan"
                                             data-copy-quote="{{ $quote->isi_quotes }} &mdash; {{ $quote->displayAuthor() }}"
                                             class="p-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors">
                                             <span class="material-symbols-outlined text-xl">content_copy</span>
@@ -212,23 +192,22 @@
         {{-- 3. Kerahasiaan & hotline --}}
         <section id="kerahasiaan" class="py-12 md:py-16">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 md:p-12 tactile-card">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        <div class="lg:col-span-8 space-y-4">
-                            <div
-                                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-semibold">
-                                <span class="material-symbols-outlined text-base">shield</span>
-                                <span>Standar Etika Konseling Sekolah</span>
-                            </div>
-                            <h3 class="text-2xl font-bold text-on-surface">
-                                Kerahasiaanmu adalah Prioritas Utama Kami
-                            </h3>
-                            <p class="text-base text-on-surface-variant leading-relaxed">
-                                Seluruh catatan dan obrolan berada di bawah sumpah profesi konselor. Guru BK dan konselor
-                                sebaya tidak akan membagikan ceritamu ke pihak lain tanpa persetujuanmu. Ruang ini adalah
-                                rumah amanmu.
-                            </p>
+                <div
+                    class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 md:p-12 tactile-card text-center">
+                    <div class="max-w-3xl mx-auto space-y-4">
+                        <div
+                            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-semibold">
+                            <span class="material-symbols-outlined text-base">shield</span>
+                            <span>Standar Etika Konseling Sekolah</span>
                         </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-on-surface">
+                            Kerahasiaanmu adalah Prioritas Utama Kami
+                        </h3>
+                        <p class="text-base text-on-surface-variant leading-relaxed">
+                            Seluruh catatan dan obrolan berada di bawah sumpah profesi konselor. Guru BK dan konselor
+                            sebaya tidak akan membagikan ceritamu ke pihak lain tanpa persetujuanmu. Ruang ini adalah
+                            rumah amanmu.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -237,8 +216,7 @@
 
     {{-- Footer --}}
     <footer class="bg-surface-container-low border-t border-outline-variant/30 text-on-surface-variant">
-        <div
-            class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-6 py-8 w-full gap-4">
+        <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-6 py-8 w-full gap-4">
             <p class="text-sm text-center md:text-left">
                 &copy; {{ now()->year }} Sahabat Aman &mdash; Layanan Bimbingan &amp; Konseling Sekolah.
             </p>
