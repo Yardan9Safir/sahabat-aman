@@ -138,7 +138,8 @@
 
 <body
     class="bg-background font-sans text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-on-primary-fixed"
-    data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
+    data-swal-flash-success="{{ session('success') }}" data-swal-flash-error="{{ session('error') }}"
+    data-swal-flash-warning="{{ session('warning') }}" data-swal-flash-info="{{ session('info') }}">
 
     @auth
         {{-- Overlay drawer HP --}}
@@ -169,26 +170,74 @@
                 </div>
 
                 <nav class="flex flex-col gap-1.5 overflow-y-auto custom-scroll min-h-0" aria-label="Navigasi utama">
-                    @if (Auth::user()->role === 'siswa')
-                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('curhat.create') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
-                            href="{{ route('curhat.create') }}" title="Buat Curhat Baru">
+                    @php
+                        $navUser = Auth::user();
+                        $inboxRoute = match ($navUser->role) {
+                            \App\Models\User::ROLE_SISWA => 'siswa.dashboard',
+                            \App\Models\User::ROLE_KONSELOR_SEBAYA => 'konselor.dashboard',
+                            \App\Models\User::ROLE_GURU => 'guru.curhat.index',
+                            default => 'admin.dashboard',
+                        };
+                        $inboxActive = match ($navUser->role) {
+                            \App\Models\User::ROLE_SISWA => ['siswa.dashboard', 'siswa.curhat.show', 'siswa.curhat.reply'],
+                            \App\Models\User::ROLE_KONSELOR_SEBAYA => ['konselor.dashboard', 'konselor.sesi.*'],
+                            \App\Models\User::ROLE_GURU => ['guru.*'],
+                            default => ['admin.*'],
+                        };
+                    @endphp
+                    @if ($navUser->isSiswa())
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('siswa.curhat.create') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('siswa.curhat.create') }}" title="Buat Curhat Baru">
                             <span
-                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('curhat.create') ? 'text-primary' : 'text-outline' }}">add_notes</span>
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('siswa.curhat.create') ? 'text-primary' : 'text-outline' }}">add_notes</span>
                             <span class="sidebar-label text-label-lg truncate">Buat Curhat Baru</span>
                         </a>
                     @endif
-                    <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('dashboard', 'dashboard.show', 'dashboard.reply', 'dashboard.handle') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
-                        href="{{ route('dashboard') }}" title="Kotak Masuk & Dialog">
-                        <span
-                            class="material-symbols-outlined shrink-0 {{ request()->routeIs('dashboard', 'dashboard.show', 'dashboard.reply', 'dashboard.handle') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
-                        <span class="sidebar-label text-label-lg truncate">Kotak Masuk & Dialog</span>
-                    </a>
-                    <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('quotes.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
-                        href="{{ route('quotes.index') }}" title="Quotes & Kata-Kata">
-                        <span
-                            class="material-symbols-outlined shrink-0 {{ request()->routeIs('quotes.*') ? 'text-primary' : 'text-outline' }}">format_quote</span>
-                        <span class="sidebar-label text-label-lg truncate">Quotes & Kata-Kata</span>
-                    </a>
+                    @if ($navUser->isGuru())
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('guru.dashboard') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('guru.dashboard') }}" title="Dashboard Guru BK">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('guru.dashboard') ? 'text-primary' : 'text-outline' }}">dashboard</span>
+                            <span class="sidebar-label text-label-lg truncate">Dashboard Guru BK</span>
+                        </a>
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('guru.rekap.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('guru.rekap.index') }}" title="Rekapitulasi">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('guru.rekap.*') ? 'text-primary' : 'text-outline' }}">assessment</span>
+                            <span class="sidebar-label text-label-lg truncate">Rekapitulasi</span>
+                        </a>
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('guru.curhat.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('guru.curhat.index') }}" title="Kotak Masuk Curhat">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('guru.curhat.*') ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
+                            <span class="sidebar-label text-label-lg truncate">Kotak Masuk Curhat</span>
+                        </a>
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('guru.quotes.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('guru.quotes.index') }}" title="Kelola Quotes">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('guru.quotes.*') ? 'text-primary' : 'text-outline' }}">format_quote</span>
+                            <span class="sidebar-label text-label-lg truncate">Kelola Quotes</span>
+                        </a>
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('guru.login-display.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('guru.login-display.index') }}" title="Tampilan Halaman Login">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('guru.login-display.*') ? 'text-primary' : 'text-outline' }}">tune</span>
+                            <span class="sidebar-label text-label-lg truncate">Tampilan Halaman Login</span>
+                        </a>
+                    @else
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs(...$inboxActive) ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route($inboxRoute) }}" title="Kotak Masuk & Dialog">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs(...$inboxActive) ? 'text-primary' : 'text-outline' }}">chat_bubble</span>
+                            <span class="sidebar-label text-label-lg truncate">Kotak Masuk & Dialog</span>
+                        </a>
+                        <a class="sidebar-nav-link flex items-center gap-3 {{ request()->routeIs('quotes.*') ? 'bg-surface-container text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }} rounded-xl px-4 py-3 transition-colors duration-150"
+                            href="{{ route('quotes.index') }}" title="Quotes & Kata-Kata">
+                            <span
+                                class="material-symbols-outlined shrink-0 {{ request()->routeIs('quotes.*') ? 'text-primary' : 'text-outline' }}">format_quote</span>
+                            <span class="sidebar-label text-label-lg truncate">Quotes & Kata-Kata</span>
+                        </a>
+                    @endif
                 </nav>
             </div>
 
@@ -232,36 +281,65 @@
             {{-- Bottom nav HP dibenahi + tombol Menu untuk buka sidebar (pengganti topbar) --}}
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah">
-                @php $isSiswa = Auth::user()->role === 'siswa'; @endphp
-                @php $isKonselor = Auth::user()->role === 'konselor sebaya'; @endphp
-                <div class="grid grid-cols-{{ $isSiswa ? '4' : '4' }} gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
-                    @if ($isSiswa)
-                        <a href="{{ route('curhat.create') }}"
-                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                            <span class="material-symbols-outlined text-[22px] leading-none">add_notes</span>
+                @php
+                    $isSiswa = Auth::user()->isSiswa();
+                    $isKonselor = Auth::user()->isKonselorSebaya();
+                    $isGuru = Auth::user()->isGuru();
+                    $inboxRoute = $isSiswa
+                        ? 'siswa.dashboard'
+                        : (Auth::user()->isGuru() ? 'guru.curhat.index' : ($isKonselor ? 'konselor.dashboard' : 'admin.dashboard'));
+                    $inboxActive = $isSiswa
+                        ? ['siswa.dashboard', 'siswa.curhat.show', 'siswa.curhat.reply']
+                        : ($isKonselor ? ['konselor.dashboard', 'konselor.sesi.*'] : (Auth::user()->isGuru() ? ['guru.*'] : ['admin.*']));
+                @endphp
+                <div class="grid grid-cols-4 gap-0.5 min-[400px]:gap-1 max-w-md mx-auto">
+                    @if ($isGuru)
+                        <a href="{{ route('guru.dashboard') }}"
+                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('guru.dashboard','guru.rekap.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                            <span class="material-symbols-outlined text-[22px] leading-none">dashboard</span>
                             <span
-                                class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Curhat</span>
+                                class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Dashboard</span>
                         </a>
-                    @endif
-                    <a href="{{ route('dashboard') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard', 'dashboard.reply','dashboard.show') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                        <a href="{{ route('guru.curhat.index') }}"
+                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('guru.curhat.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                            <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
+                            <span
+                                class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Kotak Masuk</span>
+                        </a>
+                        <a href="{{ route('quotes.index') }}"
+                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*', 'guru.login-display.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                            <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
+                            <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>
+                        </a>
+                    @else
+                        @if ($isSiswa)
+                            <a href="{{ route('siswa.curhat.create') }}"
+                                class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('siswa.curhat.create') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                                <span class="material-symbols-outlined text-[22px] leading-none">add_notes</span>
+                                <span
+                                    class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Curhat</span>
+                            </a>
+                        @endif
+                        <a href="{{ route($inboxRoute) }}"
+                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs(...$inboxActive) ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
 
-                        <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>
-                    </a>
-                    @if ($isKonselor)
-                    <a href="{{ route('dashboard') }}"
-                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('dashboard.show') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                            <span class="material-symbols-outlined text-[22px] leading-none">priority_high</span>
-                            <span
-                                class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Handle Curhat</span>
+                            <span class="material-symbols-outlined text-[22px] leading-none">chat_bubble</span>
+                            <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Pesan</span>
+                        </a>
+                        @if ($isKonselor)
+                            <a href="{{ route('konselor.dashboard') }}"
+                                class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('konselor.sesi.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                                <span class="material-symbols-outlined text-[22px] leading-none">priority_high</span>
+                                <span
+                                    class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Handle Curhat</span>
+                            </a>
+                        @endif
+                        <a href="{{ route('quotes.index') }}"
+                            class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
+                            <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
+                            <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>
                         </a>
                     @endif
-                    <a href="{{ route('quotes.index') }}"
-                        class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('quotes.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
-                        <span class="material-symbols-outlined text-[22px] leading-none">format_quote</span>
-                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Quotes</span>
-                    </a>
                     <a href="{{ route('profile') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('profile') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">person</span>

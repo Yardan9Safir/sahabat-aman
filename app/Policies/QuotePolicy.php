@@ -8,7 +8,7 @@ use App\Models\User;
 class QuotePolicy
 {
     /**
-     * Guru BK boleh mengelola seluruh quotes. Selain itu hanya quote sendiri.
+     * Hanya Guru BK yang boleh mengelola seluruh quotes. Selain itu hanya quote sendiri.
      */
     public function before(User $user, string $ability): ?bool
     {
@@ -40,6 +40,6 @@ class QuotePolicy
      */
     public function setDaily(User $user): bool
     {
-        return $user->isGuru();
+        return $user->canSetDailyQuote();
     }
 }

@@ -31,30 +31,53 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
+        // 5 guru BK — masing-masing hanya mengampu kelas tertentu.
+        $guruBk = [
+            ['Anna Koiria, S.Psi', 'anna@gmail.com', 'GURU-01', ['7A', '7B', '7C', '7D', '7E', '7F']],
+            ['Annisa Uswatun Hasanah, S.Pd', 'annisa@gmail.com', 'GURU-02', ['7J', '8A', '8B', '8C', '8D', '8E']],
+            ['Haidarratur Rochma, S.Pd', 'haidarra@gmail.com', 'GURU-03', ['7G', '8F', '8G', '8H', '8I', '8J']],
+            ['Erna Krisnawati, S.Pd', 'erna@gmail.com', 'GURU-04', ['7H', '7I', '9A', '9B', '9C', '9D']],
+            ['Dian Miftahul Falah, S.Psi', 'dian@gmail.com', 'GURU-05', ['9F', '9G', '9H', '9I', '9J', '9K']],
+        ];
+
+        foreach ($guruBk as [$name, $email, $identifier, $kelas]) {
+            User::factory()->create([
+                'name' => $name,
+                'email' => $email,
+                'role' => 'guru',
+                'identifier' => $identifier,
+                'kelas' => '',
+                'guru_kelas' => $kelas,
+                'password' => bcrypt('password'),
+            ]);
+        }
+
+        foreach (User::ALL_KELAS as $kelas) {
+            User::factory()->create([
+                'name' => "Konselor Sebaya A - {$kelas}",
+                'email' => "konselorA{$kelas}@gmail.com",
+                'role' => 'konselor sebaya',
+                'identifier' => "KON-{$kelas}-A",
+                'kelas' => $kelas,
+                'password' => bcrypt('password'),
+            ]);
+
+            User::factory()->create([
+                'name' => "Konselor Sebaya B - {$kelas}",
+                'email' => "konselorB{$kelas}@gmail.com",
+                'role' => 'konselor sebaya',
+                'identifier' => "KON-{$kelas}-B",
+                'kelas' => $kelas,
+                'password' => bcrypt('password'),
+            ]);
+        }
+
         User::factory()->create([
-            'name' => 'Guru BK',
-            'email' => 'guru@gmail.com',
-            'role' => 'guru',
-            'identifier' => 'GURU-01',
+            'name' => 'Administrator',
+            'email' => 'admin@gmail.com',
+            'role' => 'admin',
+            'identifier' => 'ADM-01',
             'kelas' => '',
-            'password' => bcrypt('password'),
-        ]);
-
-        User::factory()->create([
-            'name' => 'Konselor Sebaya A',
-            'email' => 'konselorA@gmail.com',
-            'role' => 'konselor sebaya',
-            'identifier' => 'KON-7A',
-            'kelas' => '7A',
-            'password' => bcrypt('password'),
-        ]);
-
-        User::factory()->create([
-            'name' => 'Konselor Sebaya B',
-            'email' => 'konselorB@gmail.com',
-            'role' => 'konselor sebaya',
-            'identifier' => 'KON-7B',
-            'kelas' => '7B',
             'password' => bcrypt('password'),
         ]);
 

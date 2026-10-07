@@ -24,7 +24,7 @@ class QuoteDataTable
         'edit' => 'quotes.edit',
         'update' => 'quotes.update',
         'destroy' => 'quotes.destroy',
-        'daily' => 'admin.quotes.daily',
+        'daily' => 'quotes.daily',
     ];
 
     /**

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Kelola Quotes - Guru BK')
 
@@ -15,7 +15,7 @@
             </p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('admin.quotes.create') }}"
+            <a href="{{ route('guru.quotes.create') }}"
                 class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary text-label-lg font-semibold shadow-md hover:bg-primary-container hover:text-on-primary-container hover:-translate-y-0.5 transition-all">
                 <span class="material-symbols-outlined text-lg">add_notes</span>
                 Tambah Quotes
@@ -27,12 +27,12 @@
     <section class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/60 soft-shadow">
         <div class="flex flex-wrap items-center gap-1.5 p-1">
             Kategori Quotes :
-            <a href="{{ route('admin.quotes.index') }}"
+            <a href="{{ route('guru.quotes.index') }}"
                 class="px-3 py-1.5 rounded-lg text-label-md {{ !$category ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                 Semua ({{ $total }})
             </a>
             @foreach (\App\Models\Quote::CATEGORIES as $item)
-                <a href="{{ route('admin.quotes.index', array_filter(['category' => $item])) }}"
+                <a href="{{ route('guru.quotes.index', array_filter(['category' => $item])) }}"
                     class="px-3 py-1.5 rounded-lg text-label-md {{ $category === $item ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }} transition-colors">
                     {{ ucfirst($item) }} ({{ $counts[$item] ?? 0 }})
                 </a>
@@ -46,7 +46,7 @@
             <h2 class="text-title-md font-bold text-on-surface">Daftar Quotes</h2>
             <p class="text-label-sm text-on-surface-variant">
                 @if ($category)
-                    Menampilkan hasil filter. <a href="{{ route('admin.quotes.index') }}" class="font-semibold text-primary hover:underline">Reset filter</a>
+                    Menampilkan hasil filter. <a href="{{ route('guru.quotes.index') }}" class="font-semibold text-primary hover:underline">Reset filter</a>
                 @else
                     Urut dari quotes terbaru.
                 @endif
@@ -61,7 +61,7 @@
     <noscript>
         <p class="text-body-sm text-on-surface-variant">
             Tabel ini butuh JavaScript aktif. Kamu tetap bisa
-            <a href="{{ route('admin.quotes.create') }}" class="font-semibold text-primary hover:underline">menambah quotes baru</a>
+            <a href="{{ route('guru.quotes.create') }}" class="font-semibold text-primary hover:underline">menambah quotes baru</a>
             tanpa JavaScript.
         </p>
     </noscript>

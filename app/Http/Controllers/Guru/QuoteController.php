@@ -1,32 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guru;
 
 use App\DataTables\QuoteDataTable;
 use App\Http\Controllers\Concerns\ManagesQuotes;
+use App\Http\Controllers\Controller;
 use App\Models\Quote;
 use Illuminate\Http\Request;
 
-class AdminQuoteController extends Controller
+class QuoteController extends Controller
 {
     use ManagesQuotes;
 
     /**
-     * Nama route admin supaya tabel dan form tetap berada di panel admin.
+     * Nama route guru supaya tabel dan form tetap berada di panel guru.
      *
      * @var array<string, string>
      */
     protected array $routes = [
-        'data' => 'admin.quotes.data',
-        'edit' => 'admin.quotes.edit',
-        'update' => 'admin.quotes.update',
-        'destroy' => 'admin.quotes.destroy',
-        'daily' => 'admin.quotes.daily',
+        'data' => 'guru.quotes.data',
+        'edit' => 'guru.quotes.edit',
+        'update' => 'guru.quotes.update',
+        'destroy' => 'guru.quotes.destroy',
+        'daily' => 'guru.quotes.daily',
     ];
 
     public function index(Request $request)
     {
-        return view('admin.quotes.index', [
+        return view('guru.quotes.index', [
             'dataTable' => $this->quoteDataTable()->html(),
             'category' => $request->string('category')->toString() ?: null,
             'total' => Quote::count(),
@@ -44,16 +45,17 @@ class AdminQuoteController extends Controller
 
     public function create()
     {
-        return view('admin.quotes.create');
+        return view('guru.quotes.create');
     }
 
     public function store(Request $request)
     {
         $validated = $this->validateQuote($request);
+        $isDaily = $request->user()->canSetDailyQuote() && $request->boolean('is_daily');
 
-        $this->createQuote($request, $validated, $request->boolean('is_daily'));
+        $this->createQuote($request, $validated, $isDaily);
 
-        return redirect()->route('admin.quotes.index')
+        return redirect()->route('guru.quotes.index')
             ->with('success', 'Quotes berhasil ditambahkan.');
     }
 
@@ -61,7 +63,7 @@ class AdminQuoteController extends Controller
     {
         $this->authorize('update', $quote);
 
-        return view('admin.quotes.edit', compact('quote'));
+        return view('guru.quotes.edit', compact('quote'));
     }
 
     public function update(Request $request, Quote $quote)
@@ -69,10 +71,11 @@ class AdminQuoteController extends Controller
         $this->authorize('update', $quote);
 
         $validated = $this->validateQuote($request);
+        $isDaily = $request->user()->canSetDailyQuote() && $request->boolean('is_daily');
 
-        $this->updateQuote($quote, $validated, $request->boolean('is_daily'));
+        $this->updateQuote($quote, $validated, $isDaily);
 
-        return redirect()->route('admin.quotes.index')
+        return redirect()->route('guru.quotes.index')
             ->with('success', 'Quotes berhasil diperbarui.');
     }
 
@@ -82,7 +85,7 @@ class AdminQuoteController extends Controller
 
         $quote->delete();
 
-        return redirect()->route('admin.quotes.index')
+        return redirect()->route('guru.quotes.index')
             ->with('success', 'Quotes berhasil dihapus.');
     }
 
@@ -92,7 +95,7 @@ class AdminQuoteController extends Controller
 
         $this->makeDaily($quote);
 
-        return redirect()->route('admin.quotes.index')
+        return redirect()->route('guru.quotes.index')
             ->with('success', 'Quotes terpilih sebagai kata-kata hari ini.');
     }
 

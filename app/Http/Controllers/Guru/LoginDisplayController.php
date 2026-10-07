@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guru;
 
+use App\Http\Controllers\Controller;
 use App\Models\Quote;
 use App\Models\Setting;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class LoginDisplayController extends Controller
             ->orderByDesc('id_quotes')
             ->get();
 
-        return view('admin.login-display', [
+        return view('guru.login-display', [
             'quotes' => $quotes,
             'enabled' => Setting::enabled(Setting::LOGIN_QUOTE_ENABLED),
         ]);
@@ -54,7 +55,7 @@ class LoginDisplayController extends Controller
             }
         });
 
-        return redirect()->route('admin.login-display.index')
+        return redirect()->route('guru.login-display.index')
             ->with('success', 'Tampilan quotes di halaman login berhasil disimpan.');
     }
 }

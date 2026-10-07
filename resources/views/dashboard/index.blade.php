@@ -7,6 +7,9 @@
     @php
         $total = $jumlahKategori->sum();
         $adaFilter = (bool) $kategori || (bool) $status;
+        $isSiswa = Auth::user()->isSiswa();
+        $homeRoute = $isSiswa ? 'siswa.dashboard' : 'konselor.dashboard';
+        $showRoute = $isSiswa ? 'siswa.curhat.show' : 'konselor.sesi.show';
     @endphp
 
     @if ($curhats->isEmpty() && !$adaFilter)
@@ -19,7 +22,7 @@
             <p class="text-body-md text-on-surface-variant mt-2">Ketika kamu atau orang lain membalas curhatmu, percakapan
                 akan muncul di sini.</p>
             @if (Auth::user()->role === 'siswa')
-                <a href="{{ route('curhat.create') }}"
+                <a href="{{ route('siswa.curhat.create') }}"
                     class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white font-label-lg font-bold shadow-md hover:bg-primary-container transition-all">
                     <span class="material-symbols-outlined text-lg">edit_note</span> Mulai Curhat
                 </a>
@@ -41,7 +44,7 @@
                         </p>
                     </div>
                     @if ($adaFilter)
-                        <a href="{{ route('dashboard') }}"
+                        <a href="{{ route($homeRoute) }}"
                             class="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-label-sm font-semibold hover:bg-surface-container-high transition-colors">
                             <span class="material-symbols-outlined text-base leading-none">filter_alt_off</span>
                             Reset filter
@@ -52,23 +55,23 @@
                 {{-- Filter status --}}
                 <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
                     <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Status Curhat :</span>
-                    <a href="{{ route('dashboard', array_filter(['kategori' => $kategori])) }}"
+                    <a href="{{ route($homeRoute, array_filter(['kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Semua ({{ $jumlahStatus->sum() }})
                     </a>
-                    <a href="{{ route('dashboard', array_filter(['status' => 'terkirim', 'kategori' => $kategori])) }}"
+                    <a href="{{ route($homeRoute, array_filter(['status' => 'terkirim', 'kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Terkirim
                     </a>
-                    <a href="{{ route('dashboard', array_filter(['status' => 'dilihat', 'kategori' => $kategori])) }}"
+                    <a href="{{ route($homeRoute, array_filter(['status' => 'dilihat', 'kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ request('status') === 'dilihat' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Dilihat
                     </a>
-                    <a href="{{ route('dashboard', array_filter(['status' => 'dibalas', 'kategori' => $kategori])) }}"
+                    <a href="{{ route($homeRoute, array_filter(['status' => 'dibalas', 'kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Dibalas
                     </a>
-                    <a href="{{ route('dashboard', array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
+                    <a href="{{ route($homeRoute, array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
                         class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Sudah Ditangani
                     </a>
@@ -77,12 +80,12 @@
                 {{-- Filter kategori --}}
                 <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
                     <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Kategori Curhat:</span>
-                    <a href="{{ route('dashboard', array_filter(['status' => $status])) }}"
+                    <a href="{{ route($homeRoute, array_filter(['status' => $status])) }}"
                         class="px-3 py-1.5 rounded-lg {{ !$kategori ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Semua ({{ $total }})
                     </a>
                     @foreach (\App\Models\Curhat::KATEGORI as $item)
-                        <a href="{{ route('dashboard', array_filter(['kategori' => $item, 'status' => $status])) }}"
+                        <a href="{{ route($homeRoute, array_filter(['kategori' => $item, 'status' => $status])) }}"
                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg {{ $kategori === $item ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                             <span
                                 class="material-symbols-outlined text-base leading-none">{{ \App\Models\Curhat::KATEGORI_ICON[$item] }}</span>
@@ -95,7 +98,7 @@
             {{-- isi Dashboard --}}
             <div class="space-y-3">
                 @forelse ($curhats as $curhat)
-                    <a href="{{ route('dashboard.show', $curhat) }}"
+                    <a href="{{ route($showRoute, $curhat) }}"
                         class="block p-4 rounded-2xl {{ $curhat->status === 'terkirim' ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
 
                         <div class="flex items-center justify-between gap-2 mb-1.5">
@@ -122,7 +125,7 @@
                                 @elseif ($curhat->status === 'ditangani')
                                     <span
                                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary-container text-on-primary-container text-label-sm">
-                                        Pesan Sudah Ditangani
+                                        Pesan Sudah Ditangani oleh {{ $curhat->nama_penerima }}
                                     </span>
                                 @elseif($curhat->status === 'dilihat')
                                     <span
@@ -138,9 +141,9 @@
                                     {{ Str::limit($curhat->pesan, 160) }}
                                 </p>
                             </div>
-                            @php $isKonselor = Auth::user()->role === 'konselor sebaya'; @endphp
+                            @php $isKonselor = Auth::user()->isKonselorSebaya(); @endphp
                             @if ($isKonselor)
-                                <form method="POST" action="{{ route('dashboard.destroy', $curhat) }}"
+                                <form method="POST" action="{{ route('konselor.sesi.destroy', $curhat) }}"
                                     data-swal-confirm="Hapus permanen riwayat ini?"
                                     data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."
                                     data-swal-icon="warning" data-swal-confirm-text="Ya, Hapus"
@@ -165,7 +168,7 @@
                         </div>
                         <h2 class="text-headline-sm font-bold text-on-surface">Tidak ada percakapan yang cocok</h2>
                         <p class="text-body-md text-on-surface-variant mt-2">Coba pilih topik atau status lain.</p>
-                        <a href="{{ route('dashboard') }}"
+                        <a href="{{ route($homeRoute) }}"
                             class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-on-primary font-label-lg font-bold shadow-md hover:bg-primary-container transition-all">
                             <span class="material-symbols-outlined text-lg">filter_alt_off</span> Reset filter
                         </a>

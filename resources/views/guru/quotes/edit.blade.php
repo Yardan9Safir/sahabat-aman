@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Edit Quotes - Guru BK')
 
@@ -10,12 +10,12 @@
     </div>
 
     @include('quotes._form', [
-        'action' => route('admin.quotes.update', $quote),
+        'action' => route('guru.quotes.update', $quote),
         'method' => 'PUT',
         'submitLabel' => 'Simpan Perubahan',
         'submitIcon' => 'save',
         'quote' => $quote,
-        'cancelUrl' => route('admin.quotes.index'),
+        'cancelUrl' => route('guru.quotes.index'),
     ])
 </div>
 @endsection

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Tambah Quotes - Guru BK')
 
@@ -10,11 +10,11 @@
     </div>
 
     @include('quotes._form', [
-        'action' => route('admin.quotes.store'),
+        'action' => route('guru.quotes.store'),
         'method' => 'POST',
         'submitLabel' => 'Simpan Quotes',
         'submitIcon' => 'add_notes',
-        'cancelUrl' => route('admin.quotes.index'),
+        'cancelUrl' => route('guru.quotes.index'),
     ])
 </div>
 @endsection

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Siswa;
 
 use App\DataTables\QuoteDataTable;
 use App\Http\Controllers\Concerns\ManagesQuotes;
+use App\Http\Controllers\Controller;
 use App\Models\Quote;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,7 @@ class QuoteController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateQuote($request);
-        $isDaily = $request->user()->isGuru() && $request->boolean('is_daily');
+        $isDaily = $request->user()->canSetDailyQuote() && $request->boolean('is_daily');
 
         $this->createQuote($request, $validated, $isDaily);
 
@@ -58,7 +59,7 @@ class QuoteController extends Controller
         $this->authorize('update', $quote);
 
         $validated = $this->validateQuote($request);
-        $isDaily = $request->user()->isGuru() && $request->boolean('is_daily');
+        $isDaily = $request->user()->canSetDailyQuote() && $request->boolean('is_daily');
 
         $this->updateQuote($quote, $validated, $isDaily);
 

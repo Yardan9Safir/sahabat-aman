@@ -3,6 +3,11 @@
 @section('title', 'Dialog Curhat - Sahabat Aman')
 
 @section('content')
+    @php
+        $isSiswa = Auth::user()->isSiswa();
+        $homeRoute = $isSiswa ? 'siswa.dashboard' : 'konselor.dashboard';
+        $replyRoute = $isSiswa ? 'siswa.curhat.reply' : 'konselor.sesi.reply';
+    @endphp
     <div class="flex flex-col gap-2 max-w-4xl mx-auto">
 
         {{-- Tampilan Header Percakapan --}}
@@ -29,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ route('dashboard') }}"
+            <a href="{{ route($homeRoute) }}"
                 class="px-4 py-2 rounded-xl bg-surface-container text-primary text-label-md font-semibold hover:bg-surface-variant transition-colors flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-lg">arrow_back</span> Kembali
             </a>
@@ -50,7 +55,7 @@
             <div>
                 @if ($curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
                     @if ($curhat->status !== 'ditangani')
-                        <form method="POST" action="{{ route('dashboard.handle', $curhat) }}"
+                        <form method="POST" action="{{ route('konselor.sesi.handle', $curhat) }}"
                             data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
                             data-swal-text="Tindakan ini permanen dan tidak dapat dibatalkan. Seluruh riwayat chat akan dihapus permanen."
                             data-swal-icon="warning" data-swal-confirm-text="Ya, tandai selesai"
@@ -103,7 +108,7 @@
             {{-- Form Reply --}}
             <div class="p-4 bg-surface-container-low border-t border-surface-variant/40">
                 @if ($curhat->status !== 'ditangani' && ($curhat->penerima_id === auth()->id() || $curhat->siswa_id === auth()->id()))
-                    <form method="POST" action="{{ route('dashboard.reply', $curhat) }}" data-mode="chat"
+                    <form method="POST" action="{{ route($replyRoute, $curhat) }}" data-mode="chat"
                         data-target="#chatList" data-empty="#chatEmpty"
                         class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
                         @csrf

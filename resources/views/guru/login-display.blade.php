@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Tampilan Halaman Login - Guru BK')
 
@@ -18,7 +18,7 @@
         </p>
     </section>
 
-    <form method="POST" action="{{ route('admin.login-display.update') }}" class="space-y-6">
+    <form method="POST" action="{{ route('guru.login-display.update') }}" class="space-y-6">
         @csrf
         @method('PUT')
 
@@ -89,7 +89,7 @@
                     <p class="text-body-sm text-on-surface-variant mt-1">
                         Ajak siswa, konselor sebaya, atau guru untuk membuat quotes terlebih dulu.
                     </p>
-                    <a href="{{ route('quotes.create') }}"
+                    <a href="{{ route('guru.quotes.create') }}"
                         class="inline-flex items-center gap-2 mt-5 px-5 py-3 rounded-2xl bg-primary text-on-primary text-label-lg font-semibold shadow-md hover:bg-primary-container transition-all">
                         <span class="material-symbols-outlined text-lg">add_notes</span>
                         Tambah Quotes
@@ -99,7 +99,7 @@
         </section>
 
         <div class="flex flex-wrap items-center gap-3">
-            <a href="{{ route('admin.index') }}"
+            <a href="{{ route('guru.dashboard') }}"
                 class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">Kembali</a>
             <button type="submit"
                 class="px-7 py-3.5 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center gap-2">
