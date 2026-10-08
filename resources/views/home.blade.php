@@ -42,6 +42,12 @@
     data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
 
     @php
+        // ponytail: gambar memakai placeholder picsum (stabil per-seed). Ganti URL ke aset
+        // lokal (public/images/*) saat foto asli tersedia, cukup tukar $foto array.
+        $foto = [
+            'hero' => 'https://picsum.photos/seed/sahabat-hero/900/700',
+            'privasi' => 'https://picsum.photos/seed/sahabat-privasi/800/600',
+        ];
         $isGuru = auth()->check() && auth()->user()->isGuru();
         $primaryAction = auth()->check() ? route('dashboard') : route('login');
         $primaryLabel = auth()->check() ? 'Buka Kotak Masuk' : 'Mulai Curhat';
@@ -61,6 +67,8 @@
     <header class="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
         <div class="flex justify-between items-center max-w-7xl mx-auto px-6 h-20 w-full">
             <a class="flex items-center gap-2.5 shrink-0" href="{{ route('welcome') }}">
+                <span class="material-symbols-outlined text-primary text-2xl"
+                    style="font-variation-settings: 'FILL' 1;">spa</span>
                 <span class="text-lg font-bold text-primary tracking-tight">Sahabat Aman</span>
             </a>
 
@@ -68,6 +76,7 @@
                 <a href="{{ $primaryAction }}"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary text-sm shadow-sm transition-all duration-150 active:scale-95">
                     <span>{{ $primaryLabel }}</span>
+                    <span class="material-symbols-outlined text-base">arrow_forward</span>
                 </a>
             </div>
         </div>
@@ -76,46 +85,83 @@
     <main class="flex-1 flex flex-col w-full">
 
         {{-- 1. Hero --}}
-        <section id="beranda" class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden">
+        <section id="beranda" class="relative pt-12 pb-16 md:pt-16 md:pb-24 overflow-hidden">
             <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-secondary-fixed/40 rounded-full blur-3xl pointer-events-none">
+                class="absolute top-10 left-0 w-72 h-72 bg-primary-fixed/50 rounded-full blur-3xl pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 right-0 w-80 h-80 bg-tertiary-fixed/50 rounded-full blur-3xl pointer-events-none">
             </div>
 
-            <div class="max-w-4xl mx-auto px-6 text-center relative">
-                <div
-                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed border border-secondary-fixed-dim/40 mb-6">
-                    <span class="material-symbols-outlined text-secondary text-base"
-                        style="font-variation-settings: 'FILL' 1;">lock</span>
-                    <span class="text-xs font-semibold">100% Bebas Stigma &bull; Kerahasiaan Terjamin</span>
+            <div
+                class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+                <div class="text-center lg:text-left">
+                    <h1
+                        class="text-[34px] md:text-[44px] lg:text-[48px] leading-[44px] md:leading-[56px] font-extrabold text-on-surface tracking-tight mb-6 text-balance">
+                        Setiap Cerita Berhak Didengar oleh
+                        <span
+                            class="text-primary underline decoration-secondary-container decoration-wavy underline-offset-8">Sahabat
+                            Aman</span>
+                    </h1>
+                    <p class="text-base md:text-lg text-on-surface-variant max-w-xl mx-auto lg:mx-0 mb-8 text-balance leading-relaxed">
+                        Bimbingan konseling sekolah yang hangat dan aman tanpa rasa takut atau dihakimi. Suarakan isi
+                        hatimu, bersama kita temukan ketenangan.
+                    </p>
+                </div>
+                <div class="relative mx-auto w-full max-w-md lg:max-w-none">
+                    <div
+                        class="absolute -top-4 -right-4 w-28 h-28 bg-secondary-fixed/60 rounded-full blur-2xl pointer-events-none"></div>
+                    <div
+                        class="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-fixed/60 rounded-full blur-2xl pointer-events-none"></div>
+                    <img src="{{ $foto['hero'] }}" alt="Suasana konseling yang hangat dan aman"
+                        loading="lazy"
+                        class="relative w-full h-64 sm:h-80 lg:h-[440px] object-cover rounded-3xl border border-outline-variant/40 shadow-xl">
+                </div>
+            </div>
+        </section>
+
+        {{-- 1b. Keunggulan --}}
+        <section class="py-12 md:py-16 bg-surface-container-low border-t border-b border-surface-container">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-2xl mx-auto mb-10 md:mb-12">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-semibold uppercase tracking-wider mb-3">
+                        <span class="material-symbols-outlined text-sm">mood</span>
+                        Kenapa Sahabat Aman
+                    </span>
+                    <h2 class="text-2xl md:text-[32px] md:leading-[40px] font-bold text-on-surface">
+                        Ruang yang Dibuat untuk Kamu
+                    </h2>
                 </div>
 
-                <h1
-                    class="text-[34px] md:text-[48px] leading-[44px] md:leading-[56px] font-extrabold text-on-surface tracking-tight mb-6 text-balance">
-                    Setiap Cerita Berhak Didengar oleh
-                    <span
-                        class="text-primary underline decoration-secondary-container decoration-wavy underline-offset-8">Sahabat
-                        Aman</span>
-                </h1>
-
-                <p
-                    class="text-base md:text-lg text-on-surface-variant max-w-2xl mx-auto mb-10 text-balance leading-relaxed">
-                    Bimbingan konseling sekolah yang hangat dan aman tanpa rasa takut atau dihakimi. Suarakan isi
-                    hatimu, bersama kita temukan ketenangan.
-                </p>
-
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="{{ $primaryAction }}"
-                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary text-lg shadow-md hover:shadow-lg transition-all active:scale-95">
-                        <span class="material-symbols-outlined text-xl">chat_bubble</span>
-                        <span>{{ $primaryLabel }}</span>
-                    </a>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <article class="tactile-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-primary-fixed text-primary flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-2xl">psychology</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-on-surface mb-2">Tanpa Dihakimi</h3>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Ceritakan apa pun yang kamu rasa. Di sini tidak ada pertanyaan yang salah ataupun pandangan
+                            yang menghakimi.
+                        </p>
+                    </article>
+                    <article class="tactile-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-secondary-fixed text-secondary flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-2xl">how_to_reg</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-on-surface mb-2">Dijawab Pendamping</h3>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">
+                            Setiap curhat mendapat respon dari guru BK atau konselor sebaya yang paham dan peduli.
+                        </p>
+                    </article>
                 </div>
             </div>
         </section>
 
         {{-- 2. Quotes --}}
-        <section id="quotes"
-            class="py-12 md:py-20 bg-surface-container-low border-t border-b border-surface-container">
+        <section id="quotes" class="py-12 md:py-20">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center max-w-2xl mx-auto mb-14">
                     <span
@@ -133,22 +179,22 @@
                 </div>
 
                 @if ($quotes->isNotEmpty())
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-6 lg:gap-8">
+                    <div class="grid grid-cols-1 gap-6">
                         @foreach ($quotes as $index => $quote)
                             @php $warna = $accent[$index % count($accent)]; @endphp
                             <article
-                                class="tactile-card relative bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-7 flex flex-col justify-between overflow-hidden">
+                                class="tactile-card relative bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6 flex flex-col justify-between overflow-hidden">
                                 <div class="absolute top-0 left-0 right-0 h-1.5 {{ $warna['bar'] }}"></div>
 
                                 <div>
-                                    <div class="flex items-center justify-between mb-5 gap-3">
+                                    <div class="flex items-center justify-between mb-4 gap-3">
                                         <span
                                             class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-medium truncate">
                                             {{ $quote->displayAuthorContext() }}
                                         </span>
                                     </div>
 
-                                    <blockquote class="text-lg font-semibold text-on-surface leading-relaxed mb-6">
+                                    <blockquote class="text-lg font-semibold text-on-surface leading-relaxed mb-5">
                                         &ldquo;{{ $quote->isi_quotes }}&rdquo;
                                     </blockquote>
                                 </div>
@@ -190,24 +236,42 @@
         </section>
 
         {{-- 3. Kerahasiaan & hotline --}}
-        <section id="kerahasiaan" class="py-12 md:py-16">
+        <section id="kerahasiaan" class="py-12 md:py-16 bg-surface-container-low border-t border-b border-surface-container">
             <div class="max-w-7xl mx-auto px-6">
                 <div
-                    class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 md:p-12 tactile-card text-center">
-                    <div class="max-w-3xl mx-auto space-y-4">
+                    class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-6 md:p-10 tactile-card grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center overflow-hidden">
+                    <div class="relative order-2 md:order-1 mx-auto w-full max-w-md md:max-w-none">
                         <div
-                            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-xs font-semibold">
-                            <span class="material-symbols-outlined text-base">shield</span>
-                            <span>Standar Etika Konseling Sekolah</span>
-                        </div>
-                        <h3 class="text-2xl md:text-3xl font-bold text-on-surface">
+                            class="absolute -top-4 -right-4 w-24 h-24 bg-secondary-fixed/60 rounded-full blur-2xl pointer-events-none"></div>
+                        <img src="{{ $foto['privasi'] }}" alt="Konselor mendampingi siswa dengan hangat" loading="lazy"
+                            class="relative w-full h-56 sm:h-72 object-cover rounded-3xl border border-outline-variant/40 shadow-lg">
+                    </div>
+                    <div class="order-1 md:order-2 text-center md:text-left">
+                        <h3 class="text-2xl md:text-3xl font-bold text-on-surface mb-4">
                             Kerahasiaanmu adalah Prioritas Utama Kami
                         </h3>
-                        <p class="text-base text-on-surface-variant leading-relaxed">
-                            Seluruh catatan dan obrolan berada di bawah sumpah profesi konselor. Guru BK dan konselor
-                            sebaya tidak akan membagikan ceritamu ke pihak lain tanpa persetujuanmu. Ruang ini adalah
-                            rumah amanmu.
+                        <p class="text-base text-on-surface-variant leading-relaxed mb-6">
+                            Seluruh catatan dan obrolan berada di bawah sumpah profesi konselor. Ruang ini adalah rumah
+                            amanmu.
                         </p>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                            <li class="flex items-start gap-2 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Tidak dibagikan tanpa persetujuan
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Obrolan terjaga kerahasiaannya
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Bebas dari stigma &amp; penilaian
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-on-surface-variant">
+                                <span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Didampingi tenaga berpengalaman
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

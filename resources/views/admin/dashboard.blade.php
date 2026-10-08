@@ -7,7 +7,7 @@
 
         <div>
             <h1 class="text-headline-lg font-bold text-on-surface">Dashboard Admin</h1>
-            <p class="text-body-md text-on-surface-variant mt-1">Ikhtisar sistem Sahabat Aman: pengguna, curhat, dan quotes.</p>
+            <p class="text-body-md text-on-surface-variant mt-1">Ikhtisar Sistem Sahabat Aman: pengguna, curhat, dan quotes.</p>
         </div>
 
         {{-- Statistik pengguna --}}
