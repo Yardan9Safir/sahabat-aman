@@ -199,7 +199,8 @@
                                     </blockquote>
                                 </div>
 
-                                <div class="pt-4 border-t border-surface-container flex items-center justify-between gap-3">
+                                <div
+                                    class="pt-4 border-t border-surface-container flex items-center justify-between gap-3">
                                     <div class="min-w-0">
                                         <p class="text-xs font-bold {{ $warna['name'] }} truncate">
                                             {{ $quote->displayAuthor() }}

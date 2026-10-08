@@ -185,10 +185,9 @@
             <section
                 class="w-full lg:w-[46%] xl:w-[48%] bg-background flex items-center justify-center p-6 sm:p-8 md:p-10 xl:p-16">
                 <div class="w-full max-w-[420px] flex flex-col">
-                    <div class="mb-6 md:mb-8">
-                        <h1
-                            class="text-[26px] sm:text-[30px] md:text-[32px] lg:text-[34px] leading-[34px] sm:leading-[40px] lg:leading-[40px] font-bold tracking-tight text-on-surface">
-                            Selamat Datang Kembali
+                    <div class="mb-8">
+                        <h1 class="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-bold tracking-tight text-on-surface">
+                            Selamat Datang !!!
                         </h1>
                         <p class="text-sm text-on-surface-variant mt-2">
                             Tolong masukkan akun Sahabat Aman Anda untuk melanjutkan konseling.
@@ -206,7 +205,7 @@
 
                         <div>
                             <label for="email" class="block text-sm font-semibold text-on-surface mb-2">
-                                Alamat Email Siswa / Guru
+                                Email
                             </label>
                             <div class="relative">
                                 <div
