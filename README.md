@@ -108,9 +108,10 @@ Seeder membuat akun demo:
 | --- | --- | --- | --- |
 | Udin | `udin@gmail.com` | `password` | siswa |
 | Adit | `adit@gmail.com` | `password` | siswa |
-| Guru BK | `guru@gmail.com` | `password` | guru |
-| Konselor Sebaya A | `konselorA@gmail.com` | `password` | konselor sebaya |
-| Konselor Sebaya B | `konselorB@gmail.com` | `password` | konselor sebaya |
+| Annisa Uswatun Hasanah, S.Pd | `annisa@gmail.com` | `password` | guru |
+| Konselor Sebaya A (contoh per kelas) | `konselorA<KELAS>@gmail.com` (contoh: `konselorA7A@gmail.com`) | `password` | konselor sebaya |
+| Konselor Sebaya B (contoh per kelas) | `konselorB<KELAS>@gmail.com` (contoh: `konselorB7A@gmail.com`) | `password` | konselor sebaya |
+| Admin | `admin@gmail.com` | `password` | admin |
 
 ### 2.5 Kalau sudah pernah instalasi
 

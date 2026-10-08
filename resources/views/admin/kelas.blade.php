@@ -12,6 +12,7 @@
             </p>
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($gurus as $guru)
             <section
                 class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 custom-shadow-resting overflow-hidden">
@@ -30,41 +31,41 @@
                                 @endif
                             </p>
                         </div>
+                        <span
+                            class="px-3 py-1.5 rounded-full text-label-sm font-bold {{ count($guru->assignedKelas()) > 0 ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-surface-container-high text-on-surface-variant' }}">
+                            {{ count($guru->assignedKelas()) }} kelas diampu
+                        </span>
                     </div>
-                    <span
-                        class="px-3 py-1.5 rounded-full text-label-sm font-bold {{ count($guru->assignedKelas()) > 0 ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-surface-container-high text-on-surface-variant' }}">
-                        {{ count($guru->assignedKelas()) }} kelas diampu
-                    </span>
                 </div>
 
-                <form method="POST" action="{{ route('admin.kelas.update', $guru) }}" class="p-5 space-y-4">
-                    @csrf
-                    @method('PUT')
+                    <form method="POST" action="{{ route('admin.kelas.update', $guru) }}" class="p-5 space-y-4">
+                        @csrf
+                        @method('PUT')
 
-                    @error('kelas')
-                        <p class="text-xs text-error">{{ $message }}</p>
-                    @enderror
+                        @error('kelas')
+                            <p class="text-xs text-error">{{ $message }}</p>
+                        @enderror
 
-                    @foreach ([7, 8, 9] as $tingkat)
-                        <div>
-                            <p class="text-label-md font-bold text-on-surface-variant mb-2">
-                                Kelas {{ $tingkat }}
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                @foreach ($semuaKelas as $kelas)
-                                    @if (str_starts_with($kelas, (string) $tingkat))
-                                        <label
-                                            class="kelas-chip cursor-pointer select-none px-3 py-1.5 rounded-lg text-label-md border transition-colors {{ in_array($kelas, $guru->assignedKelas(), true) ? 'border-primary bg-surface-container text-primary font-bold' : 'border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary' }}">
-                                            <input type="checkbox" name="kelas[]" value="{{ $kelas }}"
-                                                class="sr-only peer"
-                                                {{ in_array($kelas, $guru->assignedKelas(), true) ? 'checked' : '' }}>
-                                            <span>{{ $kelas }}</span>
-                                        </label>
-                                    @endif
-                                @endforeach
+                        @foreach ([7, 8, 9] as $tingkat)
+                            <div>
+                                <p class="text-label-md font-bold text-on-surface-variant mb-2">
+                                    Kelas {{ $tingkat }}
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach ($semuaKelas as $kelas)
+                                        @if (str_starts_with($kelas, (string) $tingkat))
+                                            <label
+                                                class="kelas-chip cursor-pointer select-none px-3 py-1.5 rounded-lg text-label-md border transition-colors {{ in_array($kelas, $guru->assignedKelas(), true) ? 'border-primary bg-surface-container text-primary font-bold' : 'border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary' }}">
+                                                <input type="checkbox" name="kelas[]" value="{{ $kelas }}"
+                                                    class="sr-only peer"
+                                                    {{ in_array($kelas, $guru->assignedKelas(), true) ? 'checked' : '' }}>
+                                                <span>{{ $kelas }}</span>
+                                            </label>
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
 
                     <div class="flex justify-end pt-1">
                         <button type="submit"
@@ -80,7 +81,7 @@
                 <p class="text-body-md text-on-surface-variant">Belum ada akun guru BK.</p>
             </section>
         @endforelse
-
+    </div>
     </div>
 @endsection
 
@@ -91,10 +92,13 @@
             const sync = () => {
                 if (input.checked) {
                     chip.classList.add('border-primary', 'bg-surface-container', 'text-primary', 'font-bold');
-                    chip.classList.remove('border-outline-variant/60', 'bg-surface-container-lowest', 'text-on-surface-variant');
+                    chip.classList.remove('border-outline-variant/60', 'bg-surface-container-lowest',
+                        'text-on-surface-variant');
                 } else {
-                    chip.classList.remove('border-primary', 'bg-surface-container', 'text-primary', 'font-bold');
-                    chip.classList.add('border-outline-variant/60', 'bg-surface-container-lowest', 'text-on-surface-variant');
+                    chip.classList.remove('border-primary', 'bg-surface-container', 'text-primary',
+                    'font-bold');
+                    chip.classList.add('border-outline-variant/60', 'bg-surface-container-lowest',
+                        'text-on-surface-variant');
                 }
             };
             input.addEventListener('change', sync);

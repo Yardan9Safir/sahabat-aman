@@ -22,7 +22,14 @@
                 class="px-5 py-2.5 rounded-xl bg-primary text-on-primary text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all">
                 Cari
             </button>
-            @if ($q !== '')
+            <select name="role" onchange="this.form.submit()"
+                class="px-4 py-2.5 rounded-xl bg-surface-container-lowest text-on-surface text-label-lg font-semibold border border-outline-variant/60 hover:bg-surface-container-low transition-colors cursor-pointer">
+                <option value="">Semua Peran</option>
+                @foreach (\App\Models\User::ROLES as $roleOption)
+                    <option value="{{ $roleOption }}" @selected($role === $roleOption)>{{ \App\Models\User::make(['role' => $roleOption])->roleLabel() }}</option>
+                @endforeach
+            </select>
+            @if ($q !== '' || $role !== '')
                 <a href="{{ route('admin.users.index') }}"
                     class="px-5 py-2.5 rounded-xl bg-surface-container text-on-surface-variant text-label-lg font-semibold hover:bg-surface-container-high transition-colors">
                     Reset

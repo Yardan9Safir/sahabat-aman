@@ -16,6 +16,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $q = trim((string) $request->query('q'));
+        $role = in_array($request->query('role'), User::ROLES, true) ? $request->query('role') : '';
 
         $pengguna = User::query()
             ->when($q !== '', fn ($query) => $query->where(function ($query) use ($q) {
@@ -23,10 +24,12 @@ class UserController extends Controller
                     ->orWhere('email', 'like', "%{$q}%")
                     ->orWhere('identifier', 'like', "%{$q}%");
             }))
+            ->when($role !== '', fn ($query) => $query->where('role', $role))
             ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
 
+        return view('admin.users', compact('pengguna', 'q', 'role'));
         return view('admin.users', compact('pengguna', 'q'));
     }
 
