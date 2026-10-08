@@ -67,27 +67,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex items-center gap-3 pt-2">
-                <a href="{{ route('admin.dashboard') }}"
-                    class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">
-                    Batal
-                </a>
-                <button type="submit"
-                    class="px-7 py-3.5 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center gap-2">
-                    <span class="material-symbols-outlined text-lg">save</span> Simpan Perubahan
-                </button>
-            </div>
-        </form>
-
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 pt-2">
                     <a href="{{ route('admin.dashboard') }}"
-                        class="px-5 py-2.5 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">
+                        class="px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors">
                         Batal
                     </a>
                     <button type="submit"
-                        class="px-7 py-3 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                        class="px-7 py-3.5 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center gap-2">
                         <span class="material-symbols-outlined text-lg">save</span> Simpan Perubahan
                     </button>
                 </div>

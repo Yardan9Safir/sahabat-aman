@@ -36,6 +36,7 @@
                             {{ count($guru->assignedKelas()) }} kelas diampu
                         </span>
                     </div>
+                </div>
 
                     <form method="POST" action="{{ route('admin.kelas.update', $guru) }}" class="p-5 space-y-4">
                         @csrf
@@ -65,8 +66,6 @@
                                 </div>
                             </div>
                         @endforeach
-                        </div>
-                    @endforeach
 
                     <div class="flex justify-end pt-1">
                         <button type="submit"
@@ -82,24 +81,7 @@
                 <p class="text-body-md text-on-surface-variant">Belum ada akun guru BK.</p>
             </section>
         @endforelse
-</div>
-
-                        <div class="flex justify-end pt-1">
-                            <button type="submit"
-                                class="px-5 py-2.5 rounded-xl bg-primary text-on-primary text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all">
-                                Simpan Kelas {{ $guru->name }}
-                            </button>
-                        </div>
-                    </form>
-                </section>
-            @empty
-                <section
-                    class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 custom-shadow-resting p-10 text-center">
-                    <span class="material-symbols-outlined text-outline text-4xl mb-2">group</span>
-                    <p class="text-body-md text-on-surface-variant">Belum ada akun guru BK.</p>
-                </section>
-            @endforelse
-        </div>
+    </div>
     </div>
 @endsection
 
