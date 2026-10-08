@@ -136,7 +136,8 @@
     </style>
 </head>
 
-<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex"
+<body
+    class="bg-background font-sans text-on-surface min-h-screen antialiased flex selection:bg-primary-fixed selection:text-on-primary-fixed"
     data-swal-flash-success="{{ session('success') }}" data-swal-flash-error="{{ session('error') }}"
     data-swal-flash-warning="{{ session('warning') }}" data-swal-flash-info="{{ session('info') }}">
 
@@ -217,7 +218,8 @@
 
     {{-- Main --}}
     <div id="adminMainCol" class="flex-1 flex flex-col min-w-0 min-h-screen lg:pl-72">
-        <main class="sm:p-6 lg:p-8 min-h-screen bg-background mx-auto flex flex-col pb-28 lg:pb-12">
+        <main
+            class="flex-1 w-full min-h-screen bg-background mx-auto flex flex-col px-4 sm:px-8 max-w-7xl pt-6 lg:pt-8 pb-28 lg:pb-12">
             @yield('content')
             <nav class="lg:hidden fixed bottom-0 left-0 w-full z-30 bg-surface-container-lowest border-t border-surface-variant/40 px-2 pt-1.5 pb-safe shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]"
                 aria-label="Navigasi bawah">
@@ -237,8 +239,8 @@
                     <a href="{{ route('admin.kelas.index') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.kelas.*') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">
                         <span class="material-symbols-outlined text-[22px] leading-none">class</span>
-                        <span
-                            class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Kelola Kelas Guru</span>
+                        <span class="text-[10px] min-[400px]:text-[11px] leading-tight truncate max-w-full">Kelola Kelas
+                            Guru</span>
                     </a>
                     <a href="{{ route('admin.account') }}"
                         class="flex flex-col items-center justify-center gap-0.5 rounded-2xl px-0.5 min-[400px]:px-1 py-2 min-h-15 min-w-0 transition-colors {{ request()->routeIs('admin.account') ? 'bg-primary-container/60 text-primary font-bold' : 'text-on-surface-variant hover:bg-surface-container hover:text-primary' }}">

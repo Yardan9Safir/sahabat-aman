@@ -62,21 +62,15 @@ class AuthController extends Controller
             'role' => ['required', 'in:'.implode(',', User::ROLES)],
             'kelas' => ['nullable',
                 'required_if:role,'.User::ROLE_SISWA,
-                'required_if:role,'.User::ROLE_KONSELOR_SEBAYA,
                 'in:'.implode(',', User::ALL_KELAS)],
         ]);
 
-        // Setiap kelas hanya memiliki 2 konselor sebaya.
-        if ($validated['role'] === User::ROLE_KONSELOR_SEBAYA && ! empty($validated['kelas'])) {
-            $jumlahKonselor = User::where('role', User::ROLE_KONSELOR_SEBAYA)
-                ->where('kelas', $validated['kelas'])
-                ->count();
-
-            if ($jumlahKonselor >= 2) {
-                throw ValidationException::withMessages([
-                    'kelas' => 'Setiap kelas hanya memiliki 2 konselor sebaya.',
-                ]);
-            }
+        // Konselor sebaya: maksimal 10 akun (KonselorA–KonselorJ).
+        if ($validated['role'] === User::ROLE_KONSELOR_SEBAYA
+            && ($pesan = User::validasiKonselor())) {
+            throw ValidationException::withMessages([
+                'role' => $pesan,
+            ]);
         }
 
         $user = User::create([
@@ -85,7 +79,7 @@ class AuthController extends Controller
             'identifier' => $validated['identifier'],
             'password' => $validated['password'],
             'role' => $validated['role'],
-            'kelas' => $validated['kelas'] ?? null,
+            'kelas' => $validated['role'] === User::ROLE_SISWA ? ($validated['kelas'] ?? null) : null,
         ]);
 
         Auth::login($user);

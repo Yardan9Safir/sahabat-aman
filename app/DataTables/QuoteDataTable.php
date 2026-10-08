@@ -101,7 +101,6 @@ class QuoteDataTable
                     'info' => 'Menampilkan _START_ sampai _END_ dari _TOTAL_ quotes',
                     'infoEmpty' => 'Tidak ada quotes',
                     'infoFiltered' => '(disaring dari _MAX_ quotes)',
-                    'emptyTable' => 'Belum ada quotes',
                     'loadingRecords' => 'Memuat...',
                     'processing' => 'Memproses...',
                     'aria' => [
