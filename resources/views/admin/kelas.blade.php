@@ -13,24 +13,23 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse ($gurus as $guru)
-                <section
-                    class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 custom-shadow-resting overflow-hidden">
-                    <div class="p-5 border-b border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div
-                                class="w-10 h-10 rounded-xl bg-secondary-container/60 text-on-secondary-container flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined">school</span>
-                            </div>
-                            <div class="min-w-0">
-                                <h2 class="text-title-md font-bold text-on-surface truncate">{{ $guru->name }}</h2>
-                                <p class="text-label-sm text-on-surface-variant">
-                                    {{ $guru->email }}
-                                    @if ($guru->identifier)
-                                        &middot; {{ $guru->identifier }}
-                                    @endif
-                                </p>
-                            </div>
+        @forelse ($gurus as $guru)
+            <section
+                class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 custom-shadow-resting overflow-hidden">
+                <div class="p-5 border-b border-outline-variant/40 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-secondary-container/60 text-on-secondary-container flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined">school</span>
+                        </div>
+                        <div class="min-w-0">
+                            <h2 class="text-title-md font-bold text-on-surface truncate">{{ $guru->name }}</h2>
+                            <p class="text-label-sm text-on-surface-variant">
+                                {{ $guru->email }}
+                                @if ($guru->identifier)
+                                    &middot; {{ $guru->identifier }}
+                                @endif
+                            </p>
                         </div>
                         <span
                             class="px-3 py-1.5 rounded-full text-label-sm font-bold {{ count($guru->assignedKelas()) > 0 ? 'bg-primary-fixed text-on-primary-fixed' : 'bg-surface-container-high text-on-surface-variant' }}">
@@ -66,6 +65,24 @@
                                 </div>
                             </div>
                         @endforeach
+                        </div>
+                    @endforeach
+
+                    <div class="flex justify-end pt-1">
+                        <button type="submit"
+                            class="px-5 py-2.5 rounded-xl bg-primary text-on-primary text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all">
+                            Simpan Kelas {{ $guru->name }}
+                        </button>
+                    </div>
+                </form>
+            </section>
+        @empty
+            <section class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 custom-shadow-resting p-10 text-center">
+                <span class="material-symbols-outlined text-outline text-4xl mb-2">group</span>
+                <p class="text-body-md text-on-surface-variant">Belum ada akun guru BK.</p>
+            </section>
+        @endforelse
+</div>
 
                         <div class="flex justify-end pt-1">
                             <button type="submit"
