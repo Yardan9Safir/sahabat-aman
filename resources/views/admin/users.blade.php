@@ -30,6 +30,7 @@
                 @endforeach
             </select>
             @if ($q !== '' || $role !== '')
+            @if ($q !== '')
                 <a href="{{ route('admin.users.index') }}"
                     class="px-5 py-2.5 rounded-xl bg-surface-container text-on-surface-variant text-label-lg font-semibold hover:bg-surface-container-high transition-colors">
                     Reset

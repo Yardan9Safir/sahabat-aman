@@ -30,6 +30,7 @@ class UserController extends Controller
             ->withQueryString();
 
         return view('admin.users', compact('pengguna', 'q', 'role'));
+        return view('admin.users', compact('pengguna', 'q'));
     }
 
     /**
