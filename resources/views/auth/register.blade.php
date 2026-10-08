@@ -75,7 +75,7 @@
 
         <div id="kelas-field">
             <label for="kelas" class="text-label-lg font-bold text-on-surface mb-2 block">Kelas <span
-                    class="font-normal text-outline">(khusus siswa &amp; konselor sebaya)</span></label>
+                    class="font-normal text-outline">(khusus siswa)</span></label>
             <select id="kelas" name="kelas"
                 class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
                 <option value="">-- Pilih kelas --</option>
@@ -86,8 +86,8 @@
             @error('kelas')
                 <p class="mt-2 text-xs text-error">{{ $message }}</p>
             @enderror
-            <p class="mt-2 text-body-sm text-on-surface-variant">Kelas menentukan guru BK dan konselor sebaya yang
-                akan melayanimu. Tiap kelas hanya memiliki 2 konselor sebaya.</p>
+            <p class="mt-2 text-body-sm text-on-surface-variant">Kelas menentukan guru BK yang akan melayanimu.
+                Konselor sebaya tidak terikat kelas — semua konselor bisa kamu pilih.</p>
         </div>
 
         @error('password')
@@ -103,7 +103,7 @@
         const kelasSelect = document.getElementById('kelas');
         const toggleKelas = () => {
             const role = roleSelect.value;
-            const butuhKelas = role === 'siswa' || role === 'konselor sebaya';
+            const butuhKelas = role === 'siswa';
             kelasField.classList.toggle('hidden', !butuhKelas);
             kelasSelect.required = butuhKelas;
         };

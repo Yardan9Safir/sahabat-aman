@@ -118,6 +118,9 @@ Route::middleware('auth')->group(function () {
         Route::put('/akun', [AdminDashboardController::class, 'accountUpdate'])->name('account.update');
 
         Route::get('/pengguna', [UserController::class, 'index'])->name('users.index');
+        Route::get('/pengguna/data', [UserController::class, 'dataTable'])->name('users.data');
+        Route::get('/pengguna/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/pengguna', [UserController::class, 'store'])->name('users.store');
         Route::get('/pengguna/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/pengguna/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/pengguna/{user}', [UserController::class, 'destroy'])->name('users.destroy');

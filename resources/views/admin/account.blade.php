@@ -4,14 +4,13 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto space-y-6">
-
-        <div>
-            <h1 class="text-headline-lg font-bold text-on-surface">Profil Saya</h1>
-            <p class="text-body-md text-on-surface-variant mt-1">Kelola informasi akun dan kata sandi.</p>
-        </div>
-
         <section
             class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant custom-shadow-resting flex flex-col gap-4 relative overflow-hidden">
+            <div>
+                <h1 class="text-headline-lg font-bold text-on-surface">Profil Saya</h1>
+                <p class="text-body-md text-on-surface-variant mt-1">Kelola informasi akun dan kata sandi.</p>
+            </div>
+
             <div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl pointer-events-none">
             </div>
 

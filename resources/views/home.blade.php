@@ -42,8 +42,6 @@
     data-swal-flash-success="{{ session('success') }}" data-swal-flash-info="{{ session('info') }}">
 
     @php
-        // ponytail: gambar memakai placeholder picsum (stabil per-seed). Ganti URL ke aset
-        // lokal (public/images/*) saat foto asli tersedia, cukup tukar $foto array.
         $foto = [
             'hero' => 'https://picsum.photos/seed/sahabat-hero/900/700',
             'privasi' => 'https://picsum.photos/seed/sahabat-privasi/800/600',
@@ -86,15 +84,13 @@
 
         {{-- 1. Hero --}}
         <section id="beranda" class="relative pt-12 pb-16 md:pt-16 md:pb-24 overflow-hidden">
-            <div
-                class="absolute top-10 left-0 w-72 h-72 bg-primary-fixed/50 rounded-full blur-3xl pointer-events-none">
+            <div class="absolute top-10 left-0 w-72 h-72 bg-primary-fixed/50 rounded-full blur-3xl pointer-events-none">
             </div>
             <div
                 class="absolute bottom-0 right-0 w-80 h-80 bg-tertiary-fixed/50 rounded-full blur-3xl pointer-events-none">
             </div>
 
-            <div
-                class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
                 <div class="text-center lg:text-left">
                     <h1
                         class="text-[34px] md:text-[44px] lg:text-[48px] leading-[44px] md:leading-[56px] font-extrabold text-on-surface tracking-tight mb-6 text-balance">
@@ -103,18 +99,20 @@
                             class="text-primary underline decoration-secondary-container decoration-wavy underline-offset-8">Sahabat
                             Aman</span>
                     </h1>
-                    <p class="text-base md:text-lg text-on-surface-variant max-w-xl mx-auto lg:mx-0 mb-8 text-balance leading-relaxed">
+                    <p
+                        class="text-base md:text-lg text-on-surface-variant max-w-xl mx-auto lg:mx-0 mb-8 text-balance leading-relaxed">
                         Bimbingan konseling sekolah yang hangat dan aman tanpa rasa takut atau dihakimi. Suarakan isi
                         hatimu, bersama kita temukan ketenangan.
                     </p>
                 </div>
                 <div class="relative mx-auto w-full max-w-md lg:max-w-none">
                     <div
-                        class="absolute -top-4 -right-4 w-28 h-28 bg-secondary-fixed/60 rounded-full blur-2xl pointer-events-none"></div>
+                        class="absolute -top-4 -right-4 w-28 h-28 bg-secondary-fixed/60 rounded-full blur-2xl pointer-events-none">
+                    </div>
                     <div
-                        class="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-fixed/60 rounded-full blur-2xl pointer-events-none"></div>
-                    <img src="{{ $foto['hero'] }}" alt="Suasana konseling yang hangat dan aman"
-                        loading="lazy"
+                        class="absolute -bottom-6 -left-6 w-32 h-32 bg-primary-fixed/60 rounded-full blur-2xl pointer-events-none">
+                    </div>
+                    <img src="{{ $foto['hero'] }}" alt="Suasana konseling yang hangat dan aman" loading="lazy"
                         class="relative w-full h-64 sm:h-80 lg:h-[440px] object-cover rounded-3xl border border-outline-variant/40 shadow-xl">
                 </div>
             </div>
@@ -135,7 +133,8 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <article class="tactile-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6">
+                    <article
+                        class="tactile-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6">
                         <div
                             class="w-12 h-12 rounded-xl bg-primary-fixed text-primary flex items-center justify-center mb-4">
                             <span class="material-symbols-outlined text-2xl">psychology</span>
@@ -146,7 +145,8 @@
                             yang menghakimi.
                         </p>
                     </article>
-                    <article class="tactile-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6">
+                    <article
+                        class="tactile-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-6">
                         <div
                             class="w-12 h-12 rounded-xl bg-secondary-fixed text-secondary flex items-center justify-center mb-4">
                             <span class="material-symbols-outlined text-2xl">how_to_reg</span>
@@ -179,7 +179,7 @@
                 </div>
 
                 @if ($quotes->isNotEmpty())
-                    <div class="grid grid-cols-1 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
                         @foreach ($quotes as $index => $quote)
                             @php $warna = $accent[$index % count($accent)]; @endphp
                             <article
@@ -236,14 +236,17 @@
         </section>
 
         {{-- 3. Kerahasiaan & hotline --}}
-        <section id="kerahasiaan" class="py-12 md:py-16 bg-surface-container-low border-t border-b border-surface-container">
+        <section id="kerahasiaan"
+            class="py-12 md:py-16 bg-surface-container-low border-t border-b border-surface-container">
             <div class="max-w-7xl mx-auto px-6">
                 <div
                     class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-6 md:p-10 tactile-card grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 items-center overflow-hidden">
                     <div class="relative order-2 md:order-1 mx-auto w-full max-w-md md:max-w-none">
                         <div
-                            class="absolute -top-4 -right-4 w-24 h-24 bg-secondary-fixed/60 rounded-full blur-2xl pointer-events-none"></div>
-                        <img src="{{ $foto['privasi'] }}" alt="Konselor mendampingi siswa dengan hangat" loading="lazy"
+                            class="absolute -top-4 -right-4 w-24 h-24 bg-secondary-fixed/60 rounded-full blur-2xl pointer-events-none">
+                        </div>
+                        <img src="{{ $foto['privasi'] }}" alt="Konselor mendampingi siswa dengan hangat"
+                            loading="lazy"
                             class="relative w-full h-56 sm:h-72 object-cover rounded-3xl border border-outline-variant/40 shadow-lg">
                     </div>
                     <div class="order-1 md:order-2 text-center md:text-left">
