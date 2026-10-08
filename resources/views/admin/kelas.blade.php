@@ -12,6 +12,7 @@
             </p>
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($gurus as $guru)
             <section
                 class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 custom-shadow-resting overflow-hidden">
@@ -80,6 +81,7 @@
                 <p class="text-body-md text-on-surface-variant">Belum ada akun guru BK.</p>
             </section>
         @endforelse
+</div>
 
     </div>
 @endsection

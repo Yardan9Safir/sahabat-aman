@@ -39,20 +39,20 @@
         </section>
 
         {{-- Filter kategori --}}
-        <section class="bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/60 soft-shadow">
-            <div class="flex flex-wrap items-center justify-between gap-3 p-1">
+        <section class="bg-surface-container-lowest p-3 rounded-2xl border border-outline-variant/60 soft-shadow">
+            <div class="flex flex-wrap items-center justify-between gap-2">
                 <!-- Filter Kategori (Kiri) -->
-                <div class="flex flex-wrap items-center gap-1.5">
+                <div class="flex flex-wrap items-center gap-1">
                     <span class="text-label-md font-semibold text-on-surface-variant mr-1">Kategori Curhat :</span>
 
                     <a href="{{ route('quotes.index', array_filter(['mine' => $mine ? 1 : null])) }}"
-                        class="px-3 py-1.5 rounded-lg text-label-md transition-colors {{ !$category ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }}">
+                        class="px-2.5 py-1 rounded-lg text-label-md transition-colors {{ !$category ? 'font-bold bg-primary text-on-primary shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }}">
                         Semua ({{ $total }})
                     </a>
 
                     @foreach (\App\Models\Quote::CATEGORIES as $item)
                         <a href="{{ route('quotes.index', array_filter(['category' => $item, 'mine' => $mine ? 1 : null])) }}"
-                            class="px-3 py-1.5 rounded-lg text-label-md transition-colors {{ $category === $item ? 'font-bold bg-primary-fixed text-primary' : 'font-medium text-on-surface-variant hover:bg-surface-container' }}">
+                            class="px-2.5 py-1 rounded-lg text-label-md transition-colors {{ $category === $item ? 'font-bold bg-primary-fixed text-primary' : 'font-medium text-on-surface-variant hover:bg-surface-container' }}">
                             {{ ucfirst($item) }} ({{ $counts[$item] ?? 0 }})
                         </a>
                     @endforeach
@@ -61,7 +61,7 @@
                 <!-- Filter Milik Saya (Kanan) -->
                 <div class="flex items-center gap-2 border-l border-outline-variant pl-3">
                     <a href="{{ route('quotes.index', array_filter(['category' => $category, 'mine' => $mine ? null : 1])) }}"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-label-md transition-colors {{ $mine ? 'font-bold bg-tertiary-container text-on-tertiary-container shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }}">
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-label-md transition-colors {{ $mine ? 'font-bold bg-tertiary-container text-on-tertiary-container shadow-xs' : 'font-medium text-on-surface-variant hover:bg-surface-container' }}">
                         <span class="material-symbols-outlined text-sm">person</span>
                         Milik Saya
                     </a>

@@ -4,7 +4,7 @@
 
 @section('content')
     <section
-        class="bg-surface-container-lowest p-6 sm:p-8 rounded-3xl soft-shadow border border-surface-variant/40 gap-6 relative overflow-hidden">
+        class="bg-surface-container-lowest p-5 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col gap-5 relative overflow-hidden">
         <div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl pointer-events-none">
         </div>
         
@@ -16,19 +16,17 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('siswa.curhat.store') }}" class="flex flex-col gap-6" id="venting-form">
+        <form method="POST" action="{{ route('siswa.curhat.store') }}" class="flex flex-col gap-5" id="venting-form">
             @csrf
-            <div>
-                @error('penerima_id')
-                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
-                @enderror
-                @error('kategori')
-                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
-                @enderror
-                @error('pesan')
-                    <p class="mt-2 text-xs text-error">{{ $message }}</p>
-                @enderror
-            </div>
+            @error('penerima_id')
+                <p class="text-xs text-error">{{ $message }}</p>
+            @enderror
+            @error('kategori')
+                <p class="text-xs text-error">{{ $message }}</p>
+            @enderror
+            @error('pesan')
+                <p class="text-xs text-error">{{ $message }}</p>
+            @enderror
 
             {{-- 1. Pilih Target Pendengar --}}
             <div class="flex flex-col gap-2.5">
@@ -38,7 +36,7 @@
                 </label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="target-listener-group">
                     <label
-                        class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe', 'guru') === 'guru' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
+                        class="relative flex flex-col p-3.5 rounded-2xl border-2 {{ old('tujuan_tipe', 'guru') === 'guru' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
                         <input type="radio" name="tujuan_tipe" value="guru" class="peer sr-only"
                             {{ old('tujuan_tipe', 'guru') === 'guru' ? 'checked' : '' }}>
                         <div class="flex items-center justify-between mb-2">
@@ -53,7 +51,7 @@
                         </div>
                     </label>
                     <label
-                        class="relative flex flex-col p-4 rounded-2xl border-2 {{ old('tujuan_tipe') === 'konselor sebaya' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
+                        class="relative flex flex-col p-3.5 rounded-2xl border-2 {{ old('tujuan_tipe') === 'konselor sebaya' ? 'border-primary bg-surface-container-low/40' : 'border-outline-variant/60 bg-surface-container-lowest' }} cursor-pointer transition-all hover-lift">
                         <input type="radio" name="tujuan_tipe" value="konselor sebaya" class="peer sr-only"
                             {{ old('tujuan_tipe') === 'konselor sebaya' ? 'checked' : '' }}>
                         <div class="flex items-center justify-between mb-2">
@@ -77,7 +75,7 @@
                     Pilih Penerima:
                 </label>
                 <select id="penerima_id" name="penerima_id" required
-                    class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                    class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
                     <option value="">-- Pilih penerima --</option>
                     <optgroup label="Guru BK" id="optgroup-guru">
                         @forelse ($gurus as $guru)
@@ -110,7 +108,7 @@
                 <div class="flex flex-wrap gap-2" id="category-tags">
                     @foreach (['belajar' => ['Belajar', 'menu_book'], 'sosial' => ['Sosial', 'group'], 'pribadi' => ['Pribadi', 'psychology'], 'karier' => ['Karier', 'self_improvement']] as $key => [$label, $icon])
                         <button
-                            class="category-tag px-3.5 py-2 rounded-xl text-label-md border-2 {{ old('kategori') === $key ? 'border-primary bg-surface-container text-primary font-bold' : 'border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary' }} flex items-center gap-1.5 transition-colors"
+                            class="category-tag px-3.5 py-1.5 rounded-xl text-label-md border-2 {{ old('kategori') === $key ? 'border-primary bg-surface-container text-primary font-bold' : 'border-outline-variant/60 bg-surface-container-lowest text-on-surface-variant hover:border-primary hover:text-primary' }} flex items-center gap-1.5 transition-colors"
                             type="button" data-value="{{ $key }}">
                             <span class="material-symbols-outlined text-base">{{ $icon }}</span>
                             {{ $label }}
@@ -130,20 +128,20 @@
                     <span class="text-label-sm text-outline" id="char-counter">0 / 2000 karakter</span>
                 </div>
                 <textarea
-                    class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 sm:p-5 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all resize-y outline-none"
-                    id="curhat-text" name="pesan" rows="6"
+                    class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl px-4 py-3 text-on-surface placeholder:text-outline/70 focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all resize-y outline-none"
+                    id="curhat-text" name="pesan" rows="5"
                     placeholder="Tuliskan apa saja yang kamu rasakan, tidak ada penilaian di sini... Ceritakan beban ujian, rasa lelah, kesal, atau hal yang mengganjal hatimu.">{{ old('pesan') }}</textarea>
             </div>
 
             {{-- 5. Actions --}}
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
                 <div class="flex items-center gap-3 w-full sm:w-auto">
                     <a href="{{ url()->previous() }}"
-                        class="flex-1 sm:flex-none px-5 py-3 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">
+                        class="flex-1 sm:flex-none px-5 py-2.5 rounded-2xl bg-surface-container text-primary text-label-lg font-bold hover:bg-surface-variant transition-colors text-center">
                         Batal
                     </a>
                     <button
-                        class="flex-1 sm:flex-none px-4 py-3 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                        class="flex-1 sm:flex-none px-4 py-2.5 rounded-2xl bg-primary text-white text-label-lg font-bold shadow-md hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
                         type="submit">
                         <span class="material-symbols-outlined text-md">send</span> Kirim Curhat
                     </button>
@@ -153,7 +151,7 @@
     </section>
 
     <section
-        class="bg-linear-to-br from-secondary-fixed/50 to-surface-container-low p-6 rounded-3xl border border-secondary-fixed/40 soft-shadow">
+        class="bg-linear-to-br from-secondary-fixed/50 to-surface-container-low p-5 rounded-3xl border border-secondary-fixed/40 soft-shadow">
         <div class="flex items-center gap-2 text-secondary mb-3">
             <span class="material-symbols-outlined text-2xl">lightbulb</span>
             <span class="text-label-md font-bold uppercase tracking-wider">Tips Sebelum Curhat</span>

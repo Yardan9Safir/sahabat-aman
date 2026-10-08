@@ -31,8 +31,8 @@
     @else
         <div class="space-y-4">
             <div
-                class="bg-surface-container-lowest p-4 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col gap-3">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                class="bg-surface-container-lowest p-3 rounded-3xl soft-shadow border border-surface-variant/40 flex flex-col gap-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                         <h3 class="text-title-md font-bold text-on-surface">Dialog Siswa</h3>
                         <p class="text-body-sm text-on-surface-variant">
@@ -45,7 +45,7 @@
                     </div>
                     @if ($adaFilter)
                         <a href="{{ route($homeRoute) }}"
-                            class="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant text-label-sm font-semibold hover:bg-surface-container-high transition-colors">
+                            class="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-lg bg-surface-container text-on-surface-variant text-label-sm font-semibold hover:bg-surface-container-high transition-colors">
                             <span class="material-symbols-outlined text-base leading-none">filter_alt_off</span>
                             Reset filter
                         </a>
@@ -53,40 +53,40 @@
                 </div>
 
                 {{-- Filter status --}}
-                <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
+                <div class="flex items-center gap-1 overflow-x-auto custom-scroll pb-1">
                     <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Status Curhat :</span>
                     <a href="{{ route($homeRoute, array_filter(['kategori' => $kategori])) }}"
-                        class="px-3 py-1.5 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        class="px-2.5 py-1 rounded-lg {{ !request('status') ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Semua ({{ $jumlahStatus->sum() }})
                     </a>
                     <a href="{{ route($homeRoute, array_filter(['status' => 'terkirim', 'kategori' => $kategori])) }}"
-                        class="px-3 py-1.5 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        class="px-2.5 py-1 rounded-lg {{ request('status') === 'terkirim' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Terkirim
                     </a>
                     <a href="{{ route($homeRoute, array_filter(['status' => 'dilihat', 'kategori' => $kategori])) }}"
-                        class="px-3 py-1.5 rounded-lg {{ request('status') === 'dilihat' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        class="px-2.5 py-1 rounded-lg {{ request('status') === 'dilihat' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Dilihat
                     </a>
                     <a href="{{ route($homeRoute, array_filter(['status' => 'dibalas', 'kategori' => $kategori])) }}"
-                        class="px-3 py-1.5 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        class="px-2.5 py-1 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Dibalas
                     </a>
                     <a href="{{ route($homeRoute, array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
-                        class="px-3 py-1.5 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        class="px-2.5 py-1 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Sudah Ditangani
                     </a>
                 </div>
 
                 {{-- Filter kategori --}}
-                <div class="flex items-center gap-1.5 overflow-x-auto custom-scroll pb-1">
+                <div class="flex items-center gap-1 overflow-x-auto custom-scroll pb-1">
                     <span class="text-label-sm text-outline font-semibold shrink-0 pr-1">Kategori Curhat:</span>
                     <a href="{{ route($homeRoute, array_filter(['status' => $status])) }}"
-                        class="px-3 py-1.5 rounded-lg {{ !$kategori ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                        class="px-2.5 py-1 rounded-lg {{ !$kategori ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Semua ({{ $total }})
                     </a>
                     @foreach (\App\Models\Curhat::KATEGORI as $item)
                         <a href="{{ route($homeRoute, array_filter(['kategori' => $item, 'status' => $status])) }}"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg {{ $kategori === $item ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
+                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg {{ $kategori === $item ? 'bg-primary text-on-primary font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                             <span
                                 class="material-symbols-outlined text-base leading-none">{{ \App\Models\Curhat::KATEGORI_ICON[$item] }}</span>
                             {{ ucfirst($item) }} ({{ $jumlahKategori[$item] ?? 0 }})
@@ -96,12 +96,12 @@
             </div>
 
             {{-- isi Dashboard --}}
-            <div class="space-y-3">
+            <div class="space-y-2">
                 @forelse ($curhats as $curhat)
                     <a href="{{ route($showRoute, $curhat) }}"
-                        class="block p-4 rounded-2xl {{ $curhat->status === 'terkirim' ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
+                        class="block p-3 rounded-2xl {{ $curhat->status === 'terkirim' ? 'bg-surface-container-low/90 border-2 border-primary/40 shadow-sm' : 'bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/30' }} cursor-pointer transition-all hover:shadow-md">
 
-                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                        <div class="flex items-center justify-between gap-2 mb-1">
                             <div class="flex flex-col items-start gap-0.5">
                                 <span
                                     class="inline-flex items-center text-md font-bold {{ $curhat->tujuan === 'guru' ? 'text-secondary' : 'text-tertiary' }}">
@@ -151,7 +151,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="flex items-center justify-center bg-error-container text-on-error-container hover:bg-error hover:text-on-error w-9 h-9 rounded-xl transition-colors shadow-xs"
+                                        class="flex items-center justify-center bg-error-container text-on-error-container hover:bg-error hover:text-on-error w-8 h-8 rounded-xl transition-colors shadow-xs"
                                         title="Hapus Permanen">
                                         <span class="material-symbols-outlined text-base">delete</span>
                                     </button>
