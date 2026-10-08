@@ -57,8 +57,8 @@ const init = async () => {
             url: config.ajax?.url ?? window.location.href,
         },
         language: {
-            ...config.language,
             emptyTable: EMPTY_STATE,
+            ...config.language,
         },
     });
 };

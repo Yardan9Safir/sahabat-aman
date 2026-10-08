@@ -104,6 +104,37 @@ class User extends Authenticatable
     }
 
     /**
+     * Aturan konselor sebaya: maksimal 10 akun (KonselorA–KonselorJ).
+     * Kembalikan pesan error, atau null jika lolos.
+     */
+    public static function validasiKonselor(?int $kecualiId = null): ?string
+    {
+        $jumlah = self::where('role', self::ROLE_KONSELOR_SEBAYA)
+            ->when($kecualiId, fn ($query) => $query->where('id', '!=', $kecualiId))
+            ->count();
+
+        return $jumlah >= 10 ? 'KONSELOR SEBAYA SUDAH PENUH' : null;
+    }
+
+    /**
+     * Aturan kelas guru: satu kelas hanya boleh diampu satu guru (tidak boleh
+     * double). Kembalikan pesan error, atau null jika lolos.
+     */
+    public static function validasiGuruKelas(array $kelas, ?int $kecualiId = null): ?string
+    {
+        $terpakai = self::where('role', self::ROLE_GURU)
+            ->when($kecualiId, fn ($query) => $query->where('id', '!=', $kecualiId))
+            ->get()
+            ->flatMap(fn (self $guru) => $guru->assignedKelas())
+            ->intersect(array_values($kelas))
+            ->values();
+
+        return $terpakai->isEmpty()
+            ? null
+            : 'Kelas '.implode(', ', $terpakai).' sudah diampu guru lain.';
+    }
+
+    /**
      * boleh memilih kata-kata hari ini (quote of the day) — hanya guru.
      */
     public function canSetDailyQuote(): bool
@@ -122,10 +153,8 @@ class User extends Authenticatable
     }
 
     /**
-     * Apakah user ini (guru BK / konselor sebaya) menangani kelas tertentu?
-     *
-     * Guru mengikuti daftar `guru_kelas`, konselor sebaya mengikuti kelasnya
-     * sendiri (`kelas`) — setiap kelas hanya memiliki 2 konselor sebaya.
+     * Apakah guru BK ini menangani kelas tertentu? (konselor sebaya tidak
+     * terikat kelas — semua siswa bisa memilih semua konselor sebaya).
      */
     public function handlesKelas(?string $kelas): bool
     {
@@ -133,14 +162,6 @@ class User extends Authenticatable
             return false;
         }
 
-        if ($this->isGuru()) {
-            return in_array($kelas, $this->assignedKelas(), true);
-        }
-
-        if ($this->isKonselorSebaya()) {
-            return $this->kelas === $kelas;
-        }
-
-        return false;
+        return $this->isGuru() && in_array($kelas, $this->assignedKelas(), true);
     }
 }

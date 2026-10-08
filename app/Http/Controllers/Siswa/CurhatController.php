@@ -53,12 +53,10 @@ class CurhatController extends Controller
             ->get()
             ->filter(fn (User $guru) => $guru->handlesKelas($siswa->kelas))
             ->values();
-        // Konselor sebaya hanya melayani kelasmu — tiap kelas punya 2 konselor.
+        // Konselor sebaya tidak terikat kelas — semua konselor terlihat.
         $konselors = User::where('role', User::ROLE_KONSELOR_SEBAYA)
             ->orderBy('name')
-            ->get()
-            ->filter(fn (User $konselor) => $konselor->handlesKelas($siswa->kelas))
-            ->values();
+            ->get();
 
         return view('curhat.create', compact('gurus', 'konselors'));
     }
@@ -87,13 +85,6 @@ class CurhatController extends Controller
         if ($penerima->isGuru() && ! $penerima->handlesKelas($siswa->kelas)) {
             throw ValidationException::withMessages([
                 'penerima_id' => 'Guru BK tersebut tidak menerima curhat dari kelasmu.',
-            ]);
-        }
-
-        // Konselor sebaya hanya melayani 2 konselor kelasmu.
-        if ($penerima->isKonselorSebaya() && ! $penerima->handlesKelas($siswa->kelas)) {
-            throw ValidationException::withMessages([
-                'penerima_id' => 'Konselor sebaya tersebut tidak melayani kelasmu.',
             ]);
         }
 

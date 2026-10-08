@@ -90,11 +90,6 @@
                     <div class="relative z-10 w-full max-w-[480px] mx-auto lg:mx-0" id="quoteCarousel">
                         <div
                             class="bg-surface-container-lowest/95 rounded-2xl p-6 md:p-8 soft-shadow-ambient border border-outline-variant/60 relative backdrop-blur-md transition-all duration-300 min-h-[240px] lg:min-h-[300px] flex flex-col justify-between">
-                            <div
-                                class="absolute -top-5 left-6 w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-300 flex items-center justify-center text-amber-950 shadow-md shadow-amber-400/25 ring-4 ring-surface-container-lowest">
-                                <span class="material-symbols-outlined text-2xl"
-                                    style="font-variation-settings: 'FILL' 1;">format_quote</span>
-                            </div>
 
                             {{-- Semua slide ditumpuk di grid yang sama agar tinggi kartu
                                  mengikuti slide terpanjang (tidak melompat saat rotasi). --}}
@@ -104,7 +99,6 @@
                                         class="col-start-1 row-start-1 pt-2 {{ $index === 0 ? '' : 'invisible' }}">
                                         <div
                                             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/70 border border-amber-200/60 text-amber-900 text-xs font-medium mb-4 max-w-full">
-                                            <span class="material-symbols-outlined text-base text-amber-700 shrink-0">{{ $quote->category_icon }}</span>
                                             <span class="truncate">{{ $quote->category_label }}</span>
                                         </div>
                                         <blockquote
@@ -113,10 +107,6 @@
                                         </blockquote>
                                         <div
                                             class="flex items-center gap-3 border-t border-surface-container-low pt-4">
-                                            <div
-                                                class="w-9 h-9 rounded-full bg-primary-fixed text-primary flex items-center justify-center shrink-0">
-                                                <span class="material-symbols-outlined text-lg">{{ $quote->displayAuthorIcon() }}</span>
-                                            </div>
                                             <div class="min-w-0">
                                                 <p class="text-sm font-semibold leading-none text-on-surface truncate">
                                                     {{ $quote->displayAuthor() }}

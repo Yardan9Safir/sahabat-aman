@@ -92,8 +92,7 @@
                                 {{ old('tujuan_tipe') === 'konselor sebaya' && old('penerima_id') == $konselor->id ? 'selected' : '' }}>
                                 {{ $konselor->name }}</option>
                         @empty
-                            <option value="" disabled data-tujuan="konselor sebaya">Belum ada konselor sebaya untuk
-                                kelasmu</option>
+                            <option value="" disabled data-tujuan="konselor sebaya">Belum ada konselor sebaya</option>
                         @endforelse
                     </optgroup>
                 </select>
