@@ -33,7 +33,7 @@ class CurhatController extends Controller
             $curhatsKeGuru,
             $kategori,
             $status,
-            ['siswa', 'penerima', 'balasans'],
+            ['siswa', 'penerima', 'balasans', 'penangan'],
         );
 
         return view('admin.index', [
@@ -55,7 +55,7 @@ class CurhatController extends Controller
 
         abort_unless($curhat->tujuan === User::ROLE_GURU, 403);
 
-        $curhat->load(['siswa', 'penerima', 'balasans.pengirim']);
+        $curhat->load(['siswa', 'penerima', 'balasans.pengirim', 'penangan']);
 
         abort_unless($guru->handlesKelas($curhat->siswa?->kelas), 403);
 
@@ -112,7 +112,11 @@ class CurhatController extends Controller
         abort_unless($curhat->penerima_id === $guru->id, 403);
         abort_unless($guru->handlesKelas($curhat->siswa?->kelas), 403);
 
-        $curhat->update(['status' => Curhat::STATUS_DITANGANI]);
+        $curhat->update([
+            'status' => Curhat::STATUS_DITANGANI,
+            'ditangani_by' => $guru->id,
+            'ditangani_at' => now(),
+        ]);
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true]);

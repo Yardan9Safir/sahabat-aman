@@ -43,8 +43,8 @@
 
     @php
         $foto = [
-            'hero' => 'https://picsum.photos/seed/sahabat-hero/900/700',
-            'privasi' => 'https://picsum.photos/seed/sahabat-privasi/800/600',
+            'privasi' => asset('images/foto1.jpg'),
+            'hero' => asset('images/foto2.jpg'),
         ];
         $isGuru = auth()->check() && auth()->user()->isGuru();
         $primaryAction = auth()->check() ? route('dashboard') : route('login');

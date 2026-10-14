@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Curhat;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -36,7 +37,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user-edit', ['user' => new User()]);
+        return view('admin.user-edit', [
+            'user' => new User(),
+            'gurus' => User::where('role', User::ROLE_GURU)->orderBy('name')->get(),
+        ]);
     }
 
     /**
@@ -56,6 +60,9 @@ class UserController extends Controller
             'guru_kelas' => $validated['role'] === User::ROLE_GURU
                 ? array_values($validated['guru_kelas'] ?? [])
                 : [],
+            'parent_guru_id' => $validated['role'] === User::ROLE_KONSELOR_SEBAYA
+                ? ($validated['parent_guru_id'] ?? null)
+                : null,
         ]);
 
         return redirect()->route('admin.users.index')
@@ -67,7 +74,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.user-edit', compact('user'));
+        return view('admin.user-edit', [
+            'user' => $user,
+            'gurus' => User::where('role', User::ROLE_GURU)->orderBy('name')->get(),
+        ]);
     }
 
     /**
@@ -86,6 +96,9 @@ class UserController extends Controller
         $user->guru_kelas = $validated['role'] === User::ROLE_GURU
             ? array_values($validated['guru_kelas'] ?? [])
             : [];
+        $user->parent_guru_id = $validated['role'] === User::ROLE_KONSELOR_SEBAYA
+            ? ($validated['parent_guru_id'] ?? null)
+            : null;
 
         if (!empty($validated['password'])) {
             $user->password = $validated['password'];
@@ -117,6 +130,11 @@ class UserController extends Controller
             ],
             'guru_kelas' => ['array'],
             'guru_kelas.*' => ['in:' . implode(',', User::ALL_KELAS)],
+            'parent_guru_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('users', 'id')->where('role', User::ROLE_GURU),
+            ],
             'password' => [$user ? 'nullable' : 'required', 'string', 'min:8', 'confirmed'],
         ]);
 

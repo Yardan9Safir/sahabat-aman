@@ -53,7 +53,7 @@
 
             {{-- Tandai Selesai / Hapus Permanen --}}
             <div>
-                @if ($curhat->penerima_id === auth()->id() && Auth::user()->isKonselorSebaya())
+                @if (Auth::user()->bisaTanganiCurhat($curhat))
                     @if ($curhat->status !== 'ditangani')
                         <form method="POST" action="{{ route('konselor.sesi.handle', $curhat) }}"
                             data-swal-confirm="Tandai selesai dan hapus riwayat chat ini?"
@@ -107,7 +107,7 @@
         <div class="bg-surface-container-lowest rounded-3xl soft-shadow border border-surface-variant/40 overflow-hidden">
             {{-- Form Reply --}}
             <div class="p-4 bg-surface-container-low border-t border-surface-variant/40">
-                @if ($curhat->status !== 'ditangani' && ($curhat->penerima_id === auth()->id() || $curhat->siswa_id === auth()->id()))
+                @if ($curhat->status !== 'ditangani' && ($curhat->penerima_id === auth()->id() || $curhat->siswa_id === auth()->id() || Auth::user()->bisaTanganiCurhat($curhat)))
                     <form method="POST" action="{{ route($replyRoute, $curhat) }}" data-mode="chat"
                         data-target="#chatList" data-empty="#chatEmpty"
                         class="rounded-2xl border border-outline-variant bg-surface-container-lowest p-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 transition-all">
@@ -123,11 +123,11 @@
                             </button>
                         </div>
                     </form>
-                @else
+                @elseif ($curhat->status === 'ditangani')
                     <div
                         class="rounded-2xl bg-error-container text-on-error-container border border-error/30 p-4 text-center">
                         <span class="material-symbols-outlined text-primary text-xl mb-1">check_circle</span>
-                        <p class="text-label-md font-semibold">Sudah Ditangani</p>
+                        <p class="text-label-md font-semibold">Sudah Ditangani oleh {{ $curhat->penangan?->name ?? $curhat->nama_penerima }}</p>
                         <p class="text-body-sm mt-0.5">Curhat ini sudah selesai ditangani. Percakapan telah berakhir.</p>
                     </div>
                 @endif

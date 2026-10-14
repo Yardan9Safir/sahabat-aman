@@ -114,7 +114,7 @@
                     <div
                         class="rounded-2xl bg-error-container text-on-error-container border border-error/30 p-4 text-center">
                         <span class="material-symbols-outlined text-primary text-xl mb-1">check_circle</span>
-                        <p class="text-label-md font-semibold">Sudah Ditangani</p>
+                        <p class="text-label-md font-semibold">Sudah Ditangani oleh {{ $curhat->penangan?->name ?? $curhat->nama_penerima }}</p>
                         <p class="text-body-sm mt-0.5">Curhat ini sudah selesai ditangani. Percakapan telah berakhir.</p>
                     </div>
                 @endif
