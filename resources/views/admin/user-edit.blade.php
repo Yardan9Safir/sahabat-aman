@@ -185,6 +185,23 @@
                             <p class="mt-2 text-xs text-error">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div id="konselor-parent-field" class="mt-4">
+                        <label for="parent_guru_id" class="text-label-lg font-bold text-on-surface mb-2 block">Guru
+                            Pembimbing <span class="font-normal text-outline">(parent, khusus konselor sebaya)</span></label>
+                        <select name="parent_guru_id" id="parent_guru_id"
+                            class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl p-4 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                            <option value="">-- Pilih Guru BK --</option>
+                            @foreach ($gurus as $guru)
+                                <option value="{{ $guru->id }}"
+                                    {{ (string) old('parent_guru_id', $user->parent_guru_id) === (string) $guru->id ? 'selected' : '' }}>
+                                    {{ $guru->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('parent_guru_id')
+                            <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </section>
 
                 {{-- Password --}}
@@ -259,6 +276,7 @@
         const kelasField = document.getElementById('kelas-field');
         const kelasSelect = document.getElementById('kelas');
         const guruField = document.getElementById('guru-kelas-field');
+        const konselorParentField = document.getElementById('konselor-parent-field');
         const roleCards = document.querySelectorAll('.role-card');
 
         const syncRoleCards = () => {
@@ -286,6 +304,7 @@
             kelasField.classList.toggle('hidden', !butuhKelas);
             kelasSelect.required = butuhKelas;
             guruField.classList.toggle('hidden', !isGuru);
+            konselorParentField.classList.toggle('hidden', role !== 'konselor sebaya');
             syncRoleCards();
         };
 

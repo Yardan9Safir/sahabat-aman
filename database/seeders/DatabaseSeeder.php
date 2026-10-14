@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 2 akun siswa
-        User::factory()->create([
+        User::create([
             'name' => 'Udin',
             'email' => 'udin@gmail.com',
             'role' => 'siswa',
@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        User::factory()->create([
+        User::create([
             'name' => 'Adit',
             'email' => 'adit@gmail.com',
             'role' => 'siswa',
@@ -40,8 +40,10 @@ class DatabaseSeeder extends Seeder
             ['Dian Miftahul Falah, S.Psi', 'dian@gmail.com', 'GURU-05', ['9F', '9G', '9H', '9I', '9J', '9K']],
         ];
 
+        $guruIds = [];
+
         foreach ($guruBk as [$name, $email, $identifier, $kelas]) {
-            User::factory()->create([
+            $guruIds[] = User::create([
                 'name' => $name,
                 'email' => $email,
                 'role' => 'guru',
@@ -49,23 +51,25 @@ class DatabaseSeeder extends Seeder
                 'kelas' => '',
                 'guru_kelas' => $kelas,
                 'password' => bcrypt('password'),
-            ]);
+            ])->id;
         }
 
         // 10 konselor sebaya — KonselorA@… sampai KonselorJ@… (batas maksimal).
         // Konselor tidak terikat kelas (kolom `kelas` kosong), semua siswa bisa memilih mereka.
-        foreach (str_split('ABCDEFGHIJ') as $huruf) {
-            User::factory()->create([
+        // Tiap pasangan A&B, CD, EF, GH, IJ dibimbing (parent) guru ke-1 sampai ke-5.
+        foreach (str_split('ABCDEFGHIJ') as $i => $huruf) {
+            User::create([
                 'name' => "Konselor {$huruf}",
                 'email' => "Konselor{$huruf}@gmail.com",
                 'role' => 'konselor sebaya',
                 'identifier' => "KON-{$huruf}",
                 'kelas' => '',
+                'parent_guru_id' => $guruIds[intdiv($i, 2)],
                 'password' => bcrypt('password'),
             ]);
         }
 
-        User::factory()->create([
+        User::create([
             'name' => 'Administrator',
             'email' => 'admin@gmail.com',
             'role' => 'admin',

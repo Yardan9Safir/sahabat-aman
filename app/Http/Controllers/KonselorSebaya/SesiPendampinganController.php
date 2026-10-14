@@ -17,7 +17,12 @@ class SesiPendampinganController extends Controller
         $konselor = Auth::user();
         abort_unless($konselor->isKonselorSebaya(), 403);
 
-        abort_unless($curhat->penerima_id === $konselor->id || $curhat->siswa_id === $konselor->id, 403);
+        abort_unless(
+            $curhat->penerima_id === $konselor->id
+            || $curhat->siswa_id === $konselor->id
+            || ($konselor->parent_guru_id && $curhat->penerima_id === $konselor->parent_guru_id),
+            403
+        );
 
         if ($curhat->penerima_id === $konselor->id) {
             $curhat->setViewed();
@@ -30,10 +35,10 @@ class SesiPendampinganController extends Controller
     {
         $konselor = Auth::user();
 
-        $isPenerima = $konselor->isKonselorSebaya() && $curhat->penerima_id === $konselor->id;
         $isPengirim = $curhat->siswa_id === $konselor->id;
+        $isPenangani = $konselor->bisaTanganiCurhat($curhat);
 
-        abort_unless($isPenerima || $isPengirim, 403);
+        abort_unless($isPengirim || $isPenangani, 403);
         abort_if($curhat->isDitangani(), 403);
 
         $validated = $request->validate([
@@ -46,7 +51,7 @@ class SesiPendampinganController extends Controller
             'isi' => $validated['isi'],
         ]);
 
-        if ($isPenerima) {
+        if ($isPenangani) {
             $curhat->setReplied();
         }
 
@@ -73,9 +78,13 @@ class SesiPendampinganController extends Controller
     {
         $konselor = Auth::user();
 
-        abort_unless($konselor->isKonselorSebaya() && $curhat->penerima_id === $konselor->id, 403);
+        abort_unless($konselor->bisaTanganiCurhat($curhat), 403);
 
-        $curhat->update(['status' => Curhat::STATUS_DITANGANI]);
+        $curhat->update([
+            'status' => Curhat::STATUS_DITANGANI,
+            'ditangani_by' => $konselor->id,
+            'ditangani_at' => now(),
+        ]);
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true]);

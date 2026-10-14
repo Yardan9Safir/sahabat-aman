@@ -14,7 +14,8 @@ class DashboardController extends Controller
 
     /**
      * Kotak masuk konselor sebaya: curhat yang ditujukan kepadanya
-     * plus curhat yang ia kirim sendiri sebagai siswa.
+     * plus curhat yang ia kirim sendiri sebagai siswa, plus curhat yang
+     * masuk ke guru parent-nya (dibagikan, hanya bisa dilihat).
      */
     public function index(Request $request)
     {
@@ -27,9 +28,13 @@ class DashboardController extends Controller
             ->where(function ($query) use ($konselor) {
                 $query->where('penerima_id', $konselor->id)
                     ->orWhere('siswa_id', $konselor->id);
+
+                if ($konselor->parent_guru_id) {
+                    $query->orWhere('penerima_id', $konselor->parent_guru_id);
+                }
             });
 
-        $ringkasan = $this->summarizeCurhats($curhatsSaya, $kategori, $status, ['balasans']);
+        $ringkasan = $this->summarizeCurhats($curhatsSaya, $kategori, $status, ['balasans', 'penangan']);
 
         return view('dashboard.index', [
             'curhats' => $ringkasan['curhats'],

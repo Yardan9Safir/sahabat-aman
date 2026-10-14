@@ -69,19 +69,29 @@
                 @forelse($curhats as $curhat)
                     <article
                         class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/80 custom-shadow-resting custom-shadow-interactive transition-all">
-                        <div class="flex flex-wrap items-start justify-between gap-2 pb-3">
+                        <div class="flex flex-wrap items-start justify-between gap-2">
                             <div class="flex items-center gap-3 border border-emerald-200/50 px-2.5 py-1 rounded-md">
                                 <div class="flex items-center gap-2">
-                                    <h4 class="text-base font-bold text-on-surface">
-                                        {{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}</h4>
-                                    <span> - {{ $curhat->created_at->diffForHumans() }}</span>
+                                    <div class="">
+                                        <p class="text-xs font-bold">
+                                            Curhat #{{ $curhat->id }}
+                                        </p>
+
+                                        <h4 class="text-base font-bold text-on-surface">
+                                            {{ $curhat->nama_pengirim ?? ($curhat->siswa->name ?? 'Siswa') }}
+                                        </h4>
+
+                                        <p class="text-xs text-on-surface-variant">
+                                            {{ $curhat->created_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                    <span
+                                        class="bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md text-label-sm font-semibold border border-emerald-200/50">
+                                        Kategori : {{ ucfirst($curhat->kategori) }}
+                                    </span>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span
-                                    class="bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md text-label-sm font-semibold border border-emerald-200/50">
-                                    {{ ucfirst($curhat->kategori) }}
-                                </span>
                                 @if ($curhat->status === 'terkirim')
                                     <span
                                         class="bg-error-container text-on-error-container px-2.5 py-1 rounded-md text-label-sm font-bold flex items-center gap-1">
@@ -93,13 +103,13 @@
                                         class="bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-md text-label-sm font-bold">
                                         Pesan Dilihat, Namun Belum Dibalas</span>
                                 @elseif($curhat->status === 'ditangani')
-                                    <span
-                                        class="bg-primary-fixed text-on-primary-fixed px-2.5 py-1 rounded-md text-label-sm font-bold">
-                                        Pesan Ditangani oleh : {{ $curhat->nama_penerima }}</span>
+                                    <span class="bg-error text-on-error px-2.5 py-1 rounded-md text-label-md font-bold">
+                                        Pesan Ditangani oleh :
+                                        {{ $curhat->penangan?->name ?? $curhat->nama_penerima }}</span>
                                 @elseif($curhat->status === 'dibalas')
                                     <span
                                         class="bg-tertiary-container text-on-tertiary-container px-2.5 py-1 rounded-md text-label-sm font-bold">
-                                        Pesan Sudah Dibalas
+                                        Dibalas Oleh {{ $curhat->nama_penerima }}
                                     </span>
                                 @endif
                             </div>

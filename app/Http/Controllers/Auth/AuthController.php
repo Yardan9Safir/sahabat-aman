@@ -137,7 +137,33 @@ class AuthController extends Controller
 
         $user->save();
 
+        // AuthenticateSession memakai hash password di session; sinkronkan
+        // supaya ganti password tidak ikut mengeluarkan perangkat ini.
+        if (! empty($validated['password'])) {
+            $request->session()->put('password_hash_'.Auth::getDefaultDriver(), $user->getAuthPassword());
+        }
+
         return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    /**
+     * Keluarkan akun ini dari semua perangkat/sesi lain, perangkat ini tetap masuk.
+     */
+    public function logoutOtherDevices(Request $request)
+    {
+        $validated = $request->validate([
+            'logout_password' => ['required', 'string'],
+        ]);
+
+        if (! Hash::check($validated['logout_password'], $request->user()->password)) {
+            throw ValidationException::withMessages([
+                'logout_password' => ['Password salah.'],
+            ]);
+        }
+
+        Auth::logoutOtherDevices($validated['logout_password']);
+
+        return redirect()->route('profile')->with('success', 'Semua perangkat lain berhasil dikeluarkan.');
     }
 
     /**

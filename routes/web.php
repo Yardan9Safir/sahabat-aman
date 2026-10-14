@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profil', [AuthController::class, 'profile'])->name('profile');
     Route::put('/profil', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profil/keluar-perangkat-lain', [AuthController::class, 'logoutOtherDevices'])->name('profile.logout-other-devices');
 
     // Penerus tunggal: diarahkan ke panel sesuai role.
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
