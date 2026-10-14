@@ -105,7 +105,7 @@
                             <div class="flex flex-col items-start gap-0.5">
                                 <span
                                     class="inline-flex items-center text-md font-bold {{ $curhat->tujuan === 'guru' ? 'text-secondary' : 'text-tertiary' }}">
-                                    {{ $curhat->tujuanLabel }}
+                                    Kepada : {{ $curhat->tujuanLabel }}
                                 </span>
                                 <span class="text-md text-outline">
                                     {{ $curhat->created_at->diffForHumans() }}
@@ -120,17 +120,17 @@
                                 @elseif ($curhat->status === 'dibalas')
                                     <span
                                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-label-sm font-semibold">
-                                        Pesan Sudah Dibalas
+                                        Dibalas Oleh {{ $curhat->nama_penerima }}
                                     </span>
                                 @elseif ($curhat->status === 'ditangani')
                                     <span
-                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary-container text-on-primary-container text-label-sm">
-                                        Pesan Sudah Ditangani oleh {{ $curhat->nama_penerima }}
+                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-error text-on-error text-label-md font-bold">
+                                        Pesan Sudah Ditangani oleh {{ $curhat->penangan?->name ?? $curhat->nama_penerima }}
                                     </span>
                                 @elseif($curhat->status === 'dilihat')
                                     <span
                                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary-fixed font-bold text-label-md">
-                                        Pesan Sudah Dilihat, Namun Belum Dibalas
+                                        Dilihat Oleh {{ $curhat->nama_penerima }}
                                     </span>
                                 @endif
                             </div>
@@ -142,7 +142,7 @@
                                 </p>
                             </div>
                             @php $isKonselor = Auth::user()->isKonselorSebaya(); @endphp
-                            @if ($isKonselor)
+                            @if ($isKonselor && $curhat->penerima_id === auth()->id())
                                 <form method="POST" action="{{ route('konselor.sesi.destroy', $curhat) }}"
                                     data-swal-confirm="Hapus permanen riwayat ini?"
                                     data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."

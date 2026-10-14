@@ -71,6 +71,12 @@ class Curhat extends Model
         return $this->belongsTo(User::class, 'penerima_id');
     }
 
+    /** Siapa yang menandai curhat ini selesai (konselor sebaya atau guru). */
+    public function penangan()
+    {
+        return $this->belongsTo(User::class, 'ditangani_by');
+    }
+
     public function balasans()
     {
         return $this->hasMany(Balasan::class)->orderBy('created_at');

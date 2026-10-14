@@ -89,6 +89,34 @@
             </div>
         </form>
 
+        <div class="border-t border-outline-variant/40 pt-4 flex flex-col gap-4">
+            <div>
+                <h3 class="text-title-md font-bold text-on-surface">Perangkat &amp; Sesi</h3>
+                <p class="text-body-sm text-on-surface-variant">Keluar dari semua perangkat lain yang masih masuk memakai
+                    akun ini. Perangkat yang kamu pakai sekarang tetap masuk.</p>
+            </div>
+
+            <form method="POST" action="{{ route('profile.logout-other-devices') }}"
+                class="flex flex-col sm:flex-row sm:items-end gap-3">
+                @csrf
+                <div class="flex-1">
+                    <label for="logout_password" class="text-label-lg font-bold text-on-surface mb-2 block">Password Saat
+                        Ini</label>
+                    <input type="password" name="logout_password" id="logout_password" required
+                        class="w-full bg-surface-container-lowest border-1.5 border-outline-variant rounded-2xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-4 focus:ring-primary/10 transition-all outline-none"
+                        placeholder="Masukkan password untuk konfirmasi">
+                    @error('logout_password')
+                        <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+                <button type="submit"
+                    class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-error text-on-error text-label-lg font-bold shadow-md hover:opacity-90 transition-all">
+                    <span class="material-symbols-outlined text-lg">devices</span>
+                    Keluar dari Perangkat Lain
+                </button>
+            </form>
+        </div>
+
         <div>
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-surface-variant/40 pb-5">
             <div class="flex items-center gap-3">

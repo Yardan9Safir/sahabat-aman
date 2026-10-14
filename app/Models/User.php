@@ -42,6 +42,7 @@ class User extends Authenticatable
         'identifier',
         'kelas',
         'guru_kelas',
+        'parent_guru_id',
     ];
 
     protected $hidden = [
@@ -163,5 +164,16 @@ class User extends Authenticatable
         }
 
         return $this->isGuru() && in_array($kelas, $this->assignedKelas(), true);
+    }
+
+    /**
+     * Konselor sebaya boleh membalas/menangani curhat miliknya sendiri, atau
+     * curhat guru parent-nya yang dibagikan kepadanya.
+     */
+    public function bisaTanganiCurhat(Curhat $curhat): bool
+    {
+        return $this->isKonselorSebaya()
+            && ($curhat->penerima_id === $this->id
+                || ($this->parent_guru_id && $curhat->penerima_id === $this->parent_guru_id));
     }
 }
