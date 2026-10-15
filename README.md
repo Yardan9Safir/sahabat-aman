@@ -1,4 +1,4 @@
-# Sahabat Aman
+# Sahabat Aman 
 
 Aplikasi web layanan bimbingan & konseling sekolah (curhat digital) yang aman dan bebas stigma. Siswa dapat mengirim cerita kepada **guru**, **konselor sebaya**, atau **siswa lain**, sementara guru berfungsi sebagai admin yang mengelola data siswa dan data curhat.
 
