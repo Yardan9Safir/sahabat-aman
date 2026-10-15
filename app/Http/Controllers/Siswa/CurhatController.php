@@ -53,8 +53,9 @@ class CurhatController extends Controller
             ->get()
             ->filter(fn (User $guru) => $guru->handlesKelas($siswa->kelas))
             ->values();
-        // Konselor sebaya tidak terikat kelas — semua konselor terlihat.
+        // Konselor sebaya hanya yang dibimbing guru BK pada daftar $gurus (guru kelas siswa ini).
         $konselors = User::where('role', User::ROLE_KONSELOR_SEBAYA)
+            ->whereIn('parent_guru_id', $gurus->pluck('id'))
             ->orderBy('name')
             ->get();
 

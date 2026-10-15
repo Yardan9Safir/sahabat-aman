@@ -5,7 +5,6 @@ Keterangan :
 - d(delete)
 
 Draft:
-- Chat yang sudah dibagikan dapat ditangani oleh konselor sebaya / guru juga. jadi, nanti pada saat ditangani akan berubah ditangani oleh xxxx. jadi biar guru tidak terlalu banyak chat agar tidak pusing juga 
 
 Completed :
 - Guru jadikan parent dari Konselor sebaya. Jadi nanti konselor A&B ikut guru ke-1. Chat nya juga dibagikan ke konselor juga
@@ -14,7 +13,8 @@ Completed :
 - Haidarratur Rochma, S.Pd - konselor EF
 - Erna Krisnawati, S.Pd - konselor GH
 - Dian Miftahul Falah, S.Psi - konselor IJ 
-
+- Chat yang sudah dibagikan dapat ditangani oleh konselor sebaya / guru juga. jadi, nanti pada saat ditangani akan berubah ditangani oleh xxxx. jadi biar guru tidak terlalu banyak chat agar tidak pusing juga 
+- konselor sebaya jadikan child biar dapat mengambil dari parent
 
 Status Test Program :
 - Siswa dapat membuat, menjawab, membalas chat
