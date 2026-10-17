@@ -71,10 +71,6 @@
                         class="px-2.5 py-1 rounded-lg {{ request('status') === 'dibalas' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
                         Dibalas
                     </a>
-                    <a href="{{ route($homeRoute, array_filter(['status' => 'ditangani', 'kategori' => $kategori])) }}"
-                        class="px-2.5 py-1 rounded-lg {{ request('status') === 'ditangani' ? 'bg-primary-container text-on-primary-container font-semibold shadow-sm' : 'bg-surface-container-low hover:bg-surface-container text-on-surface-variant' }} text-label-sm whitespace-nowrap transition-colors">
-                        Sudah Ditangani
-                    </a>
                 </div>
 
                 {{-- Filter kategori --}}
@@ -105,10 +101,10 @@
                             <div class="flex flex-col items-start gap-0.5">
                                 <span
                                     class="inline-flex items-center text-md font-bold {{ $curhat->tujuan === 'guru' ? 'text-secondary' : 'text-tertiary' }}">
-                                    Kepada : {{ $curhat->tujuanLabel }}
+                                    Kepada : {{ $curhat->nama_penerima }}
                                 </span>
                                 <span class="text-md text-outline">
-                                    {{ $curhat->created_at->diffForHumans() }}
+                                    {{ $curhat->created_at->locale('id')->diffForHumans() }}
                                 </span>
                             </div>
                             <div>
@@ -141,7 +137,7 @@
                                     {{ Str::limit($curhat->pesan, 160) }}
                                 </p>
                             </div>
-                            @php $isKonselor = Auth::user()->isKonselorSebaya(); @endphp
+                            {{-- @php $isKonselor = Auth::user()->isKonselorSebaya(); @endphp
                             @if ($isKonselor && $curhat->penerima_id === auth()->id())
                                 <form method="POST" action="{{ route('konselor.sesi.destroy', $curhat) }}"
                                     data-swal-confirm="Hapus permanen riwayat ini?"
@@ -156,7 +152,7 @@
                                         <span class="material-symbols-outlined text-base">delete</span>
                                     </button>
                                 </form>
-                            @endif
+                            @endif --}}
                         </div>
                     </a>
                 @empty

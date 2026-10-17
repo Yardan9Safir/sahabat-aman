@@ -106,6 +106,23 @@ class Curhat extends Model
         return $query->whereHas('siswa', fn (Builder $q) => $q->whereIn('kelas', $kelas));
     }
 
+    /**
+     * Curhat yang boleh dilihat seorang guru BK: yang ditujukan kepadanya
+     * (dari kelas yang diampu, atau dialihkan konselor bimbingannya) atau yang
+     * masih masuk ke konselor sebaya bimbingannya (mode pantau, hanya baca).
+     */
+    public function scopeTerlihatGuru(Builder $query, User $guru): Builder
+    {
+        return $query->where(function (Builder $q) use ($guru) {
+            $q->where(function (Builder $milikGuru) use ($guru) {
+                $milikGuru->where('penerima_id', $guru->id)
+                    ->orWhere(function (Builder $sekelas) use ($guru) {
+                        $sekelas->where('tujuan', User::ROLE_GURU)->dariKelas($guru->assignedKelas());
+                    });
+            })->orWhereIn('penerima_id', User::where('parent_guru_id', $guru->id)->pluck('id'));
+        });
+    }
+
     public function getKategoriLabelAttribute(): string
     {
         return ucfirst((string) $this->kategori);

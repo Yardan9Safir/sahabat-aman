@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Concerns\SummarizesCurhats;
 use App\Http\Controllers\Controller;
 use App\Models\Curhat;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,16 +13,15 @@ class CurhatController extends Controller
     use SummarizesCurhats;
 
     /**
-     * Kotak masuk curhat siswa yang ditujukan ke Guru BK.
-     * Seorang guru hanya menerima curhat dari kelas yang diampunya.
+     * Kotak masuk curhat siswa untuk Guru BK: curhat yang ditujukan kepadanya
+     * (kelas yang diampu) plus curhat siswa ke konselor sebaya bimbingannya
+     * (dipantau, hanya baca).
      */
     public function index(Request $request)
     {
         ['kategori' => $kategori, 'status' => $status] = $this->curhatFilters($request);
 
-        $curhatsKeGuru = Curhat::query()
-            ->where('tujuan', User::ROLE_GURU)
-            ->dariKelas($request->user()->assignedKelas());
+        $curhatsKeGuru = Curhat::query()->terlihatGuru($request->user());
 
         $totalMasuk = (clone $curhatsKeGuru)
             ->where('status', Curhat::STATUS_TERKIRIM)
@@ -47,17 +45,16 @@ class CurhatController extends Controller
     }
 
     /**
-     * Detail percakapan curhat yang masuk ke BK.
+     * Detail percakapan curhat yang masuk ke BK. Curhat milik konselor sebaya
+     * bimbingannya hanya bisa dipantau (baca), bukan dibalas.
      */
     public function show(Curhat $curhat)
     {
         $guru = Auth::user();
 
-        abort_unless($curhat->tujuan === User::ROLE_GURU, 403);
+        abort_unless(Curhat::whereKey($curhat->id)->terlihatGuru($guru)->exists(), 403);
 
         $curhat->load(['siswa', 'penerima', 'balasans.pengirim', 'penangan']);
-
-        abort_unless($guru->handlesKelas($curhat->siswa?->kelas), 403);
 
         if ($curhat->penerima_id === Auth::id()) {
             $curhat->setViewed();
@@ -130,8 +127,9 @@ class CurhatController extends Controller
     {
         $guru = Auth::user();
 
-        abort_unless($curhat->penerima_id === $guru->id, 403);
-        abort_unless($guru->handlesKelas($curhat->siswa?->kelas), 403);
+        // Guru boleh hapus riwayat yang terlihat olehnya: chat miliknya sendiri
+        // maupun chat konselor sebaya bimbingannya (riwayat hanya di guru BK).
+        abort_unless(Curhat::whereKey($curhat->id)->terlihatGuru($guru)->exists(), 403);
 
         $curhat->balasans()->delete();
         $curhat->delete();

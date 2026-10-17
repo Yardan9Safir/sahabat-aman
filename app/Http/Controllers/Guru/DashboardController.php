@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Guru;
 
 use App\Http\Controllers\Controller;
 use App\Models\Curhat;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -17,9 +16,8 @@ class DashboardController extends Controller
 
         $guru = Auth::user();
 
-        $masuk = Curhat::query()
-            ->where('tujuan', User::ROLE_GURU)
-            ->dariKelas($guru->assignedKelas());
+        // Termasuk curhat siswa ke konselor sebaya bimbingannya (dipantau).
+        $masuk = Curhat::query()->terlihatGuru($guru);
 
         $perStatus = (clone $masuk)
             ->selectRaw('status, COUNT(*) as total')
