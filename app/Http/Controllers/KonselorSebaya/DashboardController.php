@@ -16,6 +16,7 @@ class DashboardController extends Controller
      * Kotak masuk konselor sebaya: curhat yang ditujukan kepadanya
      * plus curhat yang ia kirim sendiri sebagai siswa, plus curhat yang
      * masuk ke guru parent-nya (dibagikan, hanya bisa dilihat).
+     * Riwayat (sudah ditangani) tidak ditampilkan — riwayat hanya di guru BK.
      */
     public function index(Request $request)
     {
@@ -32,7 +33,8 @@ class DashboardController extends Controller
                 if ($konselor->parent_guru_id) {
                     $query->orWhere('penerima_id', $konselor->parent_guru_id);
                 }
-            });
+            })
+            ->where('status', '!=', Curhat::STATUS_DITANGANI);
 
         $ringkasan = $this->summarizeCurhats($curhatsSaya, $kategori, $status, ['balasans', 'penangan']);
 

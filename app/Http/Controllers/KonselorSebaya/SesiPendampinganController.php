@@ -4,6 +4,7 @@ namespace App\Http\Controllers\KonselorSebaya;
 
 use App\Http\Controllers\Controller;
 use App\Models\Curhat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +24,12 @@ class SesiPendampinganController extends Controller
             || ($konselor->parent_guru_id && $curhat->penerima_id === $konselor->parent_guru_id),
             403
         );
+
+        // Riwayat (sudah ditangani) hanya ada di akun guru BK.
+        if ($curhat->isDitangani()) {
+            return redirect()->route('konselor.dashboard')
+                ->with('error', 'Riwayat percakapan ini sudah ditutup.');
+        }
 
         if ($curhat->penerima_id === $konselor->id) {
             $curhat->setViewed();
@@ -92,6 +99,31 @@ class SesiPendampinganController extends Controller
 
         return redirect()->route('konselor.dashboard')
             ->with('success', 'Curhat telah ditangani dan riwayat chat telah dihapus.');
+    }
+
+    /**
+     * Alihkan percakapan ke guru BK pembimbing (parent) konselor untuk
+     * ditangani. Status direset ke "terkirim" supaya guru tahu belum direspon.
+     */
+    public function mintaBantuan(Curhat $curhat)
+    {
+        $konselor = Auth::user();
+
+        abort_unless($konselor->isKonselorSebaya() && $konselor->parent_guru_id, 403);
+        abort_unless($curhat->penerima_id === $konselor->id, 403);
+        abort_if($curhat->isDitangani(), 403);
+
+        $guru = User::findOrFail($konselor->parent_guru_id);
+
+        $curhat->update([
+            'penerima_id' => $guru->id,
+            'nama_penerima' => $guru->name,
+            'tujuan' => User::ROLE_GURU,
+            'status' => Curhat::STATUS_TERKIRIM,
+        ]);
+
+        return redirect()->route('konselor.dashboard')
+            ->with('success', "Curhat dialihkan ke {$guru->name} untuk ditangani.");
     }
 
     public function destroy(Curhat $curhat)

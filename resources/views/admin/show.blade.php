@@ -63,20 +63,21 @@
         <div class="bg-surface-container-lowest rounded-3xl soft-shadow border border-surface-variant/40 overflow-hidden">
             <div id="chatList" class="p-6 space-y-6">
                 {{-- Balasan --}}
+                @php $dariSiswa = fn ($b) => $b->pengirim_role === "siswa"; @endphp
                 @forelse($curhat->balasans as $balasan)
                     <div
-                        class="flex gap-3.5 max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
+                        class="flex gap-3.5 max-w-2xl {{ $dariSiswa($balasan) ? '' : 'ml-auto flex-col items-end' }}">
                         <div
-                            class="flex flex-col {{ $balasan->pengirim_id === auth()->id() ? 'items-end' : 'items-start' }} space-y-2 flex-1">
+                            class="flex flex-col {{ $dariSiswa($balasan) ? 'items-start' : 'items-end' }} space-y-2 flex-1">
                             <div class="flex items-center gap-2">
                                 <span
-                                    class="text-label-sm font-bold {{ $balasan->pengirim_id === auth()->id() ? 'text-primary' : 'text-on-surface' }}">{{ $balasan->pengirim_id === auth()->id() ? 'Kamu' : $balasan->pengirim->name ?? 'Unknown' }}</span>
+                                    class="text-label-sm font-bold {{ $dariSiswa($balasan) ? 'text-on-surface' : 'text-primary' }}">{{ $balasan->pengirim_id === auth()->id() ? 'Kamu' : $balasan->pengirim->name ?? 'Unknown' }}</span>
                                 <span
                                     class="text-label-sm text-outline">{{ $balasan->created_at->translatedFormat('H:i') }}
                                     WIB</span>
                             </div>
                             <div
-                                class="{{ $balasan->pengirim_id === auth()->id() ? 'bg-primary-container text-on-primary-container rounded-2xl rounded-tr-xs' : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs' }} p-4 shadow-sm">
+                                class="{{ $dariSiswa($balasan) ? 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-xs' : 'bg-primary-container text-on-primary-container rounded-2xl rounded-tr-xs' }} p-4 shadow-sm">
                                 <p class="text-body-md leading-relaxed">{{ $balasan->isi }}</p>
                             </div>
                         </div>
@@ -110,14 +111,22 @@
                             </button>
                         </div>
                     </form>
-                @else
+                @elseif ($curhat->status === 'ditangani')
                     <div
                         class="rounded-2xl bg-error-container text-on-error-container border border-error/30 p-4 text-center">
                         <span class="material-symbols-outlined text-primary text-xl mb-1">check_circle</span>
                         <p class="text-label-md font-semibold">Sudah Ditangani oleh {{ $curhat->penangan?->name ?? $curhat->nama_penerima }}</p>
                         <p class="text-body-sm mt-0.5">Curhat ini sudah selesai ditangani. Percakapan telah berakhir.</p>
                     </div>
+                @else
+                    <div
+                        class="rounded-2xl bg-surface-container text-on-surface-variant border border-outline-variant/60 p-4 text-center">
+                        <span class="material-symbols-outlined text-primary text-xl mb-1">visibility</span>
+                        <p class="text-label-md font-semibold">Mode Pantau</p>
+                        <p class="text-body-sm mt-0.5">Curhat ini ditujukan ke {{ $curhat->nama_penerima }}. Kamu hanya bisa membaca percakapannya.</p>
+                    </div>
                 @endif
+
             </div>
 
             {{-- Tombol Refresh --}}

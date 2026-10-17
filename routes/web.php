@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/sesi/{curhat}', [SesiPendampinganController::class, 'show'])->name('sesi.show');
         Route::post('/sesi/{curhat}/balas', [SesiPendampinganController::class, 'reply'])->name('sesi.reply');
         Route::post('/sesi/{curhat}/tangani', [SesiPendampinganController::class, 'handle'])->name('sesi.handle');
+        Route::post('/sesi/{curhat}/minta-bantuan', [SesiPendampinganController::class, 'mintaBantuan'])->name('sesi.minta-bantuan');
         Route::delete('/sesi/{curhat}', [SesiPendampinganController::class, 'destroy'])->name('sesi.destroy');
     });
 

@@ -24,7 +24,7 @@
                                 <span
                                     class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md {{ $curhat->tujuan === 'guru' ? 'bg-secondary-container text-on-secondary-container' : 'bg-tertiary-container text-on-tertiary-container' }} text-label-sm font-semibold">
                                     <span class="material-symbols-outlined text-xs">arrow_forward</span>
-                                    Kepada: {{ $curhat->tujuanLabel }}
+                                    Kepada: {{ $curhat->nama_penerima }}
                                 </span>
                             </div>
                         </div>
@@ -51,8 +51,23 @@
                 <span><strong>Akses Konseling:</strong> Percakapan ini Terenkripsi</span>
             </div>
 
-            {{-- Tandai Selesai / Hapus Permanen --}}
-            <div>
+            {{-- Tandai Selesai / Minta Bantuan Guru BK --}}
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                @if ($curhat->status !== 'ditangani' && $curhat->penerima_id === auth()->id()
+                        && Auth::user()->isKonselorSebaya() && Auth::user()->parent_guru_id)
+                    <form method="POST" action="{{ route('konselor.sesi.minta-bantuan', $curhat) }}"
+                        data-swal-confirm="Minta bantuan guru BK?"
+                        data-swal-text="Percakapan ini dialihkan ke guru BK pembimbingmu untuk ditangani."
+                        data-swal-icon="question" data-swal-confirm-text="Ya, minta bantuan"
+                        data-swal-cancel-text="Batal" data-swal-danger="false">
+                        @csrf
+                        <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-4 py-2.5 rounded-xl bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed text-label-md font-semibold transition-colors">
+                            <span class="material-symbols-outlined text-lg">support_agent</span>
+                            Alihkan Ke Guru BK
+                        </button>
+                    </form>
+                @endif
                 @if (Auth::user()->bisaTanganiCurhat($curhat))
                     @if ($curhat->status !== 'ditangani')
                         <form method="POST" action="{{ route('konselor.sesi.handle', $curhat) }}"
@@ -62,7 +77,7 @@
                             data-swal-cancel-text="Batal">
                             @csrf
                             <button type="submit"
-                                class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold transition-colors">
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary text-label-md font-semibold transition-colors">
                                 <span class="material-symbols-outlined text-lg">task_alt</span> Tandai Selesai
                             </button>
                         </form>
@@ -74,11 +89,11 @@
 
         {{-- Tampilan Chat Message --}}
         <div class="bg-surface-container-lowest rounded-3xl soft-shadow border border-surface-variant/40 overflow-hidden">
-            <div id="chatList" class="p-6 space-y-6">
+            <div id="chatList" class="p-6 space-y-2">
                 {{-- Balasan --}}
                 @forelse($curhat->balasans as $balasan)
                     <div
-                        class="flex gap-3.5 max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
+                        class="flex max-w-2xl {{ $balasan->pengirim_id === auth()->id() ? 'ml-auto flex-col items-end' : '' }}">
                         <div
                             class="flex flex-col {{ $balasan->pengirim_id === auth()->id() ? 'items-end' : 'items-start' }} space-y-2 flex-1">
                             <div class="flex items-center gap-2">

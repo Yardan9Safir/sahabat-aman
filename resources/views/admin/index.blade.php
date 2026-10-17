@@ -82,7 +82,7 @@
                                         </h4>
 
                                         <p class="text-xs text-on-surface-variant">
-                                            {{ $curhat->created_at->diffForHumans() }}
+                                            {{ $curhat->created_at->locale('id')->diffForHumans() }}
                                         </p>
                                     </div>
                                     <span
@@ -123,13 +123,15 @@
                         </div>
 
                         <div class="mt-4 pt-3 flex flex-wrap items-center justify-between gap-3">
+                            @php $milikSaya = $curhat->penerima_id === auth()->id(); @endphp
+                            <a href="{{ route('guru.curhat.show', $curhat) }}"
+                                class="flex items-center gap-1.5 {{ $curhat->status === 'ditangani' || !$milikSaya ? 'bg-surface-container-high text-on-surface' : 'bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary' }} font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
+                                <span
+                                    class="material-symbols-outlined text-base">{{ $curhat->status === 'ditangani' ? 'history' : ($milikSaya ? 'reply' : 'visibility') }}</span>
+                                <span>{{ $milikSaya ? ($curhat->status === 'ditangani' ? 'Lihat Riwayat' : 'Balas Curhat') : 'Pantau' }}</span>
+                            </a>
                             @if ($curhat->status === 'ditangani')
-                                <a href="{{ route('guru.curhat.show', $curhat) }}"
-                                    class="flex items-center gap-1.5 bg-surface-container-high text-on-surface font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs hover:bg-surface-variant transition-all">
-                                    <span class="material-symbols-outlined text-base">history</span>
-                                    <span>Lihat Riwayat</span>
-                                </a>
-                                {{-- Tombol Hapus Permanen Riwayat chat oleh guru/konselor sebaya --}}
+                                {{-- Tombol Hapus Permanen Riwayat chat (riwayat hanya milik guru BK) --}}
                                 <form method="POST" action="{{ route('guru.curhat.destroy', $curhat) }}"
                                     data-swal-confirm="Hapus permanen riwayat ini?"
                                     data-swal-text="Data akan dihapus sepenuhnya dari database dan tidak dapat dikembalikan."
@@ -143,12 +145,6 @@
                                         <span class="material-symbols-outlined text-base">delete</span>
                                     </button>
                                 </form>
-                            @else
-                                <a href="{{ route('guru.curhat.show', $curhat) }}"
-                                    class="flex items-center gap-1.5 bg-primary hover:bg-primary-container hover:text-on-primary-container text-on-primary font-label-md font-semibold px-4 py-2 rounded-xl shadow-xs transition-all">
-                                    <span class="material-symbols-outlined text-base">reply</span>
-                                    <span>Balas Curhat</span>
-                                </a>
                             @endif
                         </div>
                     </article>
